@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Github, Twitter, Search, Menu, X, Terminal } from "lucide-react";
+import { Search, Menu, X, Terminal } from "lucide-react";
+import { GithubIcon, TwitterIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -88,7 +89,7 @@ export default function Navbar() {
             className="flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
             aria-label="GitHub"
           >
-            <Github className="w-4 h-4" />
+            <GithubIcon className="w-4 h-4" />
           </Link>
           <Link
             href="https://twitter.com/thaibao"
@@ -97,7 +98,7 @@ export default function Navbar() {
             className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
             aria-label="Twitter"
           >
-            <Twitter className="w-4 h-4" />
+            <TwitterIcon className="w-4 h-4" />
           </Link>
 
           {/* Mobile hamburger */}
