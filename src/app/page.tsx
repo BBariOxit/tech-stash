@@ -1,7 +1,26 @@
+import Navbar from "@/components/navbar";
+import HeroSection from "@/components/hero-section";
+import LatestPosts from "@/components/latest-posts";
+import SnippetsCarousel from "@/components/snippets-carousel";
+import NewsletterSection from "@/components/newsletter-section";
+import Footer from "@/components/footer";
+import { getFeaturedPost, getLatestPosts } from "@/lib/posts";
+import { snippets } from "@/lib/snippets";
+
 export default function Home() {
+  const featured = getFeaturedPost();
+  const latestPosts = getLatestPosts(featured.slug);
+
   return (
-    <main className="flex min-h-screen items-center justify-center p-24">
-      <h1 className="text-4xl font-bold text-blue-500">Next.js chạy ngon rồi!</h1>
-    </main>
+    <>
+      <Navbar />
+      <main className="flex-1">
+        <HeroSection featured={featured} />
+        <LatestPosts posts={latestPosts} />
+        <SnippetsCarousel snippets={snippets} />
+        <NewsletterSection />
+      </main>
+      <Footer />
+    </>
   );
 }
