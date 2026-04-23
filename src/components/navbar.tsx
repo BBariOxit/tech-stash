@@ -7,12 +7,9 @@ import { Search, Menu, X, Terminal } from "lucide-react";
 import { GithubIcon, TwitterIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/blog", label: "Blog" },
-  { href: "/snippets", label: "Snippets" },
-  { href: "/about", label: "About" },
-];
+import { dummyNavLinks, dummySiteConfig } from "@/data";
+
+const navLinks = dummyNavLinks;
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -39,20 +36,20 @@ export default function Navbar() {
           : "bg-transparent"
       )}
     >
-      <nav className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2 shrink-0 group"
           aria-label="tech-stash home"
         >
-          <div className="flex items-center justify-center w-7 h-7 rounded-md bg-cyan-400/10 border border-cyan-400/20 group-hover:border-cyan-400/50 transition-colors">
-            <Terminal className="w-4 h-4 text-cyan-400" />
+          <div className="flex items-center justify-center w-7 h-7 rounded-md bg-primary/10 border border-primary/20 group-hover:border-primary/50 transition-colors">
+            <Terminal className="w-4 h-4 text-primary" />
           </div>
-          <span className="font-mono text-sm font-semibold text-white group-hover:text-cyan-400 transition-colors">
-            <span className="text-cyan-400/60">&lt;</span>
+          <span className="font-mono text-sm font-semibold text-white group-hover:text-primary transition-colors">
+            <span className="text-primary/60">&lt;</span>
             tech-stash
-            <span className="text-cyan-400/60"> /&gt;</span>
+            <span className="text-primary/60"> /&gt;</span>
           </span>
         </Link>
 
@@ -65,8 +62,8 @@ export default function Navbar() {
               className={cn(
                 "px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
                 pathname === link.href
-                  ? "text-cyan-400 bg-cyan-400/10"
-                  : "text-zinc-400 hover:text-white hover:bg-white/[0.06]"
+                  ? "text-primary bg-primary/10"
+                  : "text-zinc-300 hover:text-white hover:bg-white/[0.06]"
               )}
             >
               {link.label}
@@ -77,25 +74,25 @@ export default function Navbar() {
         {/* Right actions */}
         <div className="flex items-center gap-2">
           <button
-            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
             aria-label="Search"
           >
             <Search className="w-4 h-4" />
           </button>
           <Link
-            href="https://github.com/thaibao"
+            href={dummySiteConfig.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
             aria-label="GitHub"
           >
             <GithubIcon className="w-4 h-4" />
           </Link>
           <Link
-            href="https://twitter.com/thaibao"
+            href={dummySiteConfig.twitter}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
             aria-label="Twitter"
           >
             <TwitterIcon className="w-4 h-4" />
@@ -104,7 +101,7 @@ export default function Navbar() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="md:hidden flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
             aria-label="Toggle menu"
             aria-expanded={mobileOpen}
           >
@@ -116,7 +113,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-white/[0.06] bg-[#09090b]/95 backdrop-blur-xl">
-          <div className="max-w-5xl mx-auto px-4 py-3 flex flex-col gap-1">
+          <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -124,8 +121,8 @@ export default function Navbar() {
                 className={cn(
                   "px-3 py-2 rounded-md text-sm font-medium transition-colors",
                   pathname === link.href
-                    ? "text-cyan-400 bg-cyan-400/10"
-                    : "text-zinc-400 hover:text-white hover:bg-white/[0.06]"
+                    ? "text-primary bg-primary/10"
+                    : "text-zinc-300 hover:text-white hover:bg-white/[0.06]"
                 )}
               >
                 {link.label}

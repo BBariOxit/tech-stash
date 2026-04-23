@@ -39,10 +39,7 @@
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
-    /* Cyberpunk accent colors */
-    --color-cyan: #22d3ee;
-    --color-cyan-dim: rgba(34, 211, 238, 0.15);
-    --color-cyan-glow: rgba(34, 211, 238, 0.4);
+    /* Removed hardcoded cyan colors */
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -63,16 +60,16 @@
     --primary: #22d3ee;
     --primary-foreground: #09090b;
     --secondary: #1c1c1f;
-    --secondary-foreground: #a1a1aa;
+    --secondary-foreground: #d4d4d8; /* zinc-300 */
     --muted: #1c1c1f;
-    --muted-foreground: #71717a;
-    --accent: rgba(34, 211, 238, 0.12);
-    --accent-foreground: #22d3ee;
+    --muted-foreground: #a1a1aa; /* zinc-400 */
+    --accent: color-mix(in srgb, var(--primary) 12%, transparent);
+    --accent-foreground: var(--primary);
     --destructive: #ef4444;
     --border: rgba(255, 255, 255, 0.08);
     --input: rgba(255, 255, 255, 0.06);
-    --ring: #22d3ee;
-    --chart-1: #22d3ee;
+    --ring: var(--primary);
+    --chart-1: var(--primary);
     --chart-2: #a78bfa;
     --chart-3: #34d399;
     --chart-4: #f59e0b;
@@ -80,12 +77,12 @@
     --radius: 0.5rem;
     --sidebar: #0d0d0f;
     --sidebar-foreground: #fafafa;
-    --sidebar-primary: #22d3ee;
+    --sidebar-primary: var(--primary);
     --sidebar-primary-foreground: #09090b;
     --sidebar-accent: #1c1c1f;
     --sidebar-accent-foreground: #a1a1aa;
     --sidebar-border: rgba(255, 255, 255, 0.06);
-    --sidebar-ring: #22d3ee;
+    --sidebar-ring: var(--primary);
 }
 
 .dark {
@@ -98,24 +95,24 @@
     --primary: #22d3ee;
     --primary-foreground: #09090b;
     --secondary: #1c1c1f;
-    --secondary-foreground: #a1a1aa;
+    --secondary-foreground: #d4d4d8; /* zinc-300 */
     --muted: #1c1c1f;
-    --muted-foreground: #71717a;
-    --accent: rgba(34, 211, 238, 0.12);
-    --accent-foreground: #22d3ee;
+    --muted-foreground: #a1a1aa; /* zinc-400 */
+    --accent: color-mix(in srgb, var(--primary) 12%, transparent);
+    --accent-foreground: var(--primary);
     --destructive: #ef4444;
     --border: rgba(255, 255, 255, 0.08);
     --input: rgba(255, 255, 255, 0.06);
-    --ring: #22d3ee;
+    --ring: var(--primary);
     --radius: 0.5rem;
     --sidebar: #0d0d0f;
     --sidebar-foreground: #fafafa;
-    --sidebar-primary: #22d3ee;
+    --sidebar-primary: var(--primary);
     --sidebar-primary-foreground: #09090b;
     --sidebar-accent: #1c1c1f;
     --sidebar-accent-foreground: #a1a1aa;
     --sidebar-border: rgba(255, 255, 255, 0.06);
-    --sidebar-ring: #22d3ee;
+    --sidebar-ring: var(--primary);
 }
 
 @layer base {
@@ -129,9 +126,12 @@
     color-scheme: dark;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     min-height: 100dvh;
     font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -139,19 +139,19 @@
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #09090b; }
 ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #22d3ee55; }
+::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--primary) 33%, transparent); }
 
-/* Cyan glow utilities */
-.glow-cyan {
-  text-shadow: 0 0 20px rgba(34, 211, 238, 0.6);
+/* Primary glow utilities */
+.glow-primary {
+  text-shadow: 0 0 20px color-mix(in srgb, var(--primary) 60%, transparent);
 }
 .card-hover {
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .card-hover:hover {
   transform: translateY(-4px);
-  border-color: rgba(34, 211, 238, 0.35) !important;
-  box-shadow: 0 8px 30px rgba(34, 211, 238, 0.08);
+  border-color: color-mix(in srgb, var(--primary) 35%, transparent) !important;
+  box-shadow: 0 8px 30px color-mix(in srgb, var(--primary) 8%, transparent);
 }
 
 /* Code block in snippets */
@@ -159,14 +159,14 @@
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.75rem;
   line-height: 1.6;
-  color: #a1a1aa;
+  color: #d4d4d8;
   white-space: pre;
   overflow: hidden;
 }
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #22d3ee 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--chart-2) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

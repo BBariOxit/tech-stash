@@ -1,0 +1,23 @@
+---
+title: "Next.js Image với blur placeholder"
+description: "Tạo base64 blur placeholder cho ảnh để UX mượt hơn khi load."
+language: "TypeScript"
+date: "2026-04-23"
+---
+
+```ts
+import Image from 'next/image';
+
+// Generate blur placeholder
+const blurData = `data:image/svg+xml;base64,${
+  Buffer.from('<svg ...>').toString('base64')
+}`;
+
+<Image
+  src="/photo.jpg"
+  placeholder="blur"
+  blurDataURL={blurData}
+  fill
+  alt="..."
+/>
+```

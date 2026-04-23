@@ -1,0 +1,24 @@
+---
+title: "useWindowSize Hook"
+description: "Custom hook lấy kích thước màn hình, auto-update khi resize."
+language: "TypeScript"
+date: "2026-04-23"
+---
+
+```ts
+function useWindowSize() {
+  const [size, setSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  useEffect(() => {
+    const handler = () => setSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return size;
+}
+```

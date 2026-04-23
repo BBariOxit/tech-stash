@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { Calendar, Clock, ArrowRight, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Post } from "@/lib/posts";
+import { dummySiteConfig } from "@/data";
 
 const PLACEHOLDER_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%2318181b'/%3E%3Crect x='340' y='160' width='120' height='80' rx='8' fill='%2327272a'/%3E%3Ccircle cx='400' cy='190' r='20' fill='%2322d3ee' opacity='0.3'/%3E%3C/svg%3E";
 
@@ -15,40 +16,39 @@ interface HeroSectionProps {
 export default function HeroSection({ featured }: HeroSectionProps) {
   return (
     <section className="pt-28 pb-16 px-4 sm:px-6">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Left: Greeting */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
             {/* Status pill */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-400/20 bg-cyan-400/5 text-cyan-400 text-xs font-mono mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-xs font-mono mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
               Available for collaboration
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight mb-4">
-              Hi, I&apos;m{" "}
-              <span className="gradient-text">Thai Bao.</span>
+              {dummySiteConfig.greeting}{" "}
+              <span className="gradient-text">{dummySiteConfig.author}.</span>
             </h1>
 
-            <p className="text-xl text-zinc-400 font-medium mb-3">
-              Welcome to my{" "}
-              <span className="font-mono text-cyan-400">Tech Stash.</span>
+            <p className="text-xl text-zinc-300 font-medium mb-3">
+              {dummySiteConfig.welcomeText}{" "}
+              <span className="font-mono text-primary">{dummySiteConfig.siteName}</span>
             </p>
 
-            <p className="text-zinc-500 leading-relaxed text-sm max-w-md">
-              Mình là một Full-stack Developer. Đây là nơi mình lưu trữ các bài viết,
-              code snippets, và những thứ học được từ thực chiến — không có gì giả
-              tạo, chỉ có code thật và vấn đề thật.
+            <p className="text-zinc-300 leading-relaxed text-sm max-w-md">
+              {dummySiteConfig.description}
             </p>
 
             <div className="mt-8 flex items-center gap-3">
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-cyan-400 text-zinc-950 text-sm font-semibold hover:bg-cyan-300 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-zinc-950 text-sm font-semibold hover:bg-primary/90 transition-colors"
               >
                 Đọc bài viết
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -65,11 +65,12 @@ export default function HeroSection({ featured }: HeroSectionProps) {
           {/* Right: Featured Post Card */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
           >
-            <div className="text-xs font-mono text-cyan-400/60 mb-3 flex items-center gap-2">
-              <span className="w-4 h-px bg-cyan-400/40" />
+            <div className="text-xs font-mono text-primary/60 mb-3 flex items-center gap-2">
+              <span className="w-4 h-px bg-primary/40" />
               FEATURED POST
             </div>
 
@@ -99,15 +100,15 @@ export default function HeroSection({ featured }: HeroSectionProps) {
 
                 {/* Content */}
                 <div className="p-5">
-                  <h2 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors leading-snug mb-2">
+                  <h2 className="text-lg font-bold text-white group-hover:text-primary transition-colors leading-snug mb-2">
                     {featured.title}
                   </h2>
-                  <p className="text-zinc-500 text-sm leading-relaxed line-clamp-2 mb-4">
+                  <p className="text-zinc-300 text-sm leading-relaxed line-clamp-2 mb-4">
                     {featured.excerpt}
                   </p>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-xs text-zinc-600">
+                    <div className="flex items-center gap-3 text-xs text-zinc-400">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {new Date(featured.date).toLocaleDateString("vi-VN")}
@@ -117,7 +118,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
                         {featured.readTime}
                       </span>
                     </div>
-                    <span className="text-xs text-cyan-400 font-mono flex items-center gap-1 group-hover:gap-2 transition-all">
+                    <span className="text-xs text-primary font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
                       Đọc thêm <ArrowRight className="w-3 h-3" />
                     </span>
                   </div>

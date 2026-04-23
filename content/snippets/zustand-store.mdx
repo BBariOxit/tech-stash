@@ -1,0 +1,20 @@
+---
+title: "Zustand Store với TypeScript"
+description: "Setup Zustand store đơn giản nhất, đủ dùng cho 80% use case."
+language: "TypeScript"
+date: "2026-04-23"
+---
+
+```ts
+interface BearState {
+  bears: number;
+  increase: () => void;
+  reset: () => void;
+}
+
+const useStore = create<BearState>((set) => ({
+  bears: 0,
+  increase: () => set((s) => ({ bears: s.bears + 1 })),
+  reset: () => set({ bears: 0 }),
+}));
+```
