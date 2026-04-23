@@ -37,7 +37,7 @@ export default async function BlogPostPage({
               <Badge
                 key={tag}
                 variant="outline"
-                className="text-xs border-cyan-400/20 text-cyan-400/70 font-mono"
+                className="text-xs border-primary/20 text-primary/70 font-mono"
               >
                 {tag}
               </Badge>

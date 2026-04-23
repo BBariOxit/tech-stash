@@ -36,20 +36,20 @@ export default function Navbar() {
           : "bg-transparent"
       )}
     >
-      <nav className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2 shrink-0 group"
           aria-label="tech-stash home"
         >
-          <div className="flex items-center justify-center w-7 h-7 rounded-md bg-cyan-400/10 border border-cyan-400/20 group-hover:border-cyan-400/50 transition-colors">
-            <Terminal className="w-4 h-4 text-cyan-400" />
+          <div className="flex items-center justify-center w-7 h-7 rounded-md bg-primary/10 border border-primary/20 group-hover:border-primary/50 transition-colors">
+            <Terminal className="w-4 h-4 text-primary" />
           </div>
-          <span className="font-mono text-sm font-semibold text-white group-hover:text-cyan-400 transition-colors">
-            <span className="text-cyan-400/60">&lt;</span>
+          <span className="font-mono text-sm font-semibold text-white group-hover:text-primary transition-colors">
+            <span className="text-primary/60">&lt;</span>
             tech-stash
-            <span className="text-cyan-400/60"> /&gt;</span>
+            <span className="text-primary/60"> /&gt;</span>
           </span>
         </Link>
 
@@ -62,7 +62,7 @@ export default function Navbar() {
               className={cn(
                 "px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
                 pathname === link.href
-                  ? "text-cyan-400 bg-cyan-400/10"
+                  ? "text-primary bg-primary/10"
                   : "text-zinc-300 hover:text-white hover:bg-white/[0.06]"
               )}
             >
@@ -113,7 +113,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-white/[0.06] bg-[#09090b]/95 backdrop-blur-xl">
-          <div className="max-w-5xl mx-auto px-4 py-3 flex flex-col gap-1">
+          <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -121,7 +121,7 @@ export default function Navbar() {
                 className={cn(
                   "px-3 py-2 rounded-md text-sm font-medium transition-colors",
                   pathname === link.href
-                    ? "text-cyan-400 bg-cyan-400/10"
+                    ? "text-primary bg-primary/10"
                     : "text-zinc-300 hover:text-white hover:bg-white/[0.06]"
                 )}
               >

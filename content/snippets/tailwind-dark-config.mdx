@@ -1,0 +1,16 @@
+---
+title: "Tailwind v4 Dark Mode"
+description: "Force dark mode vĩnh viễn trong Tailwind v4 không cần config file."
+language: "CSS"
+date: "2026-04-23"
+---
+
+```css
+/* globals.css */
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Force dark trên html tag */
+/* <html class="dark"> trong layout.tsx */
+```

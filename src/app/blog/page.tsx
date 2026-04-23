@@ -17,10 +17,10 @@ export default function BlogPage() {
     <>
       <Navbar />
       <main className="flex-1 pt-28 pb-16 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="mb-10">
-            <div className="text-xs font-mono text-cyan-400/60 mb-2 flex items-center gap-2">
-              <span className="w-4 h-px bg-cyan-400/40" />
+            <div className="text-xs font-mono text-primary/60 mb-2 flex items-center gap-2">
+              <span className="w-4 h-px bg-primary/40" />
               ALL POSTS
             </div>
             <h1 className="text-3xl font-bold text-white">Blog</h1>
@@ -29,7 +29,7 @@ export default function BlogPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {posts.map((post) => (
               <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
                 <article className="h-full rounded-xl border border-white/[0.08] bg-[#111113] overflow-hidden card-hover flex flex-col">
@@ -41,7 +41,7 @@ export default function BlogPage() {
                     />
                     {post.featured && (
                       <div className="absolute top-3 left-3">
-                        <Badge className="bg-cyan-400/20 text-cyan-300 border-cyan-400/30 text-[10px]">
+                        <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px]">
                           Featured
                         </Badge>
                       </div>
@@ -55,7 +55,7 @@ export default function BlogPage() {
                         </Badge>
                       ))}
                     </div>
-                    <h2 className="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors leading-snug line-clamp-2 flex-1">
+                    <h2 className="text-sm font-semibold text-white group-hover:text-primary transition-colors leading-snug line-clamp-2 flex-1">
                       {post.title}
                     </h2>
                     <div className="flex items-center gap-3 text-[11px] text-zinc-400 mt-auto pt-3 border-t border-white/[0.05]">

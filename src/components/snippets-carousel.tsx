@@ -72,12 +72,12 @@ export default function SnippetsCarousel({ snippets }: SnippetsCarouselProps) {
 
   return (
     <section className="py-16 px-4 sm:px-6 border-t border-white/[0.05]">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <div className="text-xs font-mono text-cyan-400/60 mb-2 flex items-center gap-2">
-              <span className="w-4 h-px bg-cyan-400/40" />
+            <div className="text-xs font-mono text-primary/60 mb-2 flex items-center gap-2">
+              <span className="w-4 h-px bg-primary/40" />
               CODE SNIPPETS
             </div>
             <h2 className="text-2xl font-bold text-white">Đặc sản của Tech Stash</h2>

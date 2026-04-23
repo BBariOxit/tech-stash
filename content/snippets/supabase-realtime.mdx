@@ -1,0 +1,20 @@
+---
+title: "Supabase Realtime subscription"
+description: "Subscribe vào realtime changes của một table trong Supabase."
+language: "TypeScript"
+date: "2026-04-23"
+---
+
+```ts
+const channel = supabase
+  .channel('table-changes')
+  .on(
+    'postgres_changes',
+    { event: '*', schema: 'public', table: 'posts' },
+    (payload) => console.log(payload)
+  )
+  .subscribe();
+
+// Cleanup
+return () => { supabase.removeChannel(channel); };
+```
