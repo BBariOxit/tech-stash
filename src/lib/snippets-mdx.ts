@@ -28,9 +28,9 @@ export function getAllSnippets(): SnippetMeta[] {
       const id = fileName.replace(/\.mdx$/, '');
       const fullPath = path.join(snippetsDirectory, fileName);
       const fileContents = fs.readFileSync(fullPath, 'utf8');
-      
+
       const { data } = matter(fileContents);
-      
+
       return {
         id,
         title: data.title,
@@ -54,7 +54,7 @@ export function getSnippetById(id: string): Snippet | null {
     const fullPath = path.join(snippetsDirectory, `${id}.mdx`);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const { data, content } = matter(fileContents);
-    
+
     return {
       id,
       title: data.title,
