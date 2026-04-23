@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { Calendar, Clock, ArrowRight, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Post } from "@/lib/posts";
+import { dummySiteConfig } from "@/data";
 
 const PLACEHOLDER_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%2318181b'/%3E%3Crect x='340' y='160' width='120' height='80' rx='8' fill='%2327272a'/%3E%3Ccircle cx='400' cy='190' r='20' fill='%2322d3ee' opacity='0.3'/%3E%3C/svg%3E";
 
@@ -30,19 +31,17 @@ export default function HeroSection({ featured }: HeroSectionProps) {
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight mb-4">
-              Hi, I&apos;m{" "}
-              <span className="gradient-text">Thai Bao.</span>
+              {dummySiteConfig.greeting}{" "}
+              <span className="gradient-text">{dummySiteConfig.author}.</span>
             </h1>
 
             <p className="text-xl text-zinc-400 font-medium mb-3">
-              Welcome to my{" "}
-              <span className="font-mono text-cyan-400">Tech Stash.</span>
+              {dummySiteConfig.welcomeText}{" "}
+              <span className="font-mono text-cyan-400">{dummySiteConfig.siteName}</span>
             </p>
 
             <p className="text-zinc-500 leading-relaxed text-sm max-w-md">
-              Mình là một Full-stack Developer. Đây là nơi mình lưu trữ các bài viết,
-              code snippets, và những thứ học được từ thực chiến — không có gì giả
-              tạo, chỉ có code thật và vấn đề thật.
+              {dummySiteConfig.description}
             </p>
 
             <div className="mt-8 flex items-center gap-3">

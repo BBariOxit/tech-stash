@@ -65,13 +65,19 @@ export default async function BlogPostPage({
             </span>
           </div>
 
-          {/* Excerpt as placeholder content */}
+          {/* Content */}
           <div className="prose prose-invert prose-zinc max-w-none">
-            <p className="text-zinc-400 text-lg leading-relaxed">{post.excerpt}</p>
-            <div className="mt-8 p-6 rounded-xl border border-dashed border-white/10 text-center text-zinc-700">
-              <p className="font-mono text-sm">// TODO: Nội dung bài viết đầy đủ sẽ được thêm vào đây</p>
-              <p className="text-xs mt-2">Đây là placeholder — integrate với MDX hoặc CMS sau.</p>
-            </div>
+            {post.content ? (
+              <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            ) : (
+              <>
+                <p className="text-zinc-400 text-lg leading-relaxed">{post.excerpt}</p>
+                <div className="mt-8 p-6 rounded-xl border border-dashed border-white/10 text-center text-zinc-700">
+                  <p className="font-mono text-sm">// TODO: Nội dung bài viết đầy đủ sẽ được thêm vào đây</p>
+                  <p className="text-xs mt-2">Đây là placeholder — integrate với MDX hoặc CMS sau.</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </main>

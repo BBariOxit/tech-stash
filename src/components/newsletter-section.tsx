@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Mail, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { dummySiteConfig } from "@/data";
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState("");
@@ -79,7 +80,7 @@ export default function NewsletterSection() {
                     <Input
                       id="newsletter-email"
                       type="email"
-                      placeholder="mày@example.com"
+                      placeholder={dummySiteConfig.emailPlaceholder}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required

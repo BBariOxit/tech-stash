@@ -2,12 +2,9 @@ import Link from "next/link";
 import { Terminal } from "lucide-react";
 import { GithubIcon, TwitterIcon } from "@/components/icons";
 
-const footerLinks = [
-  { href: "/blog", label: "Blog" },
-  { href: "/snippets", label: "Snippets" },
-  { href: "/about", label: "About" },
-  { href: "/rss.xml", label: "RSS" },
-];
+import { dummyFooterLinks, dummySiteConfig } from "@/data";
+
+const footerLinks = dummyFooterLinks;
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -19,7 +16,7 @@ export default function Footer() {
         <div className="flex items-center gap-2">
           <Terminal className="w-3.5 h-3.5 text-cyan-400/50" />
           <span className="font-mono text-xs text-zinc-600">
-            &copy; {year} Thai Bao — tech-stash
+            &copy; {year} {dummySiteConfig.author} — {dummySiteConfig.siteName.replace('.', '')}
           </span>
         </div>
 
@@ -36,7 +33,7 @@ export default function Footer() {
           ))}
           <div className="w-px h-3 bg-white/[0.08]" />
           <Link
-            href="https://github.com/thaibao"
+            href={dummySiteConfig.github}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
@@ -45,7 +42,7 @@ export default function Footer() {
             <GithubIcon className="w-3.5 h-3.5" />
           </Link>
           <Link
-            href="https://twitter.com/thaibao"
+            href={dummySiteConfig.twitter}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter"

@@ -7,12 +7,9 @@ import { Search, Menu, X, Terminal } from "lucide-react";
 import { GithubIcon, TwitterIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/blog", label: "Blog" },
-  { href: "/snippets", label: "Snippets" },
-  { href: "/about", label: "About" },
-];
+import { dummyNavLinks, dummySiteConfig } from "@/data";
+
+const navLinks = dummyNavLinks;
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -83,7 +80,7 @@ export default function Navbar() {
             <Search className="w-4 h-4" />
           </button>
           <Link
-            href="https://github.com/thaibao"
+            href={dummySiteConfig.github}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
@@ -92,7 +89,7 @@ export default function Navbar() {
             <GithubIcon className="w-4 h-4" />
           </Link>
           <Link
-            href="https://twitter.com/thaibao"
+            href={dummySiteConfig.twitter}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
