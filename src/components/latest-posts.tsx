@@ -53,7 +53,7 @@ function PostCard({ post }: PostCardProps) {
                 <Badge
                   key={tag}
                   variant="outline"
-                  className="text-[10px] px-1.5 py-0 h-4 border-zinc-700/60 text-zinc-500 font-mono"
+                  className="text-[10px] px-1.5 py-0 h-4 border-zinc-700/60 text-zinc-300 font-mono"
                 >
                   {tag}
                 </Badge>
@@ -66,7 +66,7 @@ function PostCard({ post }: PostCardProps) {
             </h3>
 
             {/* Meta */}
-            <div className="flex items-center gap-3 text-[11px] text-zinc-600 mt-auto pt-3 border-t border-white/[0.05]">
+            <div className="flex items-center gap-3 text-[11px] text-zinc-400 mt-auto pt-3 border-t border-white/[0.05]">
               <span className="flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
                 {new Date(post.date).toLocaleDateString("vi-VN")}
@@ -102,7 +102,7 @@ export default function LatestPosts({ posts }: LatestPostsProps) {
           </div>
           <Link
             href="/blog"
-            className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-cyan-400 transition-colors font-mono"
+            className="flex items-center gap-1.5 text-sm text-zinc-300 hover:text-cyan-400 transition-colors font-medium"
           >
             Xem tất cả <ArrowRight className="w-3.5 h-3.5" />
           </Link>

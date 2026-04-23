@@ -15,7 +15,7 @@ export default function Footer() {
         {/* Brand */}
         <div className="flex items-center gap-2">
           <Terminal className="w-3.5 h-3.5 text-cyan-400/50" />
-          <span className="font-mono text-xs text-zinc-600">
+          <span className="font-mono text-xs text-zinc-400">
             &copy; {year} {dummySiteConfig.author} — {dummySiteConfig.siteName.replace('.', '')}
           </span>
         </div>
@@ -26,7 +26,7 @@ export default function Footer() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-xs text-zinc-700 hover:text-zinc-400 transition-colors"
+              className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
             >
               {link.label}
             </Link>
@@ -37,7 +37,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            className="text-zinc-700 hover:text-zinc-400 transition-colors"
+            className="text-zinc-400 hover:text-zinc-300 transition-colors"
           >
             <GithubIcon className="w-3.5 h-3.5" />
           </Link>
@@ -46,7 +46,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Twitter"
-            className="text-zinc-700 hover:text-zinc-400 transition-colors"
+            className="text-zinc-400 hover:text-zinc-300 transition-colors"
           >
             <TwitterIcon className="w-3.5 h-3.5" />
           </Link>

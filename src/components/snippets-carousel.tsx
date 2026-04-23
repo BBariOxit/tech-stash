@@ -13,7 +13,7 @@ const LANG_COLORS: Record<string, string> = {
 };
 
 function SnippetCard({ snippet }: { snippet: Snippet }) {
-  const langClass = LANG_COLORS[snippet.language] ?? "text-zinc-400 bg-zinc-400/10 border-zinc-400/20";
+  const langClass = LANG_COLORS[snippet.language] ?? "text-zinc-300 bg-zinc-400/10 border-zinc-400/20";
 
   return (
     <article className="shrink-0 w-[280px] sm:w-[320px] rounded-xl border border-white/[0.08] bg-[#111113] overflow-hidden card-hover flex flex-col">
@@ -31,7 +31,7 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
       </div>
 
       {/* Description */}
-      <p className="px-4 py-2.5 text-xs text-zinc-500 leading-relaxed border-b border-white/[0.04]">
+      <p className="px-4 py-2.5 text-xs text-zinc-300 leading-relaxed border-b border-white/[0.04]">
         {snippet.description}
       </p>
 
@@ -81,7 +81,7 @@ export default function SnippetsCarousel({ snippets }: SnippetsCarouselProps) {
               CODE SNIPPETS
             </div>
             <h2 className="text-2xl font-bold text-white">Đặc sản của Tech Stash</h2>
-            <p className="text-zinc-500 text-sm mt-1">
+            <p className="text-zinc-300 text-sm mt-1">
               Mẹo nhỏ, hook, pattern — copy về dùng liền.
             </p>
           </div>
@@ -91,7 +91,7 @@ export default function SnippetsCarousel({ snippets }: SnippetsCarouselProps) {
             <button
               onClick={() => scroll("left")}
               disabled={!canScrollLeft}
-              className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/10 text-zinc-400 hover:text-white hover:border-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/10 text-zinc-300 hover:text-white hover:border-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               aria-label="Scroll left"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -99,7 +99,7 @@ export default function SnippetsCarousel({ snippets }: SnippetsCarouselProps) {
             <button
               onClick={() => scroll("right")}
               disabled={!canScrollRight}
-              className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/10 text-zinc-400 hover:text-white hover:border-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center justify-center w-8 h-8 rounded-lg border border-white/10 text-zinc-300 hover:text-white hover:border-white/20 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               aria-label="Scroll right"
             >
               <ChevronRight className="w-4 h-4" />
@@ -127,7 +127,7 @@ export default function SnippetsCarousel({ snippets }: SnippetsCarouselProps) {
         </motion.div>
 
         {/* Mobile scroll hint */}
-        <p className="sm:hidden text-xs text-zinc-700 text-center mt-3">
+        <p className="sm:hidden text-xs text-zinc-400 text-center mt-3">
           Vuốt sang để xem thêm →
         </p>
       </div>

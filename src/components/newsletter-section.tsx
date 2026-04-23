@@ -48,7 +48,7 @@ export default function NewsletterSection() {
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
               Nhận code xịn mỗi tuần
             </h2>
-            <p className="text-zinc-500 text-sm leading-relaxed mb-8">
+            <p className="text-zinc-300 text-sm leading-relaxed mb-8">
               Tổng hợp bài viết mới, snippet hay, và tips thực chiến gửi thẳng vào
               hộp thư. Không spam, không quảng cáo — chỉ có code.
             </p>
@@ -64,7 +64,7 @@ export default function NewsletterSection() {
                 >
                   <CheckCircle2 className="w-10 h-10 text-cyan-400" />
                   <p className="text-white font-medium">Cảm ơn mày đã subscribe! 🎉</p>
-                  <p className="text-zinc-500 text-sm">Check hộp thư để confirm nhé.</p>
+                  <p className="text-zinc-300 text-sm">Check hộp thư để confirm nhé.</p>
                 </motion.div>
               ) : (
                 <motion.form
@@ -76,7 +76,7 @@ export default function NewsletterSection() {
                   className="flex flex-col sm:flex-row gap-3"
                 >
                   <div className="relative flex-1">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 pointer-events-none" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
                     <Input
                       id="newsletter-email"
                       type="email"
@@ -84,7 +84,7 @@ export default function NewsletterSection() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="pl-9 bg-white/[0.04] border-white/[0.08] text-white placeholder:text-zinc-600 focus-visible:border-cyan-400/50 focus-visible:ring-cyan-400/20 h-10"
+                      className="pl-9 bg-white/[0.04] border-white/[0.08] text-white placeholder:text-zinc-400 focus-visible:border-cyan-400/50 focus-visible:ring-cyan-400/20 h-10"
                     />
                   </div>
                   <Button
@@ -108,7 +108,7 @@ export default function NewsletterSection() {
             </AnimatePresence>
 
             {state !== "success" && (
-              <p className="mt-3 text-xs text-zinc-700">
+              <p className="mt-3 text-xs text-zinc-400">
                 Unsubscribe bất cứ lúc nào. No BS.
               </p>
             )}

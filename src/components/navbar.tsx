@@ -63,7 +63,7 @@ export default function Navbar() {
                 "px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
                 pathname === link.href
                   ? "text-cyan-400 bg-cyan-400/10"
-                  : "text-zinc-400 hover:text-white hover:bg-white/[0.06]"
+                  : "text-zinc-300 hover:text-white hover:bg-white/[0.06]"
               )}
             >
               {link.label}
@@ -74,7 +74,7 @@ export default function Navbar() {
         {/* Right actions */}
         <div className="flex items-center gap-2">
           <button
-            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
             aria-label="Search"
           >
             <Search className="w-4 h-4" />
@@ -83,7 +83,7 @@ export default function Navbar() {
             href={dummySiteConfig.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
             aria-label="GitHub"
           >
             <GithubIcon className="w-4 h-4" />
@@ -92,7 +92,7 @@ export default function Navbar() {
             href={dummySiteConfig.twitter}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
             aria-label="Twitter"
           >
             <TwitterIcon className="w-4 h-4" />
@@ -101,7 +101,7 @@ export default function Navbar() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden flex items-center justify-center w-8 h-8 rounded-md text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="md:hidden flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
             aria-label="Toggle menu"
             aria-expanded={mobileOpen}
           >
@@ -122,7 +122,7 @@ export default function Navbar() {
                   "px-3 py-2 rounded-md text-sm font-medium transition-colors",
                   pathname === link.href
                     ? "text-cyan-400 bg-cyan-400/10"
-                    : "text-zinc-400 hover:text-white hover:bg-white/[0.06]"
+                    : "text-zinc-300 hover:text-white hover:bg-white/[0.06]"
                 )}
               >
                 {link.label}

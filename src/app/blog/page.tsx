@@ -24,7 +24,7 @@ export default function BlogPage() {
               ALL POSTS
             </div>
             <h1 className="text-3xl font-bold text-white">Blog</h1>
-            <p className="text-zinc-500 text-sm mt-2">
+            <p className="text-zinc-300 text-sm mt-2">
               {posts.length} bài viết — sắp xếp theo ngày mới nhất.
             </p>
           </div>
@@ -50,7 +50,7 @@ export default function BlogPage() {
                   <div className="p-4 flex flex-col gap-3 flex-1">
                     <div className="flex flex-wrap gap-1.5">
                       {post.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-zinc-700/60 text-zinc-500 font-mono">
+                        <Badge key={tag} variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-zinc-700/60 text-zinc-300 font-mono">
                           {tag}
                         </Badge>
                       ))}
@@ -58,7 +58,7 @@ export default function BlogPage() {
                     <h2 className="text-sm font-semibold text-white group-hover:text-cyan-300 transition-colors leading-snug line-clamp-2 flex-1">
                       {post.title}
                     </h2>
-                    <div className="flex items-center gap-3 text-[11px] text-zinc-600 mt-auto pt-3 border-t border-white/[0.05]">
+                    <div className="flex items-center gap-3 text-[11px] text-zinc-400 mt-auto pt-3 border-t border-white/[0.05]">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {new Date(post.date).toLocaleDateString("vi-VN")}

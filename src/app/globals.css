@@ -63,9 +63,9 @@
     --primary: #22d3ee;
     --primary-foreground: #09090b;
     --secondary: #1c1c1f;
-    --secondary-foreground: #a1a1aa;
+    --secondary-foreground: #d4d4d8; /* zinc-300 */
     --muted: #1c1c1f;
-    --muted-foreground: #71717a;
+    --muted-foreground: #a1a1aa; /* zinc-400 */
     --accent: rgba(34, 211, 238, 0.12);
     --accent-foreground: #22d3ee;
     --destructive: #ef4444;
@@ -98,9 +98,9 @@
     --primary: #22d3ee;
     --primary-foreground: #09090b;
     --secondary: #1c1c1f;
-    --secondary-foreground: #a1a1aa;
+    --secondary-foreground: #d4d4d8; /* zinc-300 */
     --muted: #1c1c1f;
-    --muted-foreground: #71717a;
+    --muted-foreground: #a1a1aa; /* zinc-400 */
     --accent: rgba(34, 211, 238, 0.12);
     --accent-foreground: #22d3ee;
     --destructive: #ef4444;
@@ -129,9 +129,12 @@
     color-scheme: dark;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     min-height: 100dvh;
     font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -159,7 +162,7 @@
   font-family: var(--font-geist-mono), monospace;
   font-size: 0.75rem;
   line-height: 1.6;
-  color: #a1a1aa;
+  color: #d4d4d8;
   white-space: pre;
   overflow: hidden;
 }

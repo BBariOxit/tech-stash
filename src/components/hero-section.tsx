@@ -35,12 +35,12 @@ export default function HeroSection({ featured }: HeroSectionProps) {
               <span className="gradient-text">{dummySiteConfig.author}.</span>
             </h1>
 
-            <p className="text-xl text-zinc-400 font-medium mb-3">
+            <p className="text-xl text-zinc-300 font-medium mb-3">
               {dummySiteConfig.welcomeText}{" "}
               <span className="font-mono text-cyan-400">{dummySiteConfig.siteName}</span>
             </p>
 
-            <p className="text-zinc-500 leading-relaxed text-sm max-w-md">
+            <p className="text-zinc-300 leading-relaxed text-sm max-w-md">
               {dummySiteConfig.description}
             </p>
 
@@ -101,12 +101,12 @@ export default function HeroSection({ featured }: HeroSectionProps) {
                   <h2 className="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors leading-snug mb-2">
                     {featured.title}
                   </h2>
-                  <p className="text-zinc-500 text-sm leading-relaxed line-clamp-2 mb-4">
+                  <p className="text-zinc-300 text-sm leading-relaxed line-clamp-2 mb-4">
                     {featured.excerpt}
                   </p>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-xs text-zinc-600">
+                    <div className="flex items-center gap-3 text-xs text-zinc-400">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {new Date(featured.date).toLocaleDateString("vi-VN")}
@@ -116,7 +116,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
                         {featured.readTime}
                       </span>
                     </div>
-                    <span className="text-xs text-cyan-400 font-mono flex items-center gap-1 group-hover:gap-2 transition-all">
+                    <span className="text-xs text-cyan-400 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
                       Đọc thêm <ArrowRight className="w-3 h-3" />
                     </span>
                   </div>

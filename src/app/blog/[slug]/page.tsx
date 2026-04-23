@@ -25,7 +25,7 @@ export default async function BlogPostPage({
           {/* Back link */}
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 transition-colors mb-8 font-mono"
+            className="inline-flex items-center gap-1.5 text-sm text-zinc-300 hover:text-zinc-300 transition-colors mb-8 font-medium"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Quay lại Blog
@@ -50,7 +50,7 @@ export default async function BlogPostPage({
           </h1>
 
           {/* Meta */}
-          <div className="flex items-center gap-4 text-sm text-zinc-600 mb-8 pb-8 border-b border-white/[0.06]">
+          <div className="flex items-center gap-4 text-sm text-zinc-400 mb-8 pb-8 border-b border-white/[0.06]">
             <span className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
               {new Date(post.date).toLocaleDateString("vi-VN", {
@@ -71,9 +71,9 @@ export default async function BlogPostPage({
               <div dangerouslySetInnerHTML={{ __html: post.content }} />
             ) : (
               <>
-                <p className="text-zinc-400 text-lg leading-relaxed">{post.excerpt}</p>
-                <div className="mt-8 p-6 rounded-xl border border-dashed border-white/10 text-center text-zinc-700">
-                  <p className="font-mono text-sm">// TODO: Nội dung bài viết đầy đủ sẽ được thêm vào đây</p>
+                <p className="text-zinc-300 text-lg leading-relaxed">{post.excerpt}</p>
+                <div className="mt-8 p-6 rounded-xl border border-dashed border-white/10 text-center text-zinc-400">
+                  <p className="text-sm text-zinc-500">// TODO: Nội dung bài viết đầy đủ sẽ được thêm vào đây</p>
                   <p className="text-xs mt-2">Đây là placeholder — integrate với MDX hoặc CMS sau.</p>
                 </div>
               </>
