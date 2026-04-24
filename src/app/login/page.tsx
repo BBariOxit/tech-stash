@@ -3,14 +3,42 @@
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
-import { Github, Loader2, LogIn, Mail, UserPlus } from "lucide-react";
+import type { User } from "@supabase/supabase-js";
+import { Loader2, LogIn, Mail, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 
+import { GithubIcon } from "@/components/icons";
 import { createClient } from "@/lib/supabase/client";
 
 type AuthMode = "login" | "register";
 
 const GOOGLE_ICON = "https://www.svgrepo.com/show/475656/google-color.svg";
+
+async function syncClientProfile(user: User) {
+  const supabase = createClient();
+  const fullName =
+    (user.user_metadata?.full_name as string | undefined) ??
+    (user.user_metadata?.name as string | undefined) ??
+    null;
+  const avatarUrl =
+    (user.user_metadata?.avatar_url as string | undefined) ??
+    (user.user_metadata?.picture as string | undefined) ??
+    null;
+
+  const { error } = await supabase
+    .from("profiles")
+    .upsert(
+      {
+        id: user.id,
+        full_name: fullName,
+        avatar_url: avatarUrl,
+        role: "user",
+      },
+      { onConflict: "id" }
+    );
+
+  if (error) throw error;
+}
 
 export default function LoginPage() {
   const supabase = React.useMemo(() => createClient(), []);
@@ -22,7 +50,7 @@ export default function LoginPage() {
   const [password, setPassword] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const nextPath = searchParams.get("next") || "/admin";
+  const nextPath = searchParams.get("next") || "/";
 
   React.useEffect(() => {
     const error = searchParams.get("error");
@@ -31,8 +59,8 @@ export default function LoginPage() {
     const messageMap: Record<string, string> = {
       "auth-failed": "Đăng nhập OAuth thất bại.",
       "missing-code": "Thiếu mã xác thực từ OAuth provider.",
-      "user-missing": "Không lấy được thông tin user sau đăng nhập.",
-      "profile-sync": "Đăng nhập thành công nhưng lưu profile thất bại.",
+      "user-missing": "Không lấy được user sau đăng nhập.",
+      "profile-sync": "Không đồng bộ được hồ sơ người dùng.",
     };
 
     toast.error("Không thể đăng nhập", {
@@ -77,6 +105,13 @@ export default function LoginPage() {
         });
         if (error) throw error;
 
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (user) {
+          await syncClientProfile(user);
+        }
+
         toast.success("Đăng nhập thành công");
         router.push(nextPath);
         router.refresh();
@@ -93,6 +128,13 @@ export default function LoginPage() {
       if (error) throw error;
 
       if (data.session) {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (user) {
+          await syncClientProfile(user);
+        }
+
         toast.success("Tạo tài khoản thành công");
         router.push(nextPath);
         router.refresh();
@@ -111,9 +153,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#070a10] px-4 py-10">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(20,184,166,0.2),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(56,189,248,0.15),transparent_30%),radial-gradient(circle_at_50%_100%,rgba(16,185,129,0.14),transparent_32%)]" />
-
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black px-4 py-10">
       <motion.div
         initial={{ opacity: 0, y: 24, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -203,7 +243,7 @@ export default function LoginPage() {
             disabled={isLoading}
             className="flex w-full items-center justify-center gap-3 rounded-xl bg-white py-3 text-sm font-semibold text-black transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            <Github className="h-5 w-5" />
+            <GithubIcon className="h-5 w-5" />
             Tiếp tục với GitHub
           </button>
 

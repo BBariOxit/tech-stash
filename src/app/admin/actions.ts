@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { syncAuthenticatedUserProfile } from "@/lib/supabase/user-profile";
+import { getUserRole, syncProfileFromAuth } from "@/lib/supabase/profiles";
 import { revalidatePath } from "next/cache";
 
 export type CreatePostState = {
@@ -31,10 +31,15 @@ export async function createPost(data: {
   }
 
   try {
-    await syncAuthenticatedUserProfile(user);
+    await syncProfileFromAuth(user);
+    const role = await getUserRole(user.id);
+
+    if (role !== "admin") {
+      return { success: false, error: "Bạn không có quyền tạo bài viết." };
+    }
   } catch (error) {
-    console.error("[createPost] Failed to sync profile", error);
-    return { success: false, error: "Không thể đồng bộ profile người dùng." };
+    console.error("[createPost] Failed to validate role", error);
+    return { success: false, error: "Không thể xác thực quyền người dùng." };
   }
 
   // 1. Insert post

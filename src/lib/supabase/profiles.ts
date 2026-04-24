@@ -2,16 +2,14 @@ import type { User } from "@supabase/supabase-js";
 
 import { createClient } from "@/lib/supabase/server";
 
-type ProfilePayload = {
+type ProfileRow = {
   id: string;
-  email: string | null;
   full_name: string | null;
   avatar_url: string | null;
-  provider: string | null;
+  role: string;
 };
 
-function buildProfilePayload(user: User): ProfilePayload {
-  const provider = user.app_metadata?.provider ?? null;
+function normalizeProfile(user: User): ProfileRow {
   const fullName =
     (user.user_metadata?.full_name as string | undefined) ??
     (user.user_metadata?.name as string | undefined) ??
@@ -23,22 +21,31 @@ function buildProfilePayload(user: User): ProfilePayload {
 
   return {
     id: user.id,
-    email: user.email ?? null,
     full_name: fullName,
     avatar_url: avatarUrl,
-    provider,
+    role: "user",
   };
 }
 
-export async function syncAuthenticatedUserProfile(user: User) {
+export async function syncProfileFromAuth(user: User) {
   const supabase = await createClient();
-  const payload = buildProfilePayload(user);
+  const payload = normalizeProfile(user);
 
   const { error } = await supabase
     .from("profiles")
     .upsert(payload, { onConflict: "id" });
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
+}
+
+export async function getUserRole(userId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data?.role ?? null;
 }

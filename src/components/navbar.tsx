@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Search, Menu, X, Terminal } from "lucide-react";
+import { Search, Menu, X, Terminal, LogIn } from "lucide-react";
 import { GithubIcon, TwitterIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +32,7 @@ export default function Navbar() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
-          ? "border-b border-white/[0.06] bg-[#09090b]/80 backdrop-blur-xl"
+          ? "border-b border-white/6 bg-[#09090b]/80 backdrop-blur-xl"
           : "bg-transparent"
       )}
     >
@@ -63,7 +63,7 @@ export default function Navbar() {
                 "px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
                 pathname === link.href
                   ? "text-primary bg-primary/10"
-                  : "text-zinc-300 hover:text-white hover:bg-white/[0.06]"
+                  : "text-zinc-300 hover:text-white hover:bg-white/6"
               )}
             >
               {link.label}
@@ -74,7 +74,7 @@ export default function Navbar() {
         {/* Right actions */}
         <div className="flex items-center gap-2">
           <button
-            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/6 transition-colors"
             aria-label="Search"
           >
             <Search className="w-4 h-4" />
@@ -83,7 +83,7 @@ export default function Navbar() {
             href={dummySiteConfig.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/6 transition-colors"
             aria-label="GitHub"
           >
             <GithubIcon className="w-4 h-4" />
@@ -92,16 +92,24 @@ export default function Navbar() {
             href={dummySiteConfig.twitter}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/6 transition-colors"
             aria-label="Twitter"
           >
             <TwitterIcon className="w-4 h-4" />
           </Link>
 
+          <Link
+            href="/login"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-zinc-200 border border-white/10 hover:text-white hover:border-primary/40 hover:bg-primary/10 transition-colors"
+          >
+            <LogIn className="w-3.5 h-3.5" />
+            Đăng nhập
+          </Link>
+
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="md:hidden flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/6 transition-colors"
             aria-label="Toggle menu"
             aria-expanded={mobileOpen}
           >
@@ -112,7 +120,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-white/[0.06] bg-[#09090b]/95 backdrop-blur-xl">
+        <div className="md:hidden border-t border-white/6 bg-[#09090b]/95 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
             {navLinks.map((link) => (
               <Link
@@ -122,12 +130,21 @@ export default function Navbar() {
                   "px-3 py-2 rounded-md text-sm font-medium transition-colors",
                   pathname === link.href
                     ? "text-primary bg-primary/10"
-                    : "text-zinc-300 hover:text-white hover:bg-white/[0.06]"
+                    : "text-zinc-300 hover:text-white hover:bg-white/6"
                 )}
               >
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/login"
+              className="px-3 py-2 rounded-md text-sm font-medium text-zinc-200 border border-white/10 hover:text-white hover:border-primary/40 hover:bg-primary/10 transition-colors"
+            >
+              <span className="inline-flex items-center gap-2">
+                <LogIn className="w-3.5 h-3.5" />
+                Đăng nhập
+              </span>
+            </Link>
           </div>
         </div>
       )}

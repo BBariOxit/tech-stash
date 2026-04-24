@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
-import { syncAuthenticatedUserProfile } from "@/lib/supabase/user-profile";
+import { syncProfileFromAuth } from "@/lib/supabase/profiles";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
@@ -31,9 +31,9 @@ export async function GET(request: Request) {
   }
 
   try {
-    await syncAuthenticatedUserProfile(user);
+    await syncProfileFromAuth(user);
   } catch (error) {
-    console.error("[auth/callback] Profile sync failed", error);
+    console.error("[auth/callback] Unable to sync profile", error);
     return NextResponse.redirect(`${requestUrl.origin}/login?error=profile-sync`);
   }
 

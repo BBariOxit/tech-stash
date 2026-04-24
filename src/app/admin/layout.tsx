@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Toaster } from "sonner";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { createClient } from "@/lib/supabase/server";
+import { getUserRole, syncProfileFromAuth } from "@/lib/supabase/profiles";
 
 export const metadata: Metadata = {
   title: { default: "Admin — Tech Stash", template: "%s | Admin" },
@@ -22,6 +23,18 @@ export default async function AdminLayout({
 
   if (!user) {
     redirect("/login?next=/admin");
+  }
+
+  try {
+    await syncProfileFromAuth(user);
+    const role = await getUserRole(user.id);
+
+    if (role !== "admin") {
+      redirect("/");
+    }
+  } catch (error) {
+    console.error("[admin/layout] Failed to validate admin role", error);
+    redirect("/");
   }
 
   return (
