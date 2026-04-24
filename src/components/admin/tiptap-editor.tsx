@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
@@ -53,6 +54,13 @@ export function TiptapEditor({ content, onChange, className }: TiptapEditorProps
       },
     },
   });
+
+  // Đồng bộ nội dung từ bên ngoài (quan trọng khi reset form)
+  React.useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor]);
 
   if (!editor) return null;
 

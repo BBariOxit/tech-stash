@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getUserRole, syncProfileFromAuth } from "@/lib/supabase/profiles";
 import { revalidatePath } from "next/cache";
 
 export type CreatePostState = {
@@ -20,9 +21,26 @@ export async function createPost(data: {
   tagIds: string[];
 }): Promise<CreatePostState> {
   const supabase = await createClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-  // Hardcoded author_id — đây là admin tạm, sau sẽ lấy từ session
-  const ADMIN_AUTHOR_ID = process.env.ADMIN_AUTHOR_ID ?? "00000000-0000-0000-0000-000000000000";
+  if (userError || !user) {
+    return { success: false, error: "Bạn cần đăng nhập trước khi tạo bài viết." };
+  }
+
+  try {
+    await syncProfileFromAuth(user);
+    const role = await getUserRole(user.id);
+
+    if (role !== "admin") {
+      return { success: false, error: "Bạn không có quyền tạo bài viết." };
+    }
+  } catch (error) {
+    console.error("[createPost] Failed to validate role", error);
+    return { success: false, error: "Không thể xác thực quyền người dùng." };
+  }
 
   // 1. Insert post
   const { data: post, error: postError } = await supabase
@@ -36,7 +54,7 @@ export async function createPost(data: {
       language: data.language,
       published: data.published,
       featured: false,
-      author_id: ADMIN_AUTHOR_ID,
+      author_id: user.id,
     })
     .select("id")
     .single();
