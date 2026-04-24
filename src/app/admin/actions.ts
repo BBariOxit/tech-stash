@@ -13,6 +13,7 @@ export async function createPost(data: {
   title: string;
   slug: string;
   excerpt: string;
+  thumbnail: string;
   content: string;
   language: string;
   published: boolean;
@@ -30,6 +31,7 @@ export async function createPost(data: {
       title: data.title,
       slug: data.slug,
       excerpt: data.excerpt || null,
+      thumbnail: data.thumbnail || null,
       content: data.content,
       language: data.language,
       published: data.published,
