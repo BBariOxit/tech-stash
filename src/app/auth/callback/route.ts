@@ -34,7 +34,6 @@ export async function GET(request: Request) {
     await syncProfileFromAuth(user);
   } catch (error) {
     console.error("[auth/callback] Unable to sync profile", error);
-    return NextResponse.redirect(`${requestUrl.origin}/login?error=profile-sync`);
   }
 
   return NextResponse.redirect(`${requestUrl.origin}${nextPath}`);

@@ -68,10 +68,18 @@ export default function LoginPage() {
     });
   }, [searchParams]);
 
-  const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
+  const buildRedirectTo = () => {
+    const origin =
+      typeof window !== "undefined"
+        ? window.location.origin
+        : process.env.NEXT_PUBLIC_SITE_URL ?? "";
+
+    return `${origin}/auth/callback?next=${encodeURIComponent(nextPath)}`;
+  };
 
   const handleOAuth = async (provider: "github" | "google") => {
     setIsLoading(true);
+    const redirectTo = buildRedirectTo();
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: { redirectTo },
@@ -109,7 +117,11 @@ export default function LoginPage() {
           data: { user },
         } = await supabase.auth.getUser();
         if (user) {
-          await syncClientProfile(user);
+          try {
+            await syncClientProfile(user);
+          } catch (profileError) {
+            console.error("[login] Failed to sync profile", profileError);
+          }
         }
 
         toast.success("Đăng nhập thành công");
@@ -118,6 +130,7 @@ export default function LoginPage() {
         return;
       }
 
+      const redirectTo = buildRedirectTo();
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -132,7 +145,11 @@ export default function LoginPage() {
           data: { user },
         } = await supabase.auth.getUser();
         if (user) {
-          await syncClientProfile(user);
+          try {
+            await syncClientProfile(user);
+          } catch (profileError) {
+            console.error("[register] Failed to sync profile", profileError);
+          }
         }
 
         toast.success("Tạo tài khoản thành công");
