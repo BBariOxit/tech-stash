@@ -1,11 +1,15 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import type { User } from "@supabase/supabase-js";
+import { useState, useEffect, useMemo } from "react";
 import { Search, Menu, X, Terminal, LogIn } from "lucide-react";
 import { GithubIcon, TwitterIcon } from "@/components/icons";
+import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { UserDropdown } from "@/components/user-dropdown";
 
 import { dummyNavLinks, dummySiteConfig } from "@/data";
 
@@ -13,8 +17,47 @@ const navLinks = dummyNavLinks;
 
 export default function Navbar() {
   const pathname = usePathname();
+  const supabase = useMemo(() => createClient(), []);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  const displayName =
+    (user?.user_metadata?.full_name as string | undefined) ??
+    (user?.user_metadata?.name as string | undefined) ??
+    user?.email ??
+    "User";
+  const avatarUrl =
+    (user?.user_metadata?.avatar_url as string | undefined) ??
+    (user?.user_metadata?.picture as string | undefined) ??
+    null;
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadUser = async () => {
+      const {
+        data: { user: currentUser },
+      } = await supabase.auth.getUser();
+
+      if (mounted) {
+        setUser(currentUser ?? null);
+      }
+    };
+
+    void loadUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [supabase]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -98,13 +141,17 @@ export default function Navbar() {
             <TwitterIcon className="w-4 h-4" />
           </Link>
 
-          <Link
-            href="/login"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-zinc-200 border border-white/10 hover:text-white hover:border-primary/40 hover:bg-primary/10 transition-colors"
-          >
-            <LogIn className="w-3.5 h-3.5" />
-            Đăng nhập
-          </Link>
+          {user ? (
+            <UserDropdown user={user} />
+          ) : (
+            <Link
+              href="/login"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-zinc-200 border border-white/10 hover:text-white hover:border-primary/40 hover:bg-primary/10 transition-colors"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              Đăng nhập
+            </Link>
+          )}
 
           {/* Mobile hamburger */}
           <button
@@ -136,15 +183,47 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/login"
-              className="px-3 py-2 rounded-md text-sm font-medium text-zinc-200 border border-white/10 hover:text-white hover:border-primary/40 hover:bg-primary/10 transition-colors"
-            >
-              <span className="inline-flex items-center gap-2">
-                <LogIn className="w-3.5 h-3.5" />
-                Đăng nhập
-              </span>
-            </Link>
+            {user ? (
+              <div className="mt-1 space-y-1">
+                <div className="flex items-center gap-2 rounded-md border border-white/10 bg-white/4 px-3 py-2">
+                  {avatarUrl ? (
+                    <Image
+                      src={avatarUrl}
+                      alt="User avatar"
+                      width={24}
+                      height={24}
+                      className="h-6 w-6 rounded-full border border-primary/30 object-cover"
+                      unoptimized
+                    />
+                  ) : (
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-[11px] font-semibold text-primary">
+                      {displayName.charAt(0).toUpperCase()}
+                    </span>
+                  )}
+                  <span className="truncate text-sm font-medium text-zinc-100">{displayName}</span>
+                </div>
+                <button
+                  onClick={async () => {
+                    await supabase.auth.signOut();
+                    window.location.reload();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-red-400 border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 transition-colors"
+                >
+                  <LogIn className="w-3.5 h-3.5 rotate-180" />
+                  Đăng xuất
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="px-3 py-2 rounded-md text-sm font-medium text-zinc-200 border border-white/10 hover:text-white hover:border-primary/40 hover:bg-primary/10 transition-colors"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <LogIn className="w-3.5 h-3.5" />
+                  Đăng nhập
+                </span>
+              </Link>
+            )}
           </div>
         </div>
       )}

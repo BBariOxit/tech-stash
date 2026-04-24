@@ -29,7 +29,11 @@ export default async function AdminLayout({
     await syncProfileFromAuth(user);
     const role = await getUserRole(user.id);
 
+    console.log(`[AdminLayout] Debug: User ID: ${user.id}`);
+    console.log(`[AdminLayout] Debug: Role: "${role}"`);
+
     if (role !== "admin") {
+      console.warn(`[AdminLayout] Access denied for role: "${role}"`);
       redirect("/");
     }
   } catch (error) {
