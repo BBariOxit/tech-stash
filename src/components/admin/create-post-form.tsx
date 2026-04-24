@@ -32,6 +32,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { TiptapEditor } from "@/components/admin/tiptap-editor";
 import { TagsCombobox } from "@/components/admin/tags-combobox";
+import { ThumbnailUpload } from "@/components/admin/thumbnail-upload";
 import { createPost } from "@/app/admin/actions";
 import type { Tables } from "../../../types/supabase";
 
@@ -45,6 +46,7 @@ const postSchema = z.object({
     .min(3, "Slug quá ngắn")
     .regex(/^[a-z0-9-]+$/, "Slug chỉ được chứa chữ thường, số và dấu gạch ngang"),
   excerpt: z.string().max(500, "Excerpt tối đa 500 ký tự").optional(),
+  thumbnail: z.union([z.string().url("Thumbnail phải là URL hợp lệ"), z.literal("")]).optional(),
   language: z.string().min(1, "Hãy chọn ngôn ngữ"),
   content: z.string().min(10, "Nội dung quá ngắn, gõ nhiều vào!"),
   published: z.boolean(),
@@ -87,6 +89,7 @@ export function CreatePostForm() {
       title: "",
       slug: "",
       excerpt: "",
+      thumbnail: "",
       language: "",
       content: "",
       published: false,
@@ -95,6 +98,7 @@ export function CreatePostForm() {
 
   const title = watch("title");
   const published = watch("published");
+  const currentThumbnail = watch("thumbnail");
 
   // Auto-generate slug from title
   React.useEffect(() => {
@@ -113,6 +117,7 @@ export function CreatePostForm() {
       const result = await createPost({
         ...values,
         excerpt: values.excerpt ?? "",
+        thumbnail: values.thumbnail || "",
         tagIds: selectedTags.map((t) => t.id),
       });
 
@@ -225,6 +230,13 @@ export function CreatePostForm() {
         <div className="flex-[3] min-w-[260px] sticky top-6 space-y-5">
           {/* Card wrapper */}
           <div className="border border-white/10 rounded-xl bg-[#0d0d0f] p-5 space-y-5">
+            <ThumbnailUpload
+              value={currentThumbnail}
+              onChange={(url) => setValue("thumbnail", url, { shouldValidate: true })}
+            />
+
+            <Separator className="bg-white/10" />
+
             {/* Published toggle */}
             <div className="space-y-2">
               <p className="text-sm font-medium text-zinc-300">Trạng thái</p>

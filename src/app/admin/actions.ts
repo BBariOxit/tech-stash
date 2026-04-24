@@ -13,6 +13,7 @@ export async function createPost(data: {
   title: string;
   slug: string;
   excerpt: string;
+  thumbnail: string;
   content: string;
   language: string;
   published: boolean;
@@ -30,7 +31,9 @@ export async function createPost(data: {
       title: data.title,
       slug: data.slug,
       excerpt: data.excerpt || null,
+      thumbnail: data.thumbnail || null,
       content: data.content,
+      language: data.language,
       published: data.published,
       featured: false,
       author_id: ADMIN_AUTHOR_ID,
@@ -39,7 +42,10 @@ export async function createPost(data: {
     .single();
 
   if (postError) {
-    console.error("Post insert error:", postError);
+    console.error("[createPost] Post insert failed:", postError);
+    if (postError.code === "23503") {
+      return { success: false, error: "Lỗi tác giả: author_id không tồn tại trong hệ thống." };
+    }
     if (postError.code === "23505") {
       return { success: false, error: "Slug này đã tồn tại, hãy chọn slug khác." };
     }
