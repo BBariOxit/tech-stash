@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
 
 export const metadata: Metadata = {
-  title: "Admin — Tech Stash",
+  title: { default: "Admin — Tech Stash", template: "%s | Admin" },
   description: "Trang quản trị nội dung Tech Stash",
   robots: { index: false, follow: false },
 };
@@ -13,8 +14,14 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      {children}
+    <div className="flex h-screen bg-background overflow-hidden">
+      <AdminSidebar />
+
+      {/* Main scrollable content area */}
+      <div className="flex-1 overflow-y-auto">
+        {children}
+      </div>
+
       <Toaster
         theme="dark"
         richColors
@@ -27,6 +34,6 @@ export default function AdminLayout({
           },
         }}
       />
-    </>
+    </div>
   );
 }
