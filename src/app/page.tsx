@@ -9,7 +9,7 @@ import { snippets } from "@/lib/snippets";
 
 export default async function Home() {
   const featured = await getFeaturedPost();
-  const latestPosts = await getLatestPosts(featured?.slug);
+  const latestPosts = await getLatestPosts();
 
   return (
     <>
