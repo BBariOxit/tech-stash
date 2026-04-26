@@ -36,12 +36,16 @@ export default function Navbar() {
     let mounted = true;
 
     const loadUser = async () => {
-      const {
-        data: { user: currentUser },
-      } = await supabase.auth.getUser();
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
 
-      if (mounted) {
-        setUser(currentUser ?? null);
+        if (mounted) {
+          setUser(session?.user ?? null);
+        }
+      } catch (error) {
+        console.warn("Auth load error (likely concurrent request):", error);
       }
     };
 
