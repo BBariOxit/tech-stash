@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { cn } from "@/lib/utils";
-import { FileText, Tag, Shield, ChevronRight, ArrowLeft, LogIn } from "lucide-react";
+import { FileText, Layers, Tag, Shield, ChevronRight, ArrowLeft, LogIn } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 const NAV_ITEMS = [
@@ -15,6 +15,12 @@ const NAV_ITEMS = [
     label: "Tạo Post",
     icon: FileText,
     exact: true,
+  },
+  {
+    href: "/admin/posts",
+    label: "Quản lý Posts",
+    icon: Layers,
+    exact: false,
   },
   {
     href: "/admin/tags",

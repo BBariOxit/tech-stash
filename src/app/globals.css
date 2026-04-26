@@ -230,3 +230,17 @@
 .ProseMirror:focus {
   outline: none;
 }
+
+/* --- TRỊ BỆNH CHO INLINE CODE TRANG DETAIL (CLASS .PROSE) --- */
+
+/* 1. Ép màu nền, viền, và chữ màu cyan cho inline code nằm trong đoạn văn hoặc danh sách */
+.prose p code,
+.prose li code {
+  @apply bg-white/5 text-cyan-400 px-1.5 py-0.5 rounded font-mono text-sm font-normal border border-gray-800;
+}
+
+/* 2. CHÍ MẠNG: Chặt đứt 2 cái dấu nháy đơn (backticks) mặc định của Tailwind Typography */
+.prose code::before,
+.prose code::after {
+  content: none !important;
+}
