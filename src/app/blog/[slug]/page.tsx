@@ -61,7 +61,7 @@ export default async function BlogPostPage({
             </span>
             <span className="flex items-center gap-1.5">
               <Clock className="w-4 h-4" />
-              {post.readTime}
+              {post.reading_time} phút đọc
             </span>
           </div>
 

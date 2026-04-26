@@ -19,6 +19,7 @@ export async function createPost(data: {
   language: string;
   published: boolean;
   tagIds: string[];
+  reading_time: number;
 }): Promise<CreatePostState> {
   const supabase = await createClient();
   const {
@@ -53,6 +54,7 @@ export async function createPost(data: {
       content: data.content,
       language: data.language,
       published: data.published,
+      reading_time: data.reading_time,
       featured: false,
       author_id: user.id,
     })

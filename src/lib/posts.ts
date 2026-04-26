@@ -5,7 +5,7 @@ export interface Post {
   date: string;
   tags: string[];
   thumbnail: string;
-  readTime: string;
+  reading_time: number;
   featured?: boolean;
   content?: string;
 }

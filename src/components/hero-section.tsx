@@ -115,7 +115,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        {featured.readTime}
+                        {featured.reading_time} phút đọc
                       </span>
                     </div>
                     <span className="text-xs text-primary font-medium flex items-center gap-1 group-hover:gap-2 transition-all">

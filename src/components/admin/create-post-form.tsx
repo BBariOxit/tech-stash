@@ -33,6 +33,7 @@ import { Separator } from "@/components/ui/separator";
 import { TiptapEditor } from "@/components/admin/tiptap-editor";
 import { TagsCombobox } from "@/components/admin/tags-combobox";
 import { ThumbnailUpload } from "@/components/admin/thumbnail-upload";
+import { calculateReadTime } from "@/utils/readTime";
 import { createPost } from "@/app/admin/actions";
 import type { Tables } from "../../../types/supabase";
 
@@ -74,6 +75,7 @@ const LANGUAGES = [
 export function CreatePostForm() {
   const [selectedTags, setSelectedTags] = React.useState<Tag[]>([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [plainText, setPlainText] = React.useState("");
 
   const {
     register,
@@ -114,11 +116,13 @@ export function CreatePostForm() {
   const onSubmit = async (values: PostFormValues) => {
     setIsSubmitting(true);
     try {
+      const readTime = calculateReadTime(plainText);
       const result = await createPost({
         ...values,
         excerpt: values.excerpt ?? "",
         thumbnail: values.thumbnail || "",
         tagIds: selectedTags.map((t) => t.id),
+        reading_time: readTime,
       });
 
       if (result.success) {
@@ -215,6 +219,7 @@ export function CreatePostForm() {
                 <TiptapEditor
                   content={field.value}
                   onChange={field.onChange}
+                  onTextChange={setPlainText}
                 />
               )}
             />
