@@ -38,7 +38,7 @@ export const dummyPosts: Post[] = [
     date: "2025-04-18",
     tags: ["DevOps", "VPS", "Rant"],
     thumbnail: "/thumbnails/oracle-vps.jpg",
-    readTime: "8 min read",
+    reading_time: 8,
     featured: true,
     content: `
       <h2>Tưởng Free Mà Ngon À? Không Dễ Đâu!</h2>
@@ -61,7 +61,7 @@ export const dummyPosts: Post[] = [
     date: "2025-04-10",
     tags: ["Next.js", "React"],
     thumbnail: "/thumbnails/nextjs-data.jpg",
-    readTime: "6 min read",
+    reading_time: 6,
     content: `
       <h2>Đừng Dùng useEffect Nữa!</h2>
       <p>Với Next.js App Router (từ v13 trở đi), cách chúng ta fetch data đã thay đổi hoàn toàn so với thời Pages Router. Nếu bạn vẫn đang dùng <code>useEffect</code> để gọi API trong React component, bạn đang tự làm chậm ứng dụng của mình.</p>
@@ -91,7 +91,7 @@ export default async function Page() {
     date: "2025-04-02",
     tags: ["Supabase", "Security"],
     thumbnail: "/thumbnails/supabase-rls.jpg",
-    readTime: "5 min read",
+    reading_time: 5,
     content: `
       <h2>RLS Là Gì Mà Phải Cài?</h2>
       <p>Row Level Security (RLS) của PostgreSQL (và Supabase) cho phép bạn giới hạn ai được quyền đọc/ghi dữ liệu ở cấp độ <strong>từng dòng</strong> trong bảng. Rất nhiều bạn khi mới dùng Supabase lấy key <code>anon</code> public ra frontend mà quên bật RLS, dẫn đến ai cũng có thể query hoặc xóa sạch database của bạn bằng vài dòng code JS.</p>
@@ -114,7 +114,7 @@ export default async function Page() {
     date: "2025-03-25",
     tags: ["Tailwind", "CSS"],
     thumbnail: "/thumbnails/tailwind-v4.jpg",
-    readTime: "4 min read",
+    reading_time: 4,
     content: `
       <h2>Tạm Biệt tailwind.config.js</h2>
       <p>Tailwind CSS v4 là một bản cập nhật lớn, đánh dấu sự chuyển đổi từ cấu hình bằng JavaScript sang cấu hình bằng CSS (CSS-first config). Điều này giúp việc tích hợp trở nên cực kỳ đơn giản.</p>
@@ -144,7 +144,7 @@ export default async function Page() {
     date: "2025-03-15",
     tags: ["TypeScript"],
     thumbnail: "/thumbnails/typescript-tips.jpg",
-    readTime: "7 min read",
+    reading_time: 7,
     content: `
       <h2>Viết TypeScript Đừng Như Viết AnyScript</h2>
       <p>Nếu bạn chỉ dùng interface và string/number cơ bản, bạn mới sử dụng được 20% sức mạnh của TypeScript. Dưới đây là những tính năng nâng cao giúp type-checking chặt chẽ hơn.</p>
@@ -166,7 +166,7 @@ export default async function Page() {
     date: "2025-03-05",
     tags: ["Docker", "DevOps"],
     thumbnail: "/thumbnails/docker-compose.jpg",
-    readTime: "5 min read",
+    reading_time: 5,
     content: `
       <h2>Ngừng Việc Cài Cắm Trực Tiếp Lên Máy Tính!</h2>
       <p>Mình từng có thói quen cài Node, Postgres, Redis... trực tiếp lên máy. Hậu quả là sau vài tháng, máy rác và xung đột version liên miên (dự án này cần Node 14, dự án kia Node 20). Docker Compose là vị cứu tinh.</p>

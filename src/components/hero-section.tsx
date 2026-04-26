@@ -79,7 +79,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
                 {/* Thumbnail */}
                 <div className="relative h-44 overflow-hidden bg-zinc-900">
                   <img
-                    src={PLACEHOLDER_IMG}
+                    src={featured.thumbnail || PLACEHOLDER_IMG}
                     alt={featured.title}
                     className="w-full h-full object-cover opacity-60 group-hover:scale-[1.03] transition-transform duration-500"
                   />
@@ -115,7 +115,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        {featured.readTime}
+                        {featured.reading_time} phút đọc
                       </span>
                     </div>
                     <span className="text-xs text-primary font-medium flex items-center gap-1 group-hover:gap-2 transition-all">

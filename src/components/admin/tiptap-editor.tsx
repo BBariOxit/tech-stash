@@ -26,12 +26,13 @@ const lowlight = createLowlight(common);
 interface TiptapEditorProps {
   content: string;
   onChange: (content: string) => void;
+  onTextChange?: (text: string) => void;
   className?: string;
 }
 
 type Level = 1 | 2 | 3 | 4 | 5 | 6;
 
-export function TiptapEditor({ content, onChange, className }: TiptapEditorProps) {
+export function TiptapEditor({ content, onChange, onTextChange, className }: TiptapEditorProps) {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -46,11 +47,14 @@ export function TiptapEditor({ content, onChange, className }: TiptapEditorProps
     content,
     onUpdate({ editor }) {
       onChange(editor.getHTML());
+      if (onTextChange) {
+        onTextChange(editor.getText());
+      }
     },
     editorProps: {
       attributes: {
         class:
-          "min-h-[400px] p-4 focus:outline-none prose prose-invert prose-sm max-w-none prose-pre:bg-[#0d1117] prose-pre:border prose-pre:border-white/10 prose-code:text-primary prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded",
+          "min-h-[400px] p-4 focus:outline-none prose prose-invert prose-sm max-w-none",
       },
     },
   });

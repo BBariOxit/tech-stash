@@ -7,15 +7,15 @@ import Footer from "@/components/footer";
 import { getFeaturedPost, getLatestPosts } from "@/lib/posts";
 import { snippets } from "@/lib/snippets";
 
-export default function Home() {
-  const featured = getFeaturedPost();
-  const latestPosts = getLatestPosts(featured.slug);
+export default async function Home() {
+  const featured = await getFeaturedPost();
+  const latestPosts = await getLatestPosts();
 
   return (
     <>
       <Navbar />
       <main className="flex-1">
-        <HeroSection featured={featured} />
+        {featured && <HeroSection featured={featured} />}
         <LatestPosts posts={latestPosts} />
         <SnippetsCarousel snippets={snippets} />
         <NewsletterSection />

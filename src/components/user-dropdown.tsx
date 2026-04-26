@@ -94,35 +94,20 @@ export function UserDropdown({ user }: UserDropdownProps) {
 
         {/* Menu Items Section */}
         <DropdownMenuGroup className="p-1 space-y-0.5">
-          <DropdownMenuItem asChild>
-            <Link 
-              href="/admin" 
-              className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none"
-            >
-              <LayoutDashboard className="w-4 h-4 text-primary" />
-              <span className="text-sm">Admin Dashboard</span>
-              <ShieldCheck className="w-3 h-3 ml-auto text-primary/60" />
-            </Link>
+          <DropdownMenuItem render={<Link href="/admin" className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none" />}>
+            <LayoutDashboard className="w-4 h-4 text-primary" />
+            <span className="text-sm">Admin Dashboard</span>
+            <ShieldCheck className="w-3 h-3 ml-auto text-primary/60" />
           </DropdownMenuItem>
 
-          <DropdownMenuItem asChild>
-            <Link 
-              href="/profile" 
-              className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none"
-            >
-              <UserIcon className="w-4 h-4 text-zinc-400" />
-              <span className="text-sm">Hồ sơ cá nhân</span>
-            </Link>
+          <DropdownMenuItem render={<Link href="/profile" className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none" />}>
+            <UserIcon className="w-4 h-4 text-zinc-400" />
+            <span className="text-sm">Hồ sơ cá nhân</span>
           </DropdownMenuItem>
 
-          <DropdownMenuItem asChild>
-            <Link 
-              href="/settings" 
-              className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none"
-            >
-              <Settings className="w-4 h-4 text-zinc-400" />
-              <span className="text-sm">Cài đặt hệ thống</span>
-            </Link>
+          <DropdownMenuItem render={<Link href="/settings" className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none" />}>
+            <Settings className="w-4 h-4 text-zinc-400" />
+            <span className="text-sm">Cài đặt hệ thống</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
@@ -130,15 +115,9 @@ export function UserDropdown({ user }: UserDropdownProps) {
 
         {/* External Link Section */}
         <DropdownMenuGroup className="p-1">
-          <DropdownMenuItem asChild>
-            <a 
-              href="https://github.com" 
-              target="_blank"
-              className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none group/link"
-            >
-              <ExternalLink className="w-4 h-4 text-zinc-500 group-hover/link:text-zinc-300" />
-              <span className="text-sm">Trợ giúp & Phản hồi</span>
-            </a>
+          <DropdownMenuItem render={<a href="https://github.com" target="_blank" className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none group/link" />}>
+            <ExternalLink className="w-4 h-4 text-zinc-500 group-hover/link:text-zinc-300" />
+            <span className="text-sm">Trợ giúp & Phản hồi</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
