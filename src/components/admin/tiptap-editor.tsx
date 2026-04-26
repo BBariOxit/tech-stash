@@ -54,7 +54,7 @@ export function TiptapEditor({ content, onChange, onTextChange, className }: Tip
     editorProps: {
       attributes: {
         class:
-          "min-h-[400px] p-4 focus:outline-none prose prose-invert prose-sm max-w-none prose-pre:bg-[#0d1117] prose-pre:border prose-pre:border-white/10 prose-code:text-primary prose-code:bg-white/5 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded",
+          "min-h-[400px] p-4 focus:outline-none prose prose-invert prose-sm max-w-none",
       },
     },
   });

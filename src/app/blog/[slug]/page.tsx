@@ -2,9 +2,10 @@ import Link from "next/link";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
-import { posts } from "@/lib/posts";
+import { getPostBySlug, getAllPosts } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
+import { PostContent } from "@/components/post-content";
 
 // Next.js 16: params is a Promise
 export default async function BlogPostPage({
@@ -13,7 +14,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) notFound();
 
@@ -21,7 +22,7 @@ export default async function BlogPostPage({
     <>
       <Navbar />
       <main className="flex-1 pt-28 pb-16 px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           {/* Back link */}
           <Link
             href="/blog"
@@ -66,19 +67,17 @@ export default async function BlogPostPage({
           </div>
 
           {/* Content */}
-          <div className="prose prose-invert prose-zinc max-w-none">
-            {post.content ? (
-              <div dangerouslySetInnerHTML={{ __html: post.content }} />
-            ) : (
-              <>
-                <p className="text-zinc-300 text-lg leading-relaxed">{post.excerpt}</p>
-                <div className="mt-8 p-6 rounded-xl border border-dashed border-white/10 text-center text-zinc-400">
-                  <p className="text-sm text-zinc-500">// TODO: Nội dung bài viết đầy đủ sẽ được thêm vào đây</p>
-                  <p className="text-xs mt-2">Đây là placeholder — integrate với MDX hoặc CMS sau.</p>
-                </div>
-              </>
-            )}
-          </div>
+          {post.content ? (
+            <PostContent content={post.content} />
+          ) : (
+            <div className="prose prose-invert prose-zinc max-w-none">
+              <p className="text-zinc-300 text-lg leading-relaxed">{post.excerpt}</p>
+              <div className="mt-8 p-6 rounded-xl border border-dashed border-white/10 text-center text-zinc-400">
+                <p className="text-sm text-zinc-500">// TODO: Nội dung bài viết đầy đủ sẽ được thêm vào đây</p>
+                <p className="text-xs mt-2">Đây là placeholder — integrate với MDX hoặc CMS sau.</p>
+              </div>
+            </div>
+          )}
         </div>
       </main>
       <Footer />
@@ -87,7 +86,8 @@ export default async function BlogPostPage({
 }
 
 // Generate static params for all posts
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const posts = await getAllPosts();
   return posts.map((post) => ({ slug: post.slug }));
 }
 
@@ -97,7 +97,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
+  const post = await getPostBySlug(slug);
   if (!post) return {};
   return {
     title: post.title,

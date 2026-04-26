@@ -2,7 +2,7 @@ import Link from "next/link";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
-import { posts } from "@/lib/posts";
+import { getAllPosts } from "@/lib/posts";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 
 export const metadata = {
@@ -12,7 +12,8 @@ export const metadata = {
 
 const PLACEHOLDER_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='220' viewBox='0 0 400 220'%3E%3Crect width='400' height='220' fill='%2318181b'/%3E%3Crect x='160' y='80' width='80' height='60' rx='6' fill='%2327272a'/%3E%3Ccircle cx='200' cy='105' r='14' fill='%2322d3ee' opacity='0.25'/%3E%3C/svg%3E";
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getAllPosts();
   return (
     <>
       <Navbar />
@@ -35,7 +36,7 @@ export default function BlogPage() {
                 <article className="h-full rounded-xl border border-white/[0.08] bg-[#111113] overflow-hidden card-hover flex flex-col">
                   <div className="relative h-40 overflow-hidden bg-zinc-900 shrink-0">
                     <img
-                      src={PLACEHOLDER_IMG}
+                      src={post.thumbnail || PLACEHOLDER_IMG}
                       alt={post.title}
                       className="w-full h-full object-cover opacity-50 group-hover:scale-[1.04] transition-transform duration-500"
                     />

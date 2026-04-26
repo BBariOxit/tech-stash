@@ -79,7 +79,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
                 {/* Thumbnail */}
                 <div className="relative h-44 overflow-hidden bg-zinc-900">
                   <img
-                    src={PLACEHOLDER_IMG}
+                    src={featured.thumbnail || PLACEHOLDER_IMG}
                     alt={featured.title}
                     className="w-full h-full object-cover opacity-60 group-hover:scale-[1.03] transition-transform duration-500"
                   />

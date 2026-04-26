@@ -38,7 +38,7 @@ function PostCard({ post }: PostCardProps) {
           {/* Thumbnail */}
           <div className="relative h-40 overflow-hidden bg-zinc-900 shrink-0">
             <img
-              src={PLACEHOLDER_IMG}
+              src={post.thumbnail || PLACEHOLDER_IMG}
               alt={post.title}
               className="w-full h-full object-cover opacity-50 group-hover:scale-[1.04] transition-transform duration-500"
             />

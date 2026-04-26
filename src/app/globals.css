@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -190,4 +191,42 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* --- STYLE CHO TIPTAP EDITOR --- */
+
+/* 1. Sửa Inline Code (Dùng cho mấy chữ như useMemo giữa dòng) */
+.ProseMirror p code {
+  @apply bg-zinc-800 text-cyan-400 px-1.5 py-0.5 rounded-md font-mono text-sm border border-zinc-700;
+}
+
+/* 2. Sửa Code Block (Khối code to) */
+.ProseMirror pre {
+  @apply bg-[#282c34] text-zinc-100 p-4 rounded-xl font-mono text-sm overflow-x-auto my-4 border border-zinc-800;
+}
+
+/* 3. Đảm bảo font chữ trong Code Block phải là Monospace (Rất quan trọng) */
+.ProseMirror pre code,
+.ProseMirror pre code * {
+  @apply bg-transparent text-inherit p-0 border-none font-mono;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace !important;
+}
+
+/* 4. Fix luôn cho cái Inline Code lỡ nó cũng bị dở chứng */
+.ProseMirror p code,
+.ProseMirror p code * {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace !important;
+}
+
+/* 5. Fix font cho Front-end (Trang Detail Blog) để comment tiếng Việt không bị lỗi */
+.prose pre code,
+.prose pre code *,
+.prose p code,
+.prose p code * {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace !important;
+}
+
+/* (Bonus) Sửa cái viền outline khi click vào editor cho đỡ ngứa mắt */
+.ProseMirror:focus {
+  outline: none;
 }
