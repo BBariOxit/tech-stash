@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from "motion/react";
 import type { User } from "@supabase/supabase-js";
-import { Loader2, LogIn, Mail, UserPlus, Eye, EyeOff } from "lucide-react";
+import { Loader2, LogIn, Mail, UserPlus, Eye, EyeOff, Check } from "lucide-react";
 import { toast } from "sonner";
 
 import { GithubIcon } from "@/components/icons";
@@ -30,7 +30,8 @@ function validatePassword(password: string): string | null {
   return null;
 }
 
-// ─── Profile sync ─────────────────────────────────────────────────────────────
+// ─── Profile sync (client-side) ───────────────────────────────────────────────
+// Chỉ update metadata, KHÔNG đụng role — tránh downgrade admin và tránh RLS block
 async function syncClientProfile(user: User) {
   const supabase = createClient();
   const fullName =
@@ -42,14 +43,30 @@ async function syncClientProfile(user: User) {
     (user.user_metadata?.picture as string | undefined) ??
     null;
 
-  const { error } = await supabase
+  // 1. Kiểm tra profile đã tồn tại chưa
+  const { data: existing, error: selectError } = await supabase
     .from("profiles")
-    .upsert(
-      { id: user.id, full_name: fullName, avatar_url: avatarUrl, role: "user" },
-      { onConflict: "id" }
-    );
+    .select("id")
+    .eq("id", user.id)
+    .maybeSingle();
 
-  if (error) throw error;
+  if (selectError) {
+    console.warn("[syncClientProfile] Could not check profile:", selectError.message);
+    return; // Không throw — login vẫn thành công
+  }
+
+  if (existing) {
+    // 2. Đã có profile → chỉ update metadata, KHÔNG ghi đè role
+    await supabase
+      .from("profiles")
+      .update({ full_name: fullName, avatar_url: avatarUrl })
+      .eq("id", user.id);
+  } else {
+    // 3. User mới → insert với role mặc định "user"
+    await supabase
+      .from("profiles")
+      .insert({ id: user.id, full_name: fullName, avatar_url: avatarUrl, role: "user" });
+  }
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -107,7 +124,7 @@ function TiltCard({ children }: { children: React.ReactNode }) {
       initial={{ opacity: 0, y: 28, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#0c1118]/90 p-7 shadow-[0_24px_80px_-20px_rgba(45,212,191,0.35)] backdrop-blur-xl"
+      className="relative z-10 w-full max-w-md rounded-2xl border border-white/10 bg-[#0c1118]/90 p-7 shadow-[0_24px_80px_-20px_rgba(45,212,191,0.35)] backdrop-blur-xl"
     >
       {/* Spotlight layer */}
       <motion.div
@@ -138,6 +155,8 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState<string | null>(null);
+  const [passwordFocused, setPasswordFocused] = React.useState(false);
+  const [isSuccess, setIsSuccess] = React.useState(false); // register confirm-email screen
 
   const nextPath = searchParams.get("next") || "/";
 
@@ -245,9 +264,8 @@ export default function LoginPage() {
         router.push(nextPath);
         router.refresh();
       } else {
-        toast.success("Đăng ký thành công", {
-          description: "Kiểm tra email để xác nhận tài khoản.",
-        });
+        // Supabase gửi email confirm — chuyển sang success screen
+        setIsSuccess(true);
       }
     } catch (error) {
       toast.error(mode === "login" ? "Đăng nhập thất bại" : "Đăng ký thất bại", {
@@ -286,54 +304,136 @@ export default function LoginPage() {
       <TiltCard>
         {/* ── Header ── */}
         <div className="mb-7 text-center">
-          <motion.div
-            key={mode}
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-cyan-300/20 bg-cyan-400/10 shadow-inner shadow-cyan-300/10"
-          >
-            {mode === "login" ? (
-              <LogIn className="h-7 w-7 text-cyan-300" />
-            ) : (
-              <UserPlus className="h-7 w-7 text-cyan-300" />
-            )}
-          </motion.div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={isSuccess ? "success-icon" : mode}
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.85, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className={`mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border shadow-inner ${
+                isSuccess
+                  ? "border-emerald-400/30 bg-emerald-400/10 shadow-emerald-300/10"
+                  : "border-cyan-300/20 bg-cyan-400/10 shadow-cyan-300/10"
+              }`}
+            >
+              {isSuccess ? (
+                <Check className="h-7 w-7 text-emerald-400" />
+              ) : mode === "login" ? (
+                <LogIn className="h-7 w-7 text-cyan-300" />
+              ) : (
+                <UserPlus className="h-7 w-7 text-cyan-300" />
+              )}
+            </motion.div>
+          </AnimatePresence>
           <h1 className="text-3xl font-bold text-white">Tech Stash</h1>
           <p className="mt-2 text-sm text-zinc-300">
-            {mode === "login"
+            {isSuccess
+              ? "Xác nhận email để hoàn tất."
+              : mode === "login"
               ? "Đăng nhập để quản lý nội dung."
               : "Tạo tài khoản để bắt đầu đăng bài."}
           </p>
         </div>
 
-        {/* ── Tab switcher ── */}
-        <div className="mb-6 grid grid-cols-2 rounded-xl border border-white/10 bg-black/20 p-1">
-          {(["login", "register"] as AuthMode[]).map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              onClick={() => handleSetMode(tab)}
-              className={`relative rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200 ${
-                mode === tab ? "text-cyan-200" : "text-zinc-400 hover:text-zinc-200"
-              }`}
+        {/* ── Tab switcher — ẩn khi success ── */}
+        <AnimatePresence>
+          {!isSuccess && (
+            <motion.div
+              key="tabs"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+              transition={{ duration: 0.2 }}
+              className="mb-6 grid grid-cols-2 rounded-xl border border-white/10 bg-black/20 p-1"
             >
-              {mode === tab && (
-                <motion.span
-                  layoutId="tab-indicator"
-                  className="absolute inset-0 rounded-lg bg-cyan-400/20"
-                  transition={{ type: "spring", stiffness: 380, damping: 34 }}
-                />
-              )}
-              <span className="relative">
-                {tab === "login" ? "Đăng nhập" : "Đăng ký"}
-              </span>
-            </button>
-          ))}
-        </div>
+              {(["login", "register"] as AuthMode[]).map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => handleSetMode(tab)}
+                  className={`relative rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                    mode === tab ? "text-cyan-200" : "text-zinc-400 hover:text-zinc-200"
+                  }`}
+                >
+                  {mode === tab && (
+                    <motion.span
+                      layoutId="tab-indicator"
+                      className="absolute inset-0 rounded-lg bg-cyan-400/20"
+                      transition={{ type: "spring", stiffness: 380, damping: 34 }}
+                    />
+                  )}
+                  <span className="relative">
+                    {tab === "login" ? "Đăng nhập" : "Đăng ký"}
+                  </span>
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* ── Form ── */}
-        <form onSubmit={handleEmailAuth} className="space-y-4">
+        {/* ── Body: Success screen OR Form ── */}
+        <AnimatePresence mode="wait">
+          {isSuccess ? (
+            <motion.div
+              key="success"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="space-y-5 text-center"
+            >
+              {/* Email badge */}
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/8 px-3 py-1.5">
+                <Mail className="h-3.5 w-3.5 text-emerald-400" />
+                <span className="text-xs font-medium text-emerald-300">{email}</span>
+              </div>
+
+              <div className="space-y-1.5">
+                <h2 className="text-lg font-semibold text-white">Check mail đi!</h2>
+                <p className="text-sm text-zinc-400">
+                  Link kích hoạt vừa được gửi rồi đấy.
+                </p>
+                <p className="text-xs text-zinc-600">
+                  Không thấy? Ngó thử hòm <span className="text-zinc-500">Spam / Junk</span> nhé.
+                </p>
+              </div>
+
+              <div className="space-y-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => { setIsSuccess(false); handleSetMode("login"); }}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-cyan-300 py-3 text-sm font-semibold text-slate-900 transition hover:bg-cyan-200 active:scale-[0.98]"
+                >
+                  <LogIn className="h-4 w-4" />
+                  Quay lại đăng nhập
+                </button>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    const { error } = await supabase.auth.resend({ type: "signup", email });
+                    if (error) {
+                      toast.error("Gửi lại thất bại", { description: error.message });
+                    } else {
+                      toast.success("Đã gửi lại!", { description: "Kiểm tra hộp thư nhé." });
+                    }
+                  }}
+                  className="text-xs text-zinc-500 transition hover:text-zinc-300"
+                >
+                  Gửi lại email xác nhận
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+        <motion.form
+          key="form"
+          onSubmit={handleEmailAuth}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="space-y-4"
+        >
           {/* Email */}
           <div className="space-y-1.5">
             <label htmlFor="email" className="block text-xs font-medium text-zinc-400">
@@ -371,6 +471,8 @@ export default function LoginPage() {
                 type={showPassword ? "text" : "password"}
                 autoComplete={mode === "login" ? "current-password" : "new-password"}
                 value={password}
+                onFocus={() => setPasswordFocused(true)}
+                onBlur={() => setPasswordFocused(false)}
                 onChange={(e) => {
                   setPassword(e.target.value);
                   if (mode === "register" && passwordError) {
@@ -392,6 +494,34 @@ export default function LoginPage() {
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
+
+              {/* ── Desktop: Floating popover (thò ra bên phải, không đẩy layout) ── */}
+              {mode === "register" && (
+                <div
+                  className={`hidden md:block absolute top-0 left-[calc(100%+1rem)] w-56 rounded-xl border border-white/10 bg-zinc-900/95 p-3.5 shadow-2xl backdrop-blur-md transition-all duration-200 z-50 ${
+                    passwordFocused && password.length > 0
+                      ? "opacity-100 translate-x-0 pointer-events-auto"
+                      : "opacity-0 -translate-x-2 pointer-events-none"
+                  }`}
+                >
+                  {/* Arrow */}
+                  <div className="absolute top-3.5 -left-[5px] h-2.5 w-2.5 rotate-45 border-b-0 border-r-0 border border-white/10 bg-zinc-900" />
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">Yêu cầu mật khẩu</p>
+                  <ul className="space-y-1.5">
+                    {PASSWORD_RULES.map((rule) => (
+                      <li
+                        key={rule.label}
+                        className={`flex items-center gap-2 text-xs transition-colors ${
+                          rule.regex.test(password) ? "text-emerald-400" : "text-zinc-500"
+                        }`}
+                      >
+                        <span className="text-[10px]">{rule.regex.test(password) ? "✓" : "○"}</span>
+                        {rule.label}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             {/* Password validation error */}
@@ -409,13 +539,9 @@ export default function LoginPage() {
               )}
             </AnimatePresence>
 
-            {/* Password strength hints (register only, no error yet) */}
-            {mode === "register" && !passwordError && password.length > 0 && (
-              <motion.ul
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mt-1 space-y-0.5"
-              >
+            {/* ── Mobile: Inline checklist (chỉ hiện trên mobile, sổ xuống bình thường) ── */}
+            {mode === "register" && passwordFocused && password.length > 0 && (
+              <ul className="block md:hidden mt-1 space-y-1">
                 {PASSWORD_RULES.map((rule) => (
                   <li
                     key={rule.label}
@@ -427,7 +553,7 @@ export default function LoginPage() {
                     {rule.label}
                   </li>
                 ))}
-              </motion.ul>
+              </ul>
             )}
           </div>
 
@@ -440,39 +566,44 @@ export default function LoginPage() {
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
             {mode === "login" ? "Đăng nhập bằng email" : "Đăng ký bằng email"}
           </button>
-        </form>
+        </motion.form>
+          )}
+        </AnimatePresence>
 
-        {/* ── Divider ── */}
-        <div className="my-6 flex items-center gap-3">
-          <div className="h-px flex-1 bg-white/8" />
-          <span className="text-[11px] uppercase tracking-[0.18em] text-zinc-500">hoặc</span>
-          <div className="h-px flex-1 bg-white/8" />
-        </div>
+        {/* ── Divider + OAuth — ẩn khi success ── */}
+        {!isSuccess && (
+          <>
+            <div className="my-6 flex items-center gap-3">
+              <div className="h-px flex-1 bg-white/8" />
+              <span className="text-[11px] uppercase tracking-[0.18em] text-zinc-500">hoặc</span>
+              <div className="h-px flex-1 bg-white/8" />
+            </div>
 
-        {/* ── OAuth buttons ── */}
-        <div className="space-y-3">
-          {/* GitHub — dark, tone-sur-tone */}
-          <button
-            type="button"
-            onClick={() => void handleOAuth("github")}
-            disabled={isLoading}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-700/60 bg-zinc-900 py-3 text-sm font-semibold text-zinc-100 transition hover:border-zinc-600 hover:bg-zinc-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            <GithubIcon className="h-5 w-5" />
-            Tiếp tục với GitHub
-          </button>
+            <div className="space-y-3">
+              {/* GitHub — dark, tone-sur-tone */}
+              <button
+                type="button"
+                onClick={() => void handleOAuth("github")}
+                disabled={isLoading}
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-700/60 bg-zinc-900 py-3 text-sm font-semibold text-zinc-100 transition hover:border-zinc-600 hover:bg-zinc-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <GithubIcon className="h-5 w-5" />
+                Tiếp tục với GitHub
+              </button>
 
-          {/* Google */}
-          <button
-            type="button"
-            onClick={() => void handleOAuth("google")}
-            disabled={isLoading}
-            className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/5 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            <img src={GOOGLE_ICON} className="h-5 w-5" alt="Google logo" />
-            Tiếp tục với Google
-          </button>
-        </div>
+              {/* Google */}
+              <button
+                type="button"
+                onClick={() => void handleOAuth("google")}
+                disabled={isLoading}
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/5 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                <img src={GOOGLE_ICON} className="h-5 w-5" alt="Google logo" />
+                Tiếp tục với Google
+              </button>
+            </div>
+          </>
+        )}
       </TiltCard>
     </div>
   );
