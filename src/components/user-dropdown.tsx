@@ -28,9 +28,10 @@ import { createClient } from "@/lib/supabase/client";
 
 interface UserDropdownProps {
   user: User;
+  role: string | null;
 }
 
-export function UserDropdown({ user }: UserDropdownProps) {
+export function UserDropdown({ user, role }: UserDropdownProps) {
   const router = useRouter();
   const supabase = React.useMemo(() => createClient(), []);
 
@@ -94,11 +95,13 @@ export function UserDropdown({ user }: UserDropdownProps) {
 
         {/* Menu Items Section */}
         <DropdownMenuGroup className="p-1 space-y-0.5">
-          <DropdownMenuItem render={<Link href="/admin" className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none" />}>
-            <LayoutDashboard className="w-4 h-4 text-primary" />
-            <span className="text-sm">Admin Dashboard</span>
-            <ShieldCheck className="w-3 h-3 ml-auto text-primary/60" />
-          </DropdownMenuItem>
+          {role === "admin" && (
+            <DropdownMenuItem render={<Link href="/admin" className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none" />}>
+              <LayoutDashboard className="w-4 h-4 text-primary" />
+              <span className="text-sm">Admin Dashboard</span>
+              <ShieldCheck className="w-3 h-3 ml-auto text-primary/60" />
+            </DropdownMenuItem>
+          )}
 
           <DropdownMenuItem render={<Link href="/profile" className="flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors focus:bg-white/5 focus:text-white outline-none" />}>
             <UserIcon className="w-4 h-4 text-zinc-400" />
