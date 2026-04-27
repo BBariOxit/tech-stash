@@ -21,6 +21,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [role, setRole] = useState<string | null>(null);
 
   const displayName =
     (user?.user_metadata?.full_name as string | undefined) ??
@@ -43,6 +44,17 @@ export default function Navbar() {
 
         if (mounted) {
           setUser(session?.user ?? null);
+
+          if (session?.user) {
+            const { data } = await supabase
+              .from("profiles")
+              .select("role")
+              .eq("id", session.user.id)
+              .maybeSingle();
+            setRole(data?.role ?? null);
+          } else {
+            setRole(null);
+          }
         }
       } catch (error) {
         console.warn("Auth load error (likely concurrent request):", error);
@@ -55,6 +67,7 @@ export default function Navbar() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (!session?.user) setRole(null);
     });
 
     return () => {
@@ -146,7 +159,7 @@ export default function Navbar() {
           </Link>
 
           {user ? (
-            <UserDropdown user={user} />
+            <UserDropdown user={user} role={role} />
           ) : (
             <Link
               href="/login"
