@@ -98,7 +98,7 @@ export function SnippetsClient({ snippets }: SnippetsClientProps) {
       
       {filteredSnippets.length === 0 && (
         <div className="text-center py-12 text-zinc-500">
-          Không tìm thấy snippet nào khớp với tìm kiếm của mày.
+          Không tìm thấy snippet nào khớp với tìm kiếm của bạn.
         </div>
       )}
     </div>
