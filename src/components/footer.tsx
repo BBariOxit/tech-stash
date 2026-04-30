@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Terminal } from "lucide-react";
-import { GithubIcon, TwitterIcon } from "@/components/icons";
+import { GithubIcon, AppleIcon } from "@/components/icons";
 
 import { dummyFooterLinks, dummySiteConfig } from "@/data";
 
@@ -42,13 +42,13 @@ export default function Footer() {
             <GithubIcon className="w-3.5 h-3.5" />
           </Link>
           <Link
-            href={dummySiteConfig.twitter}
+            href={dummySiteConfig.portfolio}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Twitter"
+            aria-label="Portfolio"
             className="text-zinc-400 hover:text-zinc-300 transition-colors"
           >
-            <TwitterIcon className="w-3.5 h-3.5" />
+            <AppleIcon className="w-4 h-4" />
           </Link>
         </div>
       </div>

@@ -24,11 +24,11 @@ interface CodeBlockProps {
 export async function CodeBlock({ code, lang, filename }: CodeBlockProps) {
   const normalizedLang = lang.toLowerCase();
   const ext = LANG_EXT[normalizedLang] ?? normalizedLang;
-  const displayFilename = filename ?? `snippet.${ext}`;
+  const displayFilename = filename ?? `code.${ext}`;
 
   const html = await codeToHtml(code, {
     lang: normalizedLang,
-    theme: 'vitesse-dark',
+    theme: 'one-dark-pro',
   });
 
   return (

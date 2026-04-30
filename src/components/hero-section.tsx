@@ -81,7 +81,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
                   <img
                     src={featured.thumbnail || PLACEHOLDER_IMG}
                     alt={featured.title}
-                    className="w-full h-full object-cover opacity-60 group-hover:scale-[1.03] transition-transform duration-500"
+                    className="w-full h-full object-cover opacity-60"
                   />
                   {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#111113] via-transparent to-transparent" />

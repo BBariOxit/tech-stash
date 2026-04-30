@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { useState, useEffect, useMemo } from "react";
 import { Search, Menu, X, Terminal, LogIn } from "lucide-react";
-import { GithubIcon, TwitterIcon } from "@/components/icons";
+import { GithubIcon, AppleIcon } from "@/components/icons";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { UserDropdown } from "@/components/user-dropdown";
@@ -149,13 +149,13 @@ export default function Navbar() {
             <GithubIcon className="w-4 h-4" />
           </Link>
           <Link
-            href={dummySiteConfig.twitter}
+            href={dummySiteConfig.portfolio}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/6 transition-colors"
-            aria-label="Twitter"
+            aria-label="Portfolio"
           >
-            <TwitterIcon className="w-4 h-4" />
+            <AppleIcon className="w-4 h-4" />
           </Link>
 
           {user ? (

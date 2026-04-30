@@ -80,8 +80,10 @@ export function AdminSidebar() {
             <Shield className="w-3.5 h-3.5 text-primary" />
           </div>
           <div className="leading-none">
-            <p className="text-sm font-semibold text-white">Admin Panel</p>
-            <p className="text-[10px] text-zinc-600 mt-0.5">tech-stash</p>
+            <div className="text-sm font-semibold flex items-center">
+              <Link href="/" className="text-zinc-300 hover:text-white transition-colors">tech-stash</Link>
+              <span className="text-primary">/admin</span>
+            </div>
           </div>
         </div>
       </div>
@@ -147,13 +149,6 @@ export function AdminSidebar() {
           </Link>
         )}
 
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-xs text-zinc-600 hover:text-zinc-300 transition-colors px-2 py-2 rounded-lg hover:bg-white/4"
-        >
-          <ArrowLeft className="w-3 h-3" />
-          Về trang chủ
-        </Link>
       </div>
     </aside>
   );
