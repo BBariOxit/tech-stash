@@ -24,8 +24,8 @@ export const dummySiteConfig = {
   welcomeText: "Welcome to my",
   siteName: "Tech Stash.",
   description: "Mình là một Full-stack Developer. Đây là nơi mình lưu trữ các bài viết, code snippets, và những thứ học được từ thực chiến — không có gì giả tạo, chỉ có code thật và vấn đề thật.",
-  github: "https://github.com/thaibao",
-  twitter: "https://twitter.com/thaibao",
+  github: "https://github.com/BBariOxit",
+  portfolio: "https://ptb.cobweb.id.vn/",
   emailPlaceholder: "mày@example.com",
 };
 
