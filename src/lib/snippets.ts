@@ -1,113 +1,102 @@
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "../../types/supabase";
+
+const supabase = createClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
 export interface Snippet {
   id: string;
+  slug: string;
   title: string;
-  language: string;
   description: string;
   code: string;
+  filename: string;
+  language: string; // derived from filename extension or tags
+  date: string;
+  tags: string[];
 }
 
-export const snippets: Snippet[] = [
-  {
-    id: "use-window-size",
-    title: "useWindowSize Hook",
-    language: "TypeScript",
-    description: "Custom hook lấy kích thước màn hình, auto-update khi resize.",
-    code: `function useWindowSize() {
-  const [size, setSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-  useEffect(() => {
-    const handler = () => setSize({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
-  }, []);
-  return size;
-}`,
-  },
-  {
-    id: "tailwind-dark-config",
-    title: "Tailwind v4 Dark Mode",
-    language: "CSS",
-    description: "Force dark mode vĩnh viễn trong Tailwind v4 không cần config file.",
-    code: `/* globals.css */
-@import "tailwindcss";
-
-@custom-variant dark (&:is(.dark *));
-
-/* Force dark trên html tag */
-/* <html class="dark"> trong layout.tsx */`,
-  },
-  {
-    id: "next-image-blur",
-    title: "Next.js Image với blur placeholder",
-    language: "TypeScript",
-    description: "Tạo base64 blur placeholder cho ảnh để UX mượt hơn khi load.",
-    code: `import Image from 'next/image';
-
-// Generate blur placeholder
-const blurData = \`data:image/svg+xml;base64,\${
-  Buffer.from('<svg ...>').toString('base64')
-}\`;
-
-<Image
-  src="/photo.jpg"
-  placeholder="blur"
-  blurDataURL={blurData}
-  fill
-  alt="..."
-/>`,
-  },
-  {
-    id: "supabase-realtime",
-    title: "Supabase Realtime subscription",
-    language: "TypeScript",
-    description: "Subscribe vào realtime changes của một table trong Supabase.",
-    code: `const channel = supabase
-  .channel('table-changes')
-  .on(
-    'postgres_changes',
-    { event: '*', schema: 'public', table: 'posts' },
-    (payload) => console.log(payload)
-  )
-  .subscribe();
-
-// Cleanup
-return () => { supabase.removeChannel(channel); };`,
-  },
-  {
-    id: "zustand-store",
-    title: "Zustand Store với TypeScript",
-    language: "TypeScript",
-    description: "Setup Zustand store đơn giản nhất, đủ dùng cho 80% use case.",
-    code: `interface BearState {
-  bears: number;
-  increase: () => void;
-  reset: () => void;
+function getLanguageFromFilename(filename: string): string {
+  const ext = filename.split('.').pop()?.toLowerCase() || '';
+  const langMap: Record<string, string> = {
+    ts: 'TypeScript',
+    tsx: 'TypeScript',
+    js: 'JavaScript',
+    jsx: 'JavaScript',
+    css: 'CSS',
+    scss: 'SCSS',
+    html: 'HTML',
+    json: 'JSON',
+    md: 'Markdown',
+    sh: 'Bash',
+    bash: 'Bash',
+    py: 'Python',
+    go: 'Go',
+    rs: 'Rust'
+  };
+  return langMap[ext] || 'Text';
 }
 
-const useStore = create<BearState>((set) => ({
-  bears: 0,
-  increase: () => set((s) => ({ bears: s.bears + 1 })),
-  reset: () => set({ bears: 0 }),
-}));`,
-  },
-  {
-    id: "cn-utility",
-    title: "cn() utility function",
-    language: "TypeScript",
-    description: "Merge Tailwind classes đúng cách với clsx + tailwind-merge.",
-    code: `import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+export async function getAllSnippets(): Promise<Snippet[]> {
+  const { data, error } = await supabase
+    .from("snippets")
+    .select(`
+      *,
+      snippet_tags (
+        tags (
+          name
+        )
+      )
+    `)
+    .eq("published", true)
+    .order("created_at", { ascending: false });
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  if (error || !data) {
+    console.error("Error fetching snippets:", error);
+    return [];
+  }
+
+  return data.map((snippet: any) => ({
+    id: snippet.id,
+    slug: snippet.slug,
+    title: snippet.title,
+    description: snippet.description || "",
+    code: snippet.code || "",
+    filename: snippet.filename || "snippet.ts",
+    language: getLanguageFromFilename(snippet.filename || ""),
+    date: snippet.created_at,
+    tags: snippet.snippet_tags?.map((st: any) => st.tags?.name).filter(Boolean) || [],
+  }));
 }
 
-// Usage:
-cn('px-4 py-2', isActive && 'bg-blue-500', className)`,
-  },
-];
+export async function getSnippetBySlug(slug: string): Promise<Snippet | null> {
+  const { data, error } = await supabase
+    .from("snippets")
+    .select(`
+      *,
+      snippet_tags (
+        tags (
+          name
+        )
+      )
+    `)
+    .eq("slug", slug)
+    .eq("published", true)
+    .single();
+
+  if (error || !data) return null;
+
+  return {
+    id: data.id,
+    slug: data.slug,
+    title: data.title,
+    description: data.description || "",
+    code: data.code || "",
+    filename: data.filename || "snippet.ts",
+    language: getLanguageFromFilename(data.filename || ""),
+    date: data.created_at,
+    tags: data.snippet_tags?.map((st: any) => st.tags?.name).filter(Boolean) || [],
+  };
+}

@@ -116,6 +116,75 @@ export type Database = {
         }
         Relationships: []
       }
+      snippet_tags: {
+        Row: {
+          snippet_id: string
+          tag_id: string
+        }
+        Insert: {
+          snippet_id: string
+          tag_id: string
+        }
+        Update: {
+          snippet_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snippet_tags_snippet_id_fkey"
+            columns: ["snippet_id"]
+            isOneToOne: false
+            referencedRelation: "snippets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snippet_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      snippets: {
+        Row: {
+          author_id: string | null
+          code: string
+          created_at: string | null
+          description: string | null
+          filename: string | null
+          id: string
+          published: boolean | null
+          slug: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author_id?: string | null
+          code: string
+          created_at?: string | null
+          description?: string | null
+          filename?: string | null
+          id?: string
+          published?: boolean | null
+          slug: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author_id?: string | null
+          code?: string
+          created_at?: string | null
+          description?: string | null
+          filename?: string | null
+          id?: string
+          published?: boolean | null
+          slug?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       tags: {
         Row: {
           created_at: string

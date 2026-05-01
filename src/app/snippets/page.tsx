@@ -1,4 +1,4 @@
-import { getAllSnippets } from "@/lib/snippets-mdx";
+import { getAllSnippets } from "@/lib/snippets";
 import { SnippetsClient } from "./SnippetsClient";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -8,8 +8,8 @@ export const metadata = {
   description: "Kho lưu trữ code snippets tiện ích.",
 };
 
-export default function SnippetsPage() {
-  const snippets = getAllSnippets();
+export default async function SnippetsPage() {
+  const snippets = await getAllSnippets();
 
   return (
     <>
