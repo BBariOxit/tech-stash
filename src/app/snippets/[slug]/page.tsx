@@ -1,25 +1,11 @@
-import { getSnippetById, getAllSnippets } from "@/lib/snippets-mdx";
+import { getSnippetBySlug, getAllSnippets } from "@/lib/snippets";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Terminal, Heart, Bookmark } from "lucide-react";
 import Link from "next/link";
-import { MDXRemote } from "next-mdx-remote/rsc";
 import { CodeBlock } from "@/components/CodeBlock";
-import { CopyButton } from "@/components/copy-button";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import type { Metadata } from "next";
-
-// Map language → extension cho CodeBlock header
-const LANG_EXT: Record<string, string> = {
-  typescript: "ts",
-  javascript: "js",
-  css: "css",
-  bash: "sh",
-  html: "html",
-  json: "json",
-  tsx: "tsx",
-  jsx: "jsx",
-};
 
 const LANG_COLORS: Record<string, string> = {
   TypeScript: "text-blue-400 bg-blue-400/10 border-blue-400/20",
@@ -29,8 +15,8 @@ const LANG_COLORS: Record<string, string> = {
 };
 
 export async function generateStaticParams() {
-  const snippets = getAllSnippets();
-  return snippets.map((snippet) => ({ slug: snippet.id }));
+  const snippets = await getAllSnippets();
+  return snippets.map((snippet) => ({ slug: snippet.slug }));
 }
 
 export async function generateMetadata({
@@ -39,7 +25,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const snippet = getSnippetById(slug);
+  const snippet = await getSnippetBySlug(slug);
   if (!snippet) return { title: "Snippet không tồn tại | Tech Stash" };
   return {
     title: `${snippet.title} | Tech Stash`,
@@ -53,57 +39,12 @@ export default async function SnippetDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const snippet = getSnippetById(slug);
+  const snippet = await getSnippetBySlug(slug);
 
   if (!snippet) notFound();
 
-  const langKey = snippet.language.toLowerCase();
-  const ext = LANG_EXT[langKey] ?? langKey;
-  const filename = `snippet.${ext}`;
   const langColorClass =
     LANG_COLORS[snippet.language] ?? "text-zinc-300 bg-zinc-400/10 border-zinc-400/20";
-
-  // Extract raw code string from MDX content (block đầu tiên)
-  const codeMatch = snippet.content.match(/```[a-zA-Z]*\n([\s\S]*?)```/);
-  const rawCode = codeMatch ? codeMatch[1].trim() : snippet.content.trim();
-
-  // MDX components — override pre/code để inject CodeBlock & CopyButton
-  const components = {
-    pre: (props: React.ComponentProps<"pre">) => {
-      const child = (props.children as React.ReactElement<{ props: { children: string; className?: string } }>);
-      const code = child?.props?.children ?? "";
-      const lang =
-        child?.props?.className?.replace("language-", "") || "text";
-      return (
-        <CodeBlock code={code} lang={lang} filename={`snippet.${LANG_EXT[lang] ?? lang}`} />
-      );
-    },
-    p: (props: React.ComponentProps<"p">) => (
-      <p className="text-zinc-300 leading-relaxed mb-5" {...props} />
-    ),
-    h2: (props: React.ComponentProps<"h2">) => (
-      <h2 className="text-xl font-bold text-white mt-10 mb-4" {...props} />
-    ),
-    h3: (props: React.ComponentProps<"h3">) => (
-      <h3 className="text-lg font-semibold text-white mt-6 mb-3" {...props} />
-    ),
-    ul: (props: React.ComponentProps<"ul">) => (
-      <ul className="list-disc list-inside text-zinc-300 mb-5 space-y-1.5" {...props} />
-    ),
-    li: (props: React.ComponentProps<"li">) => <li {...props} />,
-    a: (props: React.ComponentProps<"a">) => (
-      <a className="text-primary hover:underline" {...props} />
-    ),
-    strong: (props: React.ComponentProps<"strong">) => (
-      <strong className="text-white font-semibold" {...props} />
-    ),
-    code: (props: React.ComponentProps<"code">) => (
-      <code
-        className="px-1.5 py-0.5 rounded bg-white/[0.07] text-primary font-mono text-sm"
-        {...props}
-      />
-    ),
-  };
 
   return (
     <>
@@ -135,7 +76,7 @@ export default async function SnippetDetailPage({
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-zinc-500">
                   <Calendar className="w-3 h-3" />
-                  {snippet.date}
+                  {new Date(snippet.date).toLocaleDateString("vi-VN")}
                 </span>
               </div>
 
@@ -151,25 +92,25 @@ export default async function SnippetDetailPage({
             </header>
 
             {/* ═══════════════════════════
-                  PHẦN 2 · MDX Content
-                  (giải thích, context...)
+                  PHẦN 2 · Code Content
             ═══════════════════════════ */}
             <div className="mb-8">
-              <MDXRemote source={snippet.content} components={components as any} />
+              <CodeBlock 
+                code={snippet.code} 
+                lang={snippet.languageSlug} 
+                filename={snippet.filename} 
+              />
             </div>
           </article>
 
           {/* ═══════════════════════════
                 PHẦN 3 · Supabase Placeholder
-                (Like / Bookmark — future)
           ═══════════════════════════ */}
           <div className="mt-16 pt-10 border-t border-white/[0.06] flex items-center justify-between">
             <p className="text-sm text-zinc-600 font-mono">
-              {/* ID snippet để sau dùng với Supabase */}
-              # {snippet.id}
+              # {snippet.id.substring(0, 8)}
             </p>
             <div className="flex items-center gap-2">
-              {/* Placeholder — sẽ connect Supabase sau */}
               <button
                 disabled
                 title="Coming soon — Supabase"

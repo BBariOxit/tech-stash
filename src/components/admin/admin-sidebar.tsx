@@ -6,27 +6,71 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { cn } from "@/lib/utils";
-import { FileText, Layers, Tag, Shield, ChevronRight, ArrowLeft, LogIn } from "lucide-react";
+import {
+  FileText,
+  Layers,
+  Tag,
+  Shield,
+  ChevronRight,
+  LogIn,
+  Code2,
+  LayoutList,
+  PlusCircle,
+  Globe,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-const NAV_ITEMS = [
+const NAV_GROUPS = [
   {
-    href: "/admin",
-    label: "Tạo Post",
-    icon: FileText,
-    exact: true,
+    label: "Blog",
+    items: [
+      {
+        href: "/admin",
+        label: "Tạo Post",
+        icon: PlusCircle,
+        exact: true,
+      },
+      {
+        href: "/admin/posts",
+        label: "Quản lý Posts",
+        icon: Layers,
+        exact: false,
+      },
+    ],
   },
   {
-    href: "/admin/posts",
-    label: "Quản lý Posts",
-    icon: Layers,
-    exact: false,
+    label: "Snippets",
+    items: [
+      {
+        href: "/admin/snippets/create",
+        label: "Tạo Snippet",
+        icon: Code2,
+        exact: true,
+      },
+      {
+        href: "/admin/snippets",
+        label: "Quản lý Snippets",
+        icon: LayoutList,
+        exact: true,
+      },
+    ],
   },
   {
-    href: "/admin/tags",
-    label: "Quản lý Tags",
-    icon: Tag,
-    exact: false,
+    label: "Phân loại",
+    items: [
+      {
+        href: "/admin/tags",
+        label: "Quản lý Tags",
+        icon: Tag,
+        exact: false,
+      },
+      {
+        href: "/admin/languages",
+        label: "Quản lý Languages",
+        icon: Globe,
+        exact: false,
+      },
+    ],
   },
 ];
 
@@ -89,31 +133,37 @@ export function AdminSidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
-        <p className="text-[10px] uppercase tracking-widest text-zinc-600 font-semibold px-2 pb-2">
-          Nội dung
-        </p>
-        {NAV_ITEMS.map(({ href, label, icon: Icon, exact }) => {
-          const isActive = exact ? pathname === href : pathname.startsWith(href);
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm transition-all group border",
-                isActive
-                  ? "bg-primary/10 text-primary border-primary/20 font-medium"
-                  : "text-zinc-400 hover:text-white hover:bg-white/6 border-transparent"
-              )}
-            >
-              <Icon className="w-4 h-4 shrink-0" />
-              <span className="flex-1">{label}</span>
-              {isActive && (
-                <ChevronRight className="w-3 h-3 opacity-50" />
-              )}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 p-3 space-y-4 overflow-y-auto">
+        {NAV_GROUPS.map((group) => (
+          <div key={group.label} className="space-y-0.5">
+            <p className="text-[10px] uppercase tracking-widest text-zinc-600 font-semibold px-2 pb-2">
+              {group.label}
+            </p>
+            {group.items.map(({ href, label, icon: Icon, exact }) => {
+              const isActive = exact
+                ? pathname === href
+                : pathname.startsWith(href);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={cn(
+                    "flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm transition-all group border",
+                    isActive
+                      ? "bg-primary/10 text-primary border-primary/20 font-medium"
+                      : "text-zinc-400 hover:text-white hover:bg-white/6 border-transparent"
+                  )}
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span className="flex-1">{label}</span>
+                  {isActive && (
+                    <ChevronRight className="w-3 h-3 opacity-50" />
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* Footer */}

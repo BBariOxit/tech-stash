@@ -16,7 +16,7 @@ export async function createPost(data: {
   excerpt: string;
   thumbnail: string;
   content: string;
-  language: string;
+  language_id: string;
   published: boolean;
   tagIds: string[];
   reading_time: number;
@@ -52,7 +52,7 @@ export async function createPost(data: {
       excerpt: data.excerpt || null,
       thumbnail: data.thumbnail || null,
       content: data.content,
-      language: data.language,
+      language_id: data.language_id,
       published: data.published,
       reading_time: data.reading_time,
       featured: false,

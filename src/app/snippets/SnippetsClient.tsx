@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, Code2, Copy, Check } from "lucide-react";
-import { SnippetMeta } from "@/lib/snippets-mdx";
+import type { Snippet } from "@/lib/snippets";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 interface SnippetsClientProps {
-  snippets: SnippetMeta[];
+  snippets: Snippet[];
 }
 
 export function SnippetsClient({ snippets }: SnippetsClientProps) {
@@ -71,7 +71,7 @@ export function SnippetsClient({ snippets }: SnippetsClientProps) {
               transition={{ duration: 0.2 }}
               key={snippet.id}
             >
-              <Link href={`/snippets/${snippet.id}`} className="group block h-full">
+              <Link href={`/snippets/${snippet.slug}`} className="group block h-full">
                 <article className="h-full p-5 rounded-xl border border-white/[0.08] bg-[#111113] card-hover flex flex-col gap-3 relative">
                   <div className="flex items-start justify-between gap-4">
                     <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/[0.04] border border-white/[0.08] group-hover:border-primary/30 group-hover:bg-primary/5 transition-colors shrink-0">

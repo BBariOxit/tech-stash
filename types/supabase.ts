@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      languages: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
       post_tags: {
         Row: {
           id: number
@@ -56,6 +77,7 @@ export type Database = {
           featured: boolean
           id: string
           language: string
+          language_id: string | null
           published: boolean
           reading_time: number
           slug: string
@@ -70,6 +92,7 @@ export type Database = {
           featured?: boolean
           id?: string
           language: string
+          language_id?: string | null
           published?: boolean
           reading_time?: number
           slug: string
@@ -84,13 +107,22 @@ export type Database = {
           featured?: boolean
           id?: string
           language?: string
+          language_id?: string | null
           published?: boolean
           reading_time?: number
           slug?: string
           thumbnail?: string | null
           title?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "posts_language_id_fkey"
+            columns: ["language_id"]
+            isOneToOne: false
+            referencedRelation: "languages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -115,6 +147,89 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      snippet_tags: {
+        Row: {
+          snippet_id: string
+          tag_id: string
+        }
+        Insert: {
+          snippet_id: string
+          tag_id: string
+        }
+        Update: {
+          snippet_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snippet_tags_snippet_id_fkey"
+            columns: ["snippet_id"]
+            isOneToOne: false
+            referencedRelation: "snippets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "snippet_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      snippets: {
+        Row: {
+          author_id: string | null
+          code: string
+          created_at: string | null
+          description: string | null
+          filename: string | null
+          id: string
+          language: string
+          language_id: string | null
+          published: boolean | null
+          slug: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author_id?: string | null
+          code: string
+          created_at?: string | null
+          description?: string | null
+          filename?: string | null
+          id?: string
+          language?: string
+          language_id?: string | null
+          published?: boolean | null
+          slug: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author_id?: string | null
+          code?: string
+          created_at?: string | null
+          description?: string | null
+          filename?: string | null
+          id?: string
+          language?: string
+          language_id?: string | null
+          published?: boolean | null
+          slug?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "snippets_language_id_fkey"
+            columns: ["language_id"]
+            isOneToOne: false
+            referencedRelation: "languages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tags: {
         Row: {

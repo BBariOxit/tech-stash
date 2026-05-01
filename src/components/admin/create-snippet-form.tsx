@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import slugify from "slugify";
@@ -16,70 +16,66 @@ import {
   Eye,
   EyeOff,
   Loader2,
+  FileCode2,
+  Globe,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-
 import { Separator } from "@/components/ui/separator";
-import { TiptapEditor } from "@/components/admin/tiptap-editor";
 import { TagsCombobox } from "@/components/admin/tags-combobox";
 import { LanguagesSelect } from "@/components/admin/languages-select";
-import { ThumbnailUpload } from "@/components/admin/thumbnail-upload";
-import { calculateReadTime } from "@/utils/readTime";
-import { createPost } from "@/app/admin/actions";
+import { createSnippet } from "@/app/admin/snippets/actions";
 import type { Tables } from "../../../types/supabase";
 
-type Tag = Tables<"tags">;
+type TagType = Tables<"tags">;
 
 // ── Zod Schema ─────────────────────────────────────────
-const postSchema = z.object({
-  title: z.string().min(5, "Tiêu đề cần ít nhất 5 ký tự").max(200),
+const snippetSchema = z.object({
+  title: z.string().min(3, "Tiêu đề cần ít nhất 3 ký tự").max(200),
   slug: z
     .string()
     .min(3, "Slug quá ngắn")
     .regex(/^[a-z0-9-]+$/, "Slug chỉ được chứa chữ thường, số và dấu gạch ngang"),
-  excerpt: z.string().max(500, "Excerpt tối đa 500 ký tự").optional(),
-  thumbnail: z.union([z.string().url("Thumbnail phải là URL hợp lệ"), z.literal("")]).optional(),
-  language_id: z.string().min(1, "Hãy chọn ngôn ngữ"),
-  content: z.string().min(10, "Nội dung quá ngắn, gõ nhiều vào!"),
+  description: z.string().max(500, "Mô tả tối đa 500 ký tự").optional(),
+  filename: z.string().min(1, "Filename không được để trống"),
+  language_id: z.string().min(1, "Vui lòng chọn ngôn ngữ"),
+  code: z.string().min(5, "Code quá ngắn, gõ nhiều vào!"),
   published: z.boolean(),
 });
 
-type PostFormValues = z.infer<typeof postSchema>;
+type SnippetFormValues = z.infer<typeof snippetSchema>;
 
 // ── Component ───────────────────────────────────────────
-export function CreatePostForm() {
-  const [selectedTags, setSelectedTags] = React.useState<Tag[]>([]);
+export function CreateSnippetForm() {
+  const [selectedTags, setSelectedTags] = React.useState<TagType[]>([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [plainText, setPlainText] = React.useState("");
 
   const {
     register,
     handleSubmit,
-    control,
     setValue,
+    control,
     watch,
     reset,
     formState: { errors },
-  } = useForm<PostFormValues>({
-    resolver: zodResolver(postSchema),
+  } = useForm<SnippetFormValues>({
+    resolver: zodResolver(snippetSchema),
     defaultValues: {
       title: "",
       slug: "",
-      excerpt: "",
-      thumbnail: "",
+      description: "",
+      filename: "snippet.ts",
       language_id: "",
-      content: "",
+      code: "",
       published: false,
     },
   });
 
   const title = watch("title");
   const published = watch("published");
-  const currentThumbnail = watch("thumbnail");
 
   // Auto-generate slug from title
   React.useEffect(() => {
@@ -92,21 +88,18 @@ export function CreatePostForm() {
     setValue("slug", generatedSlug, { shouldValidate: true });
   }, [title, setValue]);
 
-  const onSubmit = async (values: PostFormValues) => {
+  const onSubmit = async (values: SnippetFormValues) => {
     setIsSubmitting(true);
     try {
-      const readTime = calculateReadTime(plainText);
-      const result = await createPost({
+      const result = await createSnippet({
         ...values,
-        excerpt: values.excerpt ?? "",
-        thumbnail: values.thumbnail || "",
+        description: values.description ?? "",
         tagIds: selectedTags.map((t) => t.id),
-        reading_time: readTime,
       });
 
       if (result.success) {
-        toast.success("🚀 Đã lên sóng!", {
-          description: `Post "${values.title}" đã được lưu vào Supabase.`,
+        toast.success("Snippet đã được tạo!", {
+          description: `"${values.title}" đã được lưu vào Supabase.`,
           duration: 5000,
         });
         reset();
@@ -130,18 +123,18 @@ export function CreatePostForm() {
       {/* ── Two-column layout ── */}
       <div className="flex gap-6 items-start">
         {/* ════════════════════════════════
-            LEFT COLUMN — Title / Content
+            LEFT COLUMN — Title / Code
         ════════════════════════════════ */}
         <div className="flex-[7] min-w-0 space-y-6">
           {/* Title */}
           <div className="space-y-2">
-            <Label htmlFor="title" className="flex items-center gap-2 text-sm font-medium text-zinc-300">
+            <Label htmlFor="snippet-title" className="flex items-center gap-2 text-sm font-medium text-zinc-300">
               <FileText className="w-4 h-4 text-primary" />
               Tiêu đề <span className="text-destructive">*</span>
             </Label>
             <Input
-              id="title"
-              placeholder="Ví dụ: Cách dùng useCallback đúng cách trong React..."
+              id="snippet-title"
+              placeholder="Ví dụ: useWindowSize Hook"
               className="bg-white/5 border-white/10 focus:border-primary/50 text-base h-11"
               {...register("title")}
             />
@@ -152,13 +145,13 @@ export function CreatePostForm() {
 
           {/* Slug */}
           <div className="space-y-2">
-            <Label htmlFor="slug" className="flex items-center gap-2 text-sm font-medium text-zinc-300">
+            <Label htmlFor="snippet-slug" className="flex items-center gap-2 text-sm font-medium text-zinc-300">
               <Hash className="w-4 h-4 text-primary" />
               Slug <span className="text-xs text-zinc-500 font-normal">(tự động từ title)</span>
             </Label>
             <Input
-              id="slug"
-              placeholder="ten-bai-viet-cua-ban"
+              id="snippet-slug"
+              placeholder="use-window-size-hook"
               className="bg-white/5 border-white/10 focus:border-primary/50 font-mono text-sm"
               {...register("slug")}
             />
@@ -167,43 +160,53 @@ export function CreatePostForm() {
             )}
           </div>
 
-          {/* Excerpt */}
+          {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="excerpt" className="flex items-center gap-2 text-sm font-medium text-zinc-300">
+            <Label htmlFor="snippet-desc" className="flex items-center gap-2 text-sm font-medium text-zinc-300">
               <AlignLeft className="w-4 h-4 text-primary" />
-              Excerpt / Mô tả ngắn
+              Mô tả ngắn
             </Label>
             <Textarea
-              id="excerpt"
-              placeholder="Một đoạn mô tả ngắn về bài viết (hiển thị ở trang danh sách)..."
+              id="snippet-desc"
+              placeholder="Custom hook lấy kích thước màn hình, auto-update khi resize..."
               rows={3}
               className="bg-white/5 border-white/10 focus:border-primary/50 resize-none"
-              {...register("excerpt")}
+              {...register("description")}
             />
-            {errors.excerpt && (
-              <p className="text-xs text-destructive">{errors.excerpt.message}</p>
+            {errors.description && (
+              <p className="text-xs text-destructive">{errors.description.message}</p>
             )}
           </div>
 
-          {/* Content — Tiptap */}
+          {/* Code Content */}
           <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-sm font-medium text-zinc-300">
+            <Label htmlFor="snippet-code" className="flex items-center gap-2 text-sm font-medium text-zinc-300">
               <Code2 className="w-4 h-4 text-primary" />
-              Nội dung <span className="text-destructive">*</span>
+              Code <span className="text-destructive">*</span>
             </Label>
-            <Controller
-              name="content"
-              control={control}
-              render={({ field }) => (
-                <TiptapEditor
-                  content={field.value}
-                  onChange={field.onChange}
-                  onTextChange={setPlainText}
-                />
-              )}
-            />
-            {errors.content && (
-              <p className="text-xs text-destructive">{errors.content.message}</p>
+            <div className="relative rounded-xl overflow-hidden border border-white/10">
+              {/* Code editor header */}
+              <div className="flex items-center justify-between px-4 py-2.5 bg-[#0d0d0f] border-b border-white/[0.07]">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
+                </div>
+                <span className="text-[10px] text-zinc-600 font-mono">
+                  Raw Code — sẽ được highlight bởi Shiki
+                </span>
+              </div>
+              <textarea
+                id="snippet-code"
+                placeholder={`// Paste hoặc gõ code vào đây...\nfunction example() {\n  return "Hello World";\n}`}
+                rows={16}
+                className="w-full bg-[#09090b] text-zinc-200 font-mono text-sm leading-relaxed p-4 resize-y outline-none placeholder:text-zinc-700 min-h-[320px]"
+                spellCheck={false}
+                {...register("code")}
+              />
+            </div>
+            {errors.code && (
+              <p className="text-xs text-destructive">{errors.code.message}</p>
             )}
           </div>
         </div>
@@ -214,10 +217,46 @@ export function CreatePostForm() {
         <div className="flex-[3] min-w-[260px] sticky top-6 space-y-5">
           {/* Card wrapper */}
           <div className="border border-white/10 rounded-xl bg-[#0d0d0f] p-5 space-y-5">
-            <ThumbnailUpload
-              value={currentThumbnail}
-              onChange={(url) => setValue("thumbnail", url, { shouldValidate: true })}
-            />
+            {/* Filename */}
+            <div className="space-y-2">
+              <Label htmlFor="snippet-filename" className="flex items-center gap-2 text-sm font-medium text-zinc-300">
+                <FileCode2 className="w-4 h-4 text-primary" />
+                Filename
+              </Label>
+              <Input
+                id="snippet-filename"
+                placeholder="snippet.ts"
+                className="bg-white/5 border-white/10 focus:border-primary/50 font-mono text-sm"
+                {...register("filename")}
+              />
+              {errors.filename && (
+                <p className="text-xs text-destructive">{errors.filename.message}</p>
+              )}
+            </div>
+
+            <Separator className="bg-white/10" />
+
+            {/* Language Selection */}
+            <div className="space-y-2">
+              <Label className="flex items-center gap-2 text-sm font-medium text-zinc-300">
+                <Globe className="w-4 h-4 text-primary" />
+                Ngôn ngữ chính <span className="text-destructive">*</span>
+              </Label>
+              <Controller
+                name="language_id"
+                control={control}
+                render={({ field }) => (
+                  <LanguagesSelect
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={!!errors.language_id}
+                  />
+                )}
+              />
+              {errors.language_id && (
+                <p className="text-xs text-destructive">{errors.language_id.message}</p>
+              )}
+            </div>
 
             <Separator className="bg-white/10" />
 
@@ -252,30 +291,6 @@ export function CreatePostForm() {
 
             <Separator className="bg-white/10" />
 
-            {/* Language */}
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-sm font-medium text-zinc-300">
-                <Code2 className="w-4 h-4 text-primary" />
-                Ngôn ngữ <span className="text-destructive">*</span>
-              </Label>
-              <Controller
-                name="language_id"
-                control={control}
-                render={({ field }) => (
-                  <LanguagesSelect
-                    value={field.value}
-                    onChange={field.onChange}
-                    error={!!errors.language_id}
-                  />
-                )}
-              />
-              {errors.language_id && (
-                <p className="text-xs text-destructive">{errors.language_id.message}</p>
-              )}
-            </div>
-
-            <Separator className="bg-white/10" />
-
             {/* Tags */}
             <div className="space-y-2">
               <Label className="flex items-center gap-2 text-sm font-medium text-zinc-300">
@@ -304,14 +319,14 @@ export function CreatePostForm() {
               ) : (
                 <>
                   <Send className="w-4 h-4 mr-2" />
-                  {published ? "Publish ngay" : "Lưu Draft"}
+                  {published ? "Publish Snippet" : "Lưu Draft"}
                 </>
               )}
             </Button>
 
             {/* Info */}
             <p className="text-xs text-zinc-600 text-center leading-relaxed">
-              Dữ liệu sẽ được lưu trực tiếp lên Supabase và hiển thị ngay.
+              Code sẽ được lưu raw string, client-side dùng Shiki để syntax highlight.
             </p>
           </div>
         </div>

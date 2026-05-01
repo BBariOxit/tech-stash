@@ -5,11 +5,12 @@ import SnippetsCarousel from "@/components/snippets-carousel";
 import NewsletterSection from "@/components/newsletter-section";
 import Footer from "@/components/footer";
 import { getFeaturedPost, getLatestPosts } from "@/lib/posts";
-import { snippets } from "@/lib/snippets";
+import { getAllSnippets } from "@/lib/snippets";
 
 export default async function Home() {
   const featured = await getFeaturedPost();
   const latestPosts = await getLatestPosts();
+  const snippets = await getAllSnippets();
 
   return (
     <>
@@ -17,7 +18,7 @@ export default async function Home() {
       <main className="flex-1">
         {featured && <HeroSection featured={featured} />}
         <LatestPosts posts={latestPosts} />
-        <SnippetsCarousel snippets={snippets} />
+        <SnippetsCarousel snippets={snippets.slice(0, 6)} />
         <NewsletterSection />
       </main>
       <Footer />
