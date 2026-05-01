@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import slugify from "slugify";
@@ -17,6 +17,7 @@ import {
   EyeOff,
   Loader2,
   FileCode2,
+  Globe,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { TagsCombobox } from "@/components/admin/tags-combobox";
+import { LanguagesSelect } from "@/components/admin/languages-select";
 import { createSnippet } from "@/app/admin/snippets/actions";
 import type { Tables } from "../../../types/supabase";
 
@@ -39,6 +41,7 @@ const snippetSchema = z.object({
     .regex(/^[a-z0-9-]+$/, "Slug chỉ được chứa chữ thường, số và dấu gạch ngang"),
   description: z.string().max(500, "Mô tả tối đa 500 ký tự").optional(),
   filename: z.string().min(1, "Filename không được để trống"),
+  language_id: z.string().min(1, "Vui lòng chọn ngôn ngữ"),
   code: z.string().min(5, "Code quá ngắn, gõ nhiều vào!"),
   published: z.boolean(),
 });
@@ -54,6 +57,7 @@ export function CreateSnippetForm() {
     register,
     handleSubmit,
     setValue,
+    control,
     watch,
     reset,
     formState: { errors },
@@ -64,6 +68,7 @@ export function CreateSnippetForm() {
       slug: "",
       description: "",
       filename: "snippet.ts",
+      language_id: "",
       code: "",
       published: false,
     },
@@ -226,6 +231,30 @@ export function CreateSnippetForm() {
               />
               {errors.filename && (
                 <p className="text-xs text-destructive">{errors.filename.message}</p>
+              )}
+            </div>
+
+            <Separator className="bg-white/10" />
+
+            {/* Language Selection */}
+            <div className="space-y-2">
+              <Label className="flex items-center gap-2 text-sm font-medium text-zinc-300">
+                <Globe className="w-4 h-4 text-primary" />
+                Ngôn ngữ chính <span className="text-destructive">*</span>
+              </Label>
+              <Controller
+                name="language_id"
+                control={control}
+                render={({ field }) => (
+                  <LanguagesSelect
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={!!errors.language_id}
+                  />
+                )}
+              />
+              {errors.language_id && (
+                <p className="text-xs text-destructive">{errors.language_id.message}</p>
               )}
             </div>
 

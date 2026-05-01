@@ -16,6 +16,7 @@ import {
   Check,
   Hash,
   FileCode2,
+  Globe,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -47,6 +48,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { TagsCombobox } from "@/components/admin/tags-combobox";
+import { LanguagesSelect } from "@/components/admin/languages-select";
 import type { AdminSnippet } from "@/app/admin/snippets/actions";
 import {
   toggleSnippetPublished,
@@ -79,6 +81,7 @@ export function SnippetsManagement({ initialSnippets }: SnippetsManagementProps)
     description: "",
     code: "",
     filename: "",
+    language_id: "",
   });
   const [editTags, setEditTags] = React.useState<TagType[]>([]);
   const [isSavingEdit, setIsSavingEdit] = React.useState(false);
@@ -137,6 +140,7 @@ export function SnippetsManagement({ initialSnippets }: SnippetsManagementProps)
       description: snippet.description ?? "",
       code: snippet.code,
       filename: snippet.filename ?? "snippet.ts",
+      language_id: snippet.language_id ?? "",
     });
     setEditTags(
       snippet.tags.map((t) => ({
@@ -162,6 +166,7 @@ export function SnippetsManagement({ initialSnippets }: SnippetsManagementProps)
       description: editForm.description,
       code: editForm.code,
       filename: editForm.filename,
+      language_id: editForm.language_id,
       published: editTarget.published,
       tagIds: editTags.map((t) => t.id),
     });
@@ -180,6 +185,7 @@ export function SnippetsManagement({ initialSnippets }: SnippetsManagementProps)
                 description: editForm.description,
                 code: editForm.code,
                 filename: editForm.filename,
+                language_id: editForm.language_id,
                 tags: editTags.map((t) => ({ id: t.id, name: t.name, slug: t.slug })),
               }
             : s
@@ -550,6 +556,17 @@ export function SnippetsManagement({ initialSnippets }: SnippetsManagementProps)
                   spellCheck={false}
                 />
               </div>
+            </div>
+
+            {/* Languages */}
+            <div className="space-y-1.5">
+              <Label className="text-xs text-zinc-400 flex items-center gap-1.5">
+                <Globe className="w-3 h-3" /> Ngôn ngữ chính
+              </Label>
+              <LanguagesSelect
+                value={editForm.language_id}
+                onChange={(val) => setEditForm((prev) => ({ ...prev, language_id: val }))}
+              />
             </div>
 
             {/* Tags */}

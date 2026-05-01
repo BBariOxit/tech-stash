@@ -22,16 +22,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Separator } from "@/components/ui/separator";
 import { TiptapEditor } from "@/components/admin/tiptap-editor";
 import { TagsCombobox } from "@/components/admin/tags-combobox";
+import { LanguagesSelect } from "@/components/admin/languages-select";
 import { ThumbnailUpload } from "@/components/admin/thumbnail-upload";
 import { calculateReadTime } from "@/utils/readTime";
 import { createPost } from "@/app/admin/actions";
@@ -48,28 +43,12 @@ const postSchema = z.object({
     .regex(/^[a-z0-9-]+$/, "Slug chỉ được chứa chữ thường, số và dấu gạch ngang"),
   excerpt: z.string().max(500, "Excerpt tối đa 500 ký tự").optional(),
   thumbnail: z.union([z.string().url("Thumbnail phải là URL hợp lệ"), z.literal("")]).optional(),
-  language: z.string().min(1, "Hãy chọn ngôn ngữ"),
+  language_id: z.string().min(1, "Hãy chọn ngôn ngữ"),
   content: z.string().min(10, "Nội dung quá ngắn, gõ nhiều vào!"),
   published: z.boolean(),
 });
 
 type PostFormValues = z.infer<typeof postSchema>;
-
-const LANGUAGES = [
-  "TypeScript",
-  "JavaScript",
-  "CSS",
-  "HTML",
-  "Bash",
-  "Python",
-  "Go",
-  "Rust",
-  "JSON",
-  "YAML",
-  "SQL",
-  "Markdown",
-  "Other",
-];
 
 // ── Component ───────────────────────────────────────────
 export function CreatePostForm() {
@@ -92,7 +71,7 @@ export function CreatePostForm() {
       slug: "",
       excerpt: "",
       thumbnail: "",
-      language: "",
+      language_id: "",
       content: "",
       published: false,
     },
@@ -280,25 +259,18 @@ export function CreatePostForm() {
                 Ngôn ngữ <span className="text-destructive">*</span>
               </Label>
               <Controller
-                name="language"
+                name="language_id"
                 control={control}
                 render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="bg-white/5 border-white/10 focus:border-primary/50">
-                      <SelectValue placeholder="Chọn ngôn ngữ..." />
-                    </SelectTrigger>
-                    <SelectContent className="bg-[#111113] border-white/10">
-                      {LANGUAGES.map((lang) => (
-                        <SelectItem key={lang} value={lang} className="focus:bg-primary/10 focus:text-primary">
-                          {lang}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <LanguagesSelect
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={!!errors.language_id}
+                  />
                 )}
               />
-              {errors.language && (
-                <p className="text-xs text-destructive">{errors.language.message}</p>
+              {errors.language_id && (
+                <p className="text-xs text-destructive">{errors.language_id.message}</p>
               )}
             </div>
 

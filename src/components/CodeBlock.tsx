@@ -26,10 +26,27 @@ export async function CodeBlock({ code, lang, filename }: CodeBlockProps) {
   const ext = LANG_EXT[normalizedLang] ?? normalizedLang;
   const displayFilename = filename ?? `code.${ext}`;
 
-  const html = await codeToHtml(code, {
-    lang: normalizedLang,
-    theme: 'one-dark-pro',
-  });
+  let html = "";
+  try {
+    html = await codeToHtml(code, {
+      lang: normalizedLang,
+      theme: 'one-dark-pro',
+    });
+  } catch (error) {
+    // Fallback if language is not supported by shiki
+    try {
+      html = await codeToHtml(code, {
+        lang: 'text',
+        theme: 'one-dark-pro',
+      });
+    } catch (fallbackError) {
+      // Ultimate fallback
+      html = `<pre class="shiki one-dark-pro" style="background-color:#282c34;color:#abb2bf" tabindex="0"><code>${code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')}</code></pre>`;
+    }
+  }
 
   return (
     <div className="rounded-xl overflow-hidden border border-white/[0.08] bg-[#0d0d10]">

@@ -11,6 +11,8 @@ export type AdminSnippet = {
   description: string | null;
   code: string;
   filename: string | null;
+  language_id: string | null;
+  language?: { id: string; name: string; slug: string } | null;
   published: boolean;
   created_at: string;
   updated_at: string | null;
@@ -21,10 +23,15 @@ export type AdminSnippet = {
 export async function getAdminSnippets(): Promise<AdminSnippet[]> {
   const supabase = await createServerClient();
 
-  const { data, error } = await supabase
+    const { data, error } = await supabase
     .from("snippets")
     .select(`
       *,
+      languages (
+        id,
+        name,
+        slug
+      ),
       snippet_tags (
         tags (
           id,
@@ -47,6 +54,8 @@ export async function getAdminSnippets(): Promise<AdminSnippet[]> {
     description: snippet.description,
     code: snippet.code,
     filename: snippet.filename,
+    language_id: snippet.language_id,
+    language: snippet.languages ? (Array.isArray(snippet.languages) ? snippet.languages[0] : snippet.languages) : null,
     published: snippet.published ?? false,
     created_at: snippet.created_at,
     updated_at: snippet.updated_at,
@@ -69,6 +78,7 @@ export async function createSnippet(data: {
   description: string;
   code: string;
   filename: string;
+  language_id: string;
   published: boolean;
   tagIds: string[];
 }): Promise<{ success: boolean; error?: string; snippetId?: string }> {
@@ -91,6 +101,7 @@ export async function createSnippet(data: {
       description: data.description || null,
       code: data.code,
       filename: data.filename || "snippet.ts",
+      language_id: data.language_id,
       published: data.published,
       author_id: user.id,
     })
@@ -137,6 +148,7 @@ export async function updateSnippet(
     description: string;
     code: string;
     filename: string;
+    language_id: string;
     published: boolean;
     tagIds: string[];
   }
@@ -151,6 +163,7 @@ export async function updateSnippet(
       description: data.description || null,
       code: data.code,
       filename: data.filename || "snippet.ts",
+      language_id: data.language_id,
       published: data.published,
       updated_at: new Date().toISOString(),
     })

@@ -16,6 +16,7 @@ import {
   Code2,
   LayoutList,
   PlusCircle,
+  Globe,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -61,6 +62,12 @@ const NAV_GROUPS = [
         href: "/admin/tags",
         label: "Quản lý Tags",
         icon: Tag,
+        exact: false,
+      },
+      {
+        href: "/admin/languages",
+        label: "Quản lý Languages",
+        icon: Globe,
         exact: false,
       },
     ],

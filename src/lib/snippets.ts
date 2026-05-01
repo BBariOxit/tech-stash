@@ -13,30 +13,10 @@ export interface Snippet {
   description: string;
   code: string;
   filename: string;
-  language: string; // derived from filename extension or tags
+  language: string; // from languages.name
+  languageSlug: string; // from languages.slug, used for shiki
   date: string;
   tags: string[];
-}
-
-function getLanguageFromFilename(filename: string): string {
-  const ext = filename.split('.').pop()?.toLowerCase() || '';
-  const langMap: Record<string, string> = {
-    ts: 'TypeScript',
-    tsx: 'TypeScript',
-    js: 'JavaScript',
-    jsx: 'JavaScript',
-    css: 'CSS',
-    scss: 'SCSS',
-    html: 'HTML',
-    json: 'JSON',
-    md: 'Markdown',
-    sh: 'Bash',
-    bash: 'Bash',
-    py: 'Python',
-    go: 'Go',
-    rs: 'Rust'
-  };
-  return langMap[ext] || 'Text';
 }
 
 export async function getAllSnippets(): Promise<Snippet[]> {
@@ -44,6 +24,10 @@ export async function getAllSnippets(): Promise<Snippet[]> {
     .from("snippets")
     .select(`
       *,
+      languages (
+        name,
+        slug
+      ),
       snippet_tags (
         tags (
           name
@@ -65,7 +49,8 @@ export async function getAllSnippets(): Promise<Snippet[]> {
     description: snippet.description || "",
     code: snippet.code || "",
     filename: snippet.filename || "snippet.ts",
-    language: getLanguageFromFilename(snippet.filename || ""),
+    language: snippet.languages?.name || "Text",
+    languageSlug: snippet.languages?.slug || "text",
     date: snippet.created_at,
     tags: snippet.snippet_tags?.map((st: any) => st.tags?.name).filter(Boolean) || [],
   }));
@@ -76,6 +61,10 @@ export async function getSnippetBySlug(slug: string): Promise<Snippet | null> {
     .from("snippets")
     .select(`
       *,
+      languages (
+        name,
+        slug
+      ),
       snippet_tags (
         tags (
           name
@@ -95,7 +84,8 @@ export async function getSnippetBySlug(slug: string): Promise<Snippet | null> {
     description: data.description || "",
     code: data.code || "",
     filename: data.filename || "snippet.ts",
-    language: getLanguageFromFilename(data.filename || ""),
+    language: data.languages?.name || "Text",
+    languageSlug: data.languages?.slug || "text",
     date: data.created_at,
     tags: data.snippet_tags?.map((st: any) => st.tags?.name).filter(Boolean) || [],
   };

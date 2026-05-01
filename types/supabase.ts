@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      languages: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
       post_tags: {
         Row: {
           id: number
@@ -56,6 +77,7 @@ export type Database = {
           featured: boolean
           id: string
           language: string
+          language_id: string | null
           published: boolean
           reading_time: number
           slug: string
@@ -70,6 +92,7 @@ export type Database = {
           featured?: boolean
           id?: string
           language: string
+          language_id?: string | null
           published?: boolean
           reading_time?: number
           slug: string
@@ -84,13 +107,22 @@ export type Database = {
           featured?: boolean
           id?: string
           language?: string
+          language_id?: string | null
           published?: boolean
           reading_time?: number
           slug?: string
           thumbnail?: string | null
           title?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "posts_language_id_fkey"
+            columns: ["language_id"]
+            isOneToOne: false
+            referencedRelation: "languages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -154,6 +186,8 @@ export type Database = {
           description: string | null
           filename: string | null
           id: string
+          language: string
+          language_id: string | null
           published: boolean | null
           slug: string
           title: string
@@ -166,6 +200,8 @@ export type Database = {
           description?: string | null
           filename?: string | null
           id?: string
+          language?: string
+          language_id?: string | null
           published?: boolean | null
           slug: string
           title: string
@@ -178,12 +214,22 @@ export type Database = {
           description?: string | null
           filename?: string | null
           id?: string
+          language?: string
+          language_id?: string | null
           published?: boolean | null
           slug?: string
           title?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "snippets_language_id_fkey"
+            columns: ["language_id"]
+            isOneToOne: false
+            referencedRelation: "languages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tags: {
         Row: {

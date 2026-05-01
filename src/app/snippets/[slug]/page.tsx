@@ -97,7 +97,7 @@ export default async function SnippetDetailPage({
             <div className="mb-8">
               <CodeBlock 
                 code={snippet.code} 
-                lang={snippet.language.toLowerCase()} 
+                lang={snippet.languageSlug} 
                 filename={snippet.filename} 
               />
             </div>
