@@ -6,6 +6,36 @@ import { getPostBySlug, getAllPosts } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import { PostContent } from "@/components/post-content";
+import { BlogPostLayout, type TocHeading } from "@/components/table-of-contents";
+
+/** Extract h2/h3 headings from raw HTML and inject `id` attributes */
+function extractHeadings(html: string): { headings: TocHeading[]; html: string } {
+  const headings: TocHeading[] = [];
+  const slugCount: Record<string, number> = {};
+
+  const processed = html.replace(/<(h[23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (_, tag, attrs, inner) => {
+    const level = parseInt(tag[1]);
+    const text = inner.replace(/<[^>]+>/g, "").trim();
+
+    let slug = text
+      .toLowerCase()
+      .replace(/[^\w\sÀ-ỹ]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+
+    if (slugCount[slug] !== undefined) {
+      slugCount[slug]++;
+      slug = `${slug}-${slugCount[slug]}`;
+    } else {
+      slugCount[slug] = 0;
+    }
+
+    headings.push({ id: slug, text, level });
+    return `<${tag}${attrs} id="${slug}">${inner}</${tag}>`;
+  });
+
+  return { headings, html: processed };
+}
 
 // Next.js 16: params is a Promise
 export default async function BlogPostPage({
@@ -18,66 +48,70 @@ export default async function BlogPostPage({
 
   if (!post) notFound();
 
+  const { headings, html: contentWithIds } = extractHeadings(post.content ?? "");
+
   return (
     <>
       <Navbar />
       <main className="flex-1 pt-28 pb-16 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto">
-          {/* Back link */}
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-1.5 text-sm text-zinc-300 hover:text-zinc-300 transition-colors mb-8 font-medium"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Quay lại Blog
-          </Link>
+        <div className="max-w-7xl mx-auto">
+          {/* Layout: article (animatable) + sticky ToC */}
+          <BlogPostLayout headings={headings}>
+            {/* Back link */}
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-1.5 text-sm text-zinc-400 hover:text-primary transition-colors mb-6 font-medium group"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+              Quay lại Blog
+            </Link>
 
-          {/* Tags */}
-          <div className="flex flex-wrap gap-2 mb-4">
-            {post.tags.map((tag) => (
-              <Badge
-                key={tag}
-                variant="outline"
-                className="text-xs border-primary/20 text-primary/70 font-mono"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
-
-          {/* Title */}
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-4">
-            {post.title}
-          </h1>
-
-          {/* Meta */}
-          <div className="flex items-center gap-4 text-sm text-zinc-400 mb-8 pb-8 border-b border-white/[0.06]">
-            <span className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4" />
-              {new Date(post.date).toLocaleDateString("vi-VN", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              {post.reading_time} phút đọc
-            </span>
-          </div>
-
-          {/* Content */}
-          {post.content ? (
-            <PostContent content={post.content} />
-          ) : (
-            <div className="prose prose-invert prose-zinc max-w-none">
-              <p className="text-zinc-300 text-lg leading-relaxed">{post.excerpt}</p>
-              <div className="mt-8 p-6 rounded-xl border border-dashed border-white/10 text-center text-zinc-400">
-                <p className="text-sm text-zinc-500">// TODO: Nội dung bài viết đầy đủ sẽ được thêm vào đây</p>
-                <p className="text-xs mt-2">Đây là placeholder — integrate với MDX hoặc CMS sau.</p>
-              </div>
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {post.tags.map((tag) => (
+                <Badge
+                  key={tag}
+                  variant="outline"
+                  className="text-xs border-primary/20 text-primary/70 font-mono"
+                >
+                  {tag}
+                </Badge>
+              ))}
             </div>
-          )}
+
+            {/* Title */}
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-4">
+              {post.title}
+            </h1>
+
+            {/* Meta */}
+            <div className="flex items-center gap-4 text-sm text-zinc-400 mb-8 pb-8 border-b border-white/[0.06]">
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4" />
+                {new Date(post.date).toLocaleDateString("vi-VN", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4" />
+                {post.reading_time} phút đọc
+              </span>
+            </div>
+
+            {/* Content */}
+            {post.content ? (
+              <PostContent content={contentWithIds} />
+            ) : (
+              <div className="prose prose-invert prose-zinc max-w-none">
+                <p className="text-zinc-300 text-lg leading-relaxed">{post.excerpt}</p>
+                <div className="mt-8 p-6 rounded-xl border border-dashed border-white/10 text-center text-zinc-400">
+                  <p className="text-sm text-zinc-500">// Nội dung bài viết sẽ được thêm vào đây</p>
+                </div>
+              </div>
+            )}
+          </BlogPostLayout>
         </div>
       </main>
       <Footer />
