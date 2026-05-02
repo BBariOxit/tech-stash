@@ -16,7 +16,7 @@ type Language = Tables<"languages">;
 
 interface LanguagesSelectProps {
   value?: string;
-  onChange: (value: string) => void;
+  onChange: (value: string | null) => void;
   error?: boolean;
 }
 
@@ -39,8 +39,8 @@ export function LanguagesSelect({ value, onChange, error }: LanguagesSelectProps
   return (
     <Select
       value={value}
-      onValueChange={(val) => {
-        onChange(val);
+      onValueChange={(val: string | null) => {
+        if (val) onChange?.(val);
       }}
     >
       <SelectTrigger className={`w-full bg-white/5 border-white/10 ${error ? 'border-destructive focus-visible:ring-destructive/50' : 'focus-visible:border-primary/50'} h-10`}>

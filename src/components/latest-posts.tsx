@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, type Variants } from "motion/react";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Post } from "@/lib/posts";
 
 const PLACEHOLDER_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='220' viewBox='0 0 400 220'%3E%3Crect width='400' height='220' fill='%2318181b'/%3E%3Crect x='160' y='80' width='80' height='60' rx='6' fill='%2327272a'/%3E%3Ccircle cx='200' cy='105' r='14' fill='%2322d3ee' opacity='0.25'/%3E%3C/svg%3E";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -17,7 +17,7 @@ const containerVariants = {
   },
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
@@ -32,7 +32,7 @@ interface PostCardProps {
 
 function PostCard({ post }: PostCardProps) {
   return (
-    <motion.div variants={cardVariants}>
+    <motion.div variants={cardVariants as any}>
       <Link href={`/blog/${post.slug}`} className="group block h-full">
         <article className="h-full rounded-xl border border-white/[0.08] bg-[#111113] overflow-hidden card-hover flex flex-col">
           {/* Thumbnail */}
@@ -111,7 +111,7 @@ export default function LatestPosts({ posts }: LatestPostsProps) {
         {/* Grid */}
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
-          variants={containerVariants}
+          variants={containerVariants as any}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}

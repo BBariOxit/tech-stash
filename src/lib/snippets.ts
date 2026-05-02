@@ -51,8 +51,8 @@ export async function getAllSnippets(): Promise<Snippet[]> {
     filename: snippet.filename || "snippet.ts",
     language: snippet.languages?.name || "Text",
     languageSlug: snippet.languages?.slug || "text",
-    date: snippet.created_at,
-    tags: snippet.snippet_tags?.map((st: any) => st.tags?.name).filter(Boolean) || [],
+    date: snippet.created_at || new Date().toISOString(),
+    tags: (snippet.snippet_tags?.map((st: any) => st.tags?.name).filter(Boolean) || []) as string[],
   }));
 }
 
@@ -86,7 +86,7 @@ export async function getSnippetBySlug(slug: string): Promise<Snippet | null> {
     filename: data.filename || "snippet.ts",
     language: data.languages?.name || "Text",
     languageSlug: data.languages?.slug || "text",
-    date: data.created_at,
-    tags: data.snippet_tags?.map((st: any) => st.tags?.name).filter(Boolean) || [],
+    date: data.created_at || new Date().toISOString(),
+    tags: (data.snippet_tags?.map((st: any) => st.tags?.name).filter(Boolean) || []) as string[],
   };
 }
