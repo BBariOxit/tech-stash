@@ -43,6 +43,17 @@ export async function createPost(data: {
     return { success: false, error: "Không thể xác thực quyền người dùng." };
   }
 
+  // Resolve language name from language_id (required NOT NULL column)
+  let languageName = "Other";
+  if (data.language_id) {
+    const { data: lang } = await supabase
+      .from("languages")
+      .select("name")
+      .eq("id", data.language_id)
+      .single();
+    if (lang?.name) languageName = lang.name;
+  }
+
   // 1. Insert post
   const { data: post, error: postError } = await supabase
     .from("posts")
@@ -52,6 +63,7 @@ export async function createPost(data: {
       excerpt: data.excerpt || null,
       thumbnail: data.thumbnail || null,
       content: data.content,
+      language: languageName,
       language_id: data.language_id,
       published: data.published,
       reading_time: data.reading_time,

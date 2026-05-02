@@ -36,9 +36,15 @@ export function LanguagesSelect({ value, onChange, error }: LanguagesSelectProps
       });
   }, []);
 
+  const items = languages.map((lang) => ({
+    value: lang.id,
+    label: lang.name,
+  }));
+
   return (
     <Select
       value={value}
+      items={items}
       onValueChange={(val: string | null) => {
         if (val) onChange?.(val);
       }}
