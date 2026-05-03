@@ -145,7 +145,10 @@ function TiltCard({ children }: { children: React.ReactNode }) {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function LoginPage() {
-  const supabase = React.useMemo(() => createClient(), []);
+  const supabase = React.useMemo(
+    () => (typeof window === "undefined" ? null : createClient()),
+    []
+  );
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -194,6 +197,10 @@ export default function LoginPage() {
 
   // ── OAuth ──────────────────────────────────────────────────────────────────
   const handleOAuth = async (provider: "github" | "google") => {
+    if (!supabase) {
+      toast.error("Ứng dụng đang khởi tạo", { description: "Vui lòng thử lại sau." });
+      return;
+    }
     setIsLoading(true);
     const redirectTo = buildRedirectTo();
     const { error } = await supabase.auth.signInWithOAuth({
@@ -209,6 +216,11 @@ export default function LoginPage() {
   // ── Email / Password ───────────────────────────────────────────────────────
   const handleEmailAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!supabase) {
+      toast.error("Ứng dụng đang khởi tạo", { description: "Vui lòng thử lại sau." });
+      return;
+    }
 
     if (!email || !password) {
       toast.error("Thiếu thông tin", {
@@ -411,6 +423,10 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={async () => {
+                    if (!supabase) {
+                      toast.error("Ứng dụng đang khởi tạo", { description: "Vui lòng thử lại sau." });
+                      return;
+                    }
                     const { error } = await supabase.auth.resend({ type: "signup", email });
                     if (error) {
                       toast.error("Gửi lại thất bại", { description: error.message });
