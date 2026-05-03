@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from "motion/react";
 import type { User } from "@supabase/supabase-js";
@@ -144,7 +145,7 @@ function TiltCard({ children }: { children: React.ReactNode }) {
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
-export default function LoginPage() {
+function LoginPageContent() {
   const supabase = React.useMemo(
     () => (typeof window === "undefined" ? null : createClient()),
     []
@@ -622,5 +623,19 @@ export default function LoginPage() {
         )}
       </TiltCard>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-zinc-950 text-zinc-400">
+          Đang tải...
+        </div>
+      }
+    >
+      <LoginPageContent />
+    </Suspense>
   );
 }
