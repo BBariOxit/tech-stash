@@ -203,14 +203,23 @@ function LoginPageContent() {
       return;
     }
     setIsLoading(true);
-    const redirectTo = buildRedirectTo();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo },
-    });
-    if (error) {
+
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback${nextPath ? `?next=${encodeURIComponent(nextPath)}` : ''}`, 
+        },
+      });
+
+      if (error) {
+        setIsLoading(false);
+        console.error("Lỗi đăng nhập:", error.message);
+        toast.error("Đăng nhập OAuth thất bại", { description: error.message });
+      }
+    } catch (err) {
+      console.error("Lỗi :)):", err);
       setIsLoading(false);
-      toast.error("Đăng nhập OAuth thất bại", { description: error.message });
     }
   };
 

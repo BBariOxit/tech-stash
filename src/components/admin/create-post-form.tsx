@@ -105,7 +105,7 @@ export function CreatePostForm() {
       });
 
       if (result.success) {
-        toast.success("🚀 Đã lên sóng!", {
+        toast.success("Đã lên sóng!", {
           description: `Post "${values.title}" đã được lưu vào Supabase.`,
           duration: 5000,
         });
@@ -310,9 +310,9 @@ export function CreatePostForm() {
             </Button>
 
             {/* Info */}
-            <p className="text-xs text-zinc-600 text-center leading-relaxed">
-              Dữ liệu sẽ được lưu trực tiếp lên Supabase và hiển thị ngay.
-            </p>
+            {/* <p className="text-xs text-zinc-600 text-center leading-relaxed">
+              Dữ liệu sẽ được lưu trực tiếp lên Supabase và hiển thị ngay.cc
+            </p> */}
           </div>
         </div>
       </div>
