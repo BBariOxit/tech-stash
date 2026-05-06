@@ -232,19 +232,19 @@ export function PostsManagement({ initialPosts }: PostsManagementProps) {
               <TableHead className="w-[60px] text-xs text-zinc-500">
                 Ảnh
               </TableHead>
-              <TableHead className="text-xs text-zinc-500">
+              <TableHead className="text-xs text-zinc-500 w-[35%]">
                 Tiêu đề
               </TableHead>
-              <TableHead className="text-xs text-zinc-500 w-[100px]">
+              <TableHead className="text-xs text-zinc-500 w-[12%]">
                 Trạng thái
               </TableHead>
-              <TableHead className="text-xs text-zinc-500 w-[100px]">
+              <TableHead className="text-xs text-zinc-500 w-[20%]">
                 Tags
               </TableHead>
-              <TableHead className="text-xs text-zinc-500 w-[100px]">
+              <TableHead className="text-xs text-zinc-500 w-[12%]">
                 Ngày tạo
               </TableHead>
-              <TableHead className="text-xs text-zinc-500 w-[60px] text-right">
+              <TableHead className="text-xs text-zinc-500 w-[9%] text-right">
                 
               </TableHead>
             </TableRow>
@@ -271,7 +271,7 @@ export function PostsManagement({ initialPosts }: PostsManagementProps) {
                   {/* Thumbnail */}
                   <TableCell>
                     {post.thumbnail ? (
-                      <div className="w-10 h-10 rounded-lg overflow-hidden border border-white/10 bg-white/5">
+                      <div className="w-10 h-10 rounded-lg overflow-hidden border border-white/10 bg-white/5 shrink-0">
                         <Image
                           src={post.thumbnail}
                           alt={post.title}
@@ -282,7 +282,7 @@ export function PostsManagement({ initialPosts }: PostsManagementProps) {
                         />
                       </div>
                     ) : (
-                      <div className="w-10 h-10 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center shrink-0">
                         <ImageIcon className="w-4 h-4 text-zinc-600" />
                       </div>
                     )}
@@ -319,7 +319,7 @@ export function PostsManagement({ initialPosts }: PostsManagementProps) {
                   {/* Tags */}
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {post.tags.slice(0, 3).map((tag) => (
+                      {post.tags.slice(0, 2).map((tag) => (
                         <Badge
                           key={tag}
                           variant="outline"
@@ -328,6 +328,14 @@ export function PostsManagement({ initialPosts }: PostsManagementProps) {
                           {tag}
                         </Badge>
                       ))}
+                      {post.tags.length > 2 && (
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] border-zinc-700 text-zinc-500"
+                        >
+                          +{post.tags.length - 2}
+                        </Badge>
+                      )}
                     </div>
                   </TableCell>
 

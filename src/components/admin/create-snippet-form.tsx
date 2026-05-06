@@ -193,7 +193,7 @@ export function CreateSnippetForm() {
                   <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
                 </div>
                 <span className="text-[10px] text-zinc-600 font-mono">
-                  Raw Code — sẽ được highlight bởi Shiki
+                  Raw Code
                 </span>
               </div>
               <textarea
@@ -325,9 +325,9 @@ export function CreateSnippetForm() {
             </Button>
 
             {/* Info */}
-            <p className="text-xs text-zinc-600 text-center leading-relaxed">
+            {/* <p className="text-xs text-zinc-600 text-center leading-relaxed">
               Code sẽ được lưu raw string, client-side dùng Shiki để syntax highlight.
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
