@@ -156,9 +156,12 @@ function LoginPageContent() {
   const [mode, setMode] = React.useState<AuthMode>("login");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState<string | null>(null);
+  const [confirmPasswordError, setConfirmPasswordError] = React.useState<string | null>(null);
   const [passwordFocused, setPasswordFocused] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false); // register confirm-email screen
 
@@ -168,9 +171,12 @@ function LoginPageContent() {
   const handleSetMode = (next: AuthMode) => {
     setMode(next);
     setPasswordError(null);
+    setConfirmPasswordError(null);
     setPassword("");
+    setConfirmPassword("");
     setEmail("");
     setShowPassword(false);
+    setShowConfirmPassword(false);
   };
 
   // Show OAuth error from query param
@@ -246,8 +252,13 @@ function LoginPageContent() {
         setPasswordError(err);
         return;
       }
+      if (password !== confirmPassword) {
+        setConfirmPasswordError("Mật khẩu nhập lại không khớp.");
+        return;
+      }
     }
     setPasswordError(null);
+    setConfirmPasswordError(null);
 
     try {
       setIsLoading(true);
@@ -349,13 +360,13 @@ function LoginPageContent() {
             </motion.div>
           </AnimatePresence>
           <h1 className="text-3xl font-bold text-white">Tech Stash</h1>
-          <p className="mt-2 text-sm text-zinc-300">
+          {/* <p className="mt-2 text-sm text-zinc-300">
             {isSuccess
               ? "Xác nhận email để hoàn tất."
               : mode === "login"
               ? "Đăng nhập để quản lý nội dung."
-              : "Tạo tài khoản để bắt đầu đăng bài."}
-          </p>
+              : "Điền thông tin bên dưới để tạo tài khoản."}
+          </p> */}
         </div>
 
         {/* ── Tab switcher — ẩn khi success ── */}
@@ -582,6 +593,71 @@ function LoginPageContent() {
               </ul>
             )}
           </div>
+
+          {/* Confirm Password — chỉ hiện khi register */}
+          {mode === "register" && (
+            <div className="space-y-1.5">
+              <label htmlFor="confirm-password" className="block text-xs font-medium text-zinc-400">
+                Nhập lại mật khẩu
+              </label>
+              <div className="relative">
+                <input
+                  id="confirm-password"
+                  type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    if (confirmPasswordError) {
+                      setConfirmPasswordError(
+                        e.target.value !== password ? "Mật khẩu nhập lại không khớp." : null
+                      );
+                    }
+                  }}
+                  className={`w-full rounded-xl border bg-white/5 px-3 py-2.5 pr-10 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:bg-white/7 ${
+                    confirmPasswordError
+                      ? "border-red-500/60 focus:border-red-400/70"
+                      : confirmPassword.length > 0 && confirmPassword === password
+                      ? "border-emerald-400/50 focus:border-emerald-400/70"
+                      : "border-white/10 focus:border-cyan-300/50"
+                  }`}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 transition hover:text-zinc-300"
+                  aria-label={showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                >
+                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+              <AnimatePresence>
+                {confirmPasswordError && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.18 }}
+                    className="text-xs text-red-400"
+                  >
+                    ✕ {confirmPasswordError}
+                  </motion.p>
+                )}
+                {!confirmPasswordError && confirmPassword.length > 0 && confirmPassword === password && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.18 }}
+                    className="text-xs text-emerald-400"
+                  >
+                    ✓ Mật khẩu khớp
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
 
           {/* Submit */}
           <button
