@@ -58,12 +58,12 @@ export async function getFeaturedPost(): Promise<Post | null> {
 export async function getLatestPosts(excludeSlug?: string): Promise<Post[]> {
   const posts = await getAllPosts();
   const filtered = posts.filter((p) => p.slug !== excludeSlug);
-  
+
   // Nếu filter xong không còn bài nào, lấy luôn bài bị exclude (để UI không bị trống)
   if (filtered.length === 0 && posts.length > 0) {
     return posts.slice(0, 6);
   }
-  
+
   return filtered.slice(0, 6);
 }
 
