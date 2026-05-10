@@ -10,10 +10,15 @@ type ProfileRow = {
 };
 
 function normalizeMetadata(user: User) {
-  const fullName =
+  let fullName =
     (user.user_metadata?.full_name as string | undefined) ??
     (user.user_metadata?.name as string | undefined) ??
     null;
+
+  if (!fullName && user.email) {
+    fullName = user.email.split("@")[0];
+  }
+
   const avatarUrl =
     (user.user_metadata?.avatar_url as string | undefined) ??
     (user.user_metadata?.picture as string | undefined) ??
