@@ -7,6 +7,7 @@ const supabase = createClient<Database>(
 );
 
 export interface Post {
+  id?: string;
   slug: string;
   title: string;
   excerpt: string;
@@ -38,6 +39,7 @@ export async function getAllPosts(): Promise<Post[]> {
   }
 
   return data.map((post: any) => ({
+    id: post.id,
     slug: post.slug,
     title: post.title,
     excerpt: post.excerpt || "",
@@ -84,6 +86,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   if (error || !data) return null;
 
   return {
+    id: data.id,
     slug: data.slug,
     title: data.title,
     excerpt: data.excerpt || "",
