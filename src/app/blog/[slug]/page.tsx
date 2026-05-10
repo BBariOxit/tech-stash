@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import { PostContent } from "@/components/post-content";
 import { BlogPostLayout, type TocHeading } from "@/components/table-of-contents";
+import { CommentSection } from "@/components/comments/CommentSection";
 
 /** Extract h2/h3 headings from raw HTML and inject `id` attributes */
 function extractHeadings(html: string): { headings: TocHeading[]; html: string } {
@@ -111,6 +112,9 @@ export default async function BlogPostPage({
                 </div>
               </div>
             )}
+
+            {/* Comment section — only available for posts with a DB id */}
+            {post.id && <CommentSection postId={post.id} />}
           </BlogPostLayout>
         </div>
       </main>
