@@ -279,11 +279,18 @@ function LoginPageContent() {
       }
 
       // Register
+      const displayName = email.split('@')[0];
       const redirectTo = buildRedirectTo();
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: redirectTo },
+        options: { 
+          emailRedirectTo: redirectTo,
+          data: {
+            full_name: displayName,
+            avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${displayName}`
+          }
+        },
       });
       if (error) throw error;
 
