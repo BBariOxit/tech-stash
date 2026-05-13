@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Mail, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
+import { Mail, ArrowRight, CheckCircle2, Sparkles, Cpu, CodeXml, Terminal, Zap, Globe, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { dummySiteConfig } from "@/data";
@@ -30,11 +30,21 @@ export default function NewsletterSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#0d1117] to-[#111113] overflow-hidden p-8 sm:p-12"
+          className="group relative rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#0d1117] to-[#111113] overflow-hidden p-8 sm:p-12"
         >
           {/* Background decorations */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/[0.04] rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-violet-500/[0.04] rounded-full blur-3xl pointer-events-none" />
+
+          {/* Decorative Icons */}
+          <Cpu className="absolute top-8 left-8 size-20 text-primary opacity-15 -rotate-12 transition-transform duration-500 group-hover:rotate-0 group-hover:scale-110 pointer-events-none" />
+          <CodeXml className="absolute top-12 right-12 size-24 text-primary opacity-20 rotate-12 transition-transform duration-500 group-hover:rotate-0 group-hover:scale-110 pointer-events-none" />
+          <Terminal className="absolute bottom-10 left-12 size-20 text-primary opacity-15 rotate-6 transition-transform duration-500 group-hover:rotate-0 group-hover:scale-110 pointer-events-none" />
+          <Zap className="absolute bottom-8 right-10 size-16 text-primary opacity-20 -rotate-12 transition-transform duration-500 group-hover:rotate-0 group-hover:scale-110 pointer-events-none" />
+          
+          {/* New Random Icons */}
+          <Globe className="absolute top-1/2 left-1/4 -translate-y-1/2 size-16 text-primary opacity-10 rotate-45 transition-transform duration-700 group-hover:rotate-0 group-hover:scale-110 pointer-events-none" />
+          <Database className="absolute top-1/3 right-1/4 size-14 text-primary opacity-10 -rotate-6 transition-transform duration-700 group-hover:rotate-0 group-hover:scale-110 pointer-events-none" />
 
           {/* Border glow top */}
           <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
