@@ -30,41 +30,48 @@ export default function HeroSection({ featured }: HeroSectionProps) {
 
         {/* Typography / Headline */}
         <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-          className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter text-white leading-[1.1] mb-6"
+          initial={{ opacity: 0, filter: "blur(12px)", y: 10 }}
+          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter text-white leading-[1.1] mb-6 relative"
         >
-          Building Fast, Secure, and <span className="gradient-text">Scalable Web.</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-primary">
+            Code. Build. Scale.
+          </span>
+          {/* Blinking Cursor */}
+          <motion.span
+            animate={{ opacity: [1, 0] }}
+            transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+            className="inline-block w-4 md:w-6 h-[0.85em] bg-primary ml-2 align-baseline"
+          />
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-          className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+          transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
+          className="mb-10 max-w-3xl mx-auto text-lg sm:text-xl text-zinc-400 leading-relaxed"
         >
-          Tao là Thái Bảo. Đây là ổ chứa code snippet và những bài viết thực chiến 
-          hàng ngày từ công việc Full-stack Developer của tao.
+          Ý tưởng trên màn hình. Hệ thống trên Cloud. Nghệ thuật trong từng dòng code.
         </motion.p>
 
         {/* Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.7, ease: "backOut" }}
           className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-20"
         >
           <Link
             href="/blog"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-zinc-950 text-sm font-medium hover:bg-primary/90 transition-all hover:scale-105"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-zinc-950 text-sm font-semibold hover:bg-primary/90 transition-all"
           >
             Đọc bài viết
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             href="/snippets"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-white/10 bg-white/5 text-zinc-300 text-sm font-medium hover:border-white/20 hover:text-white hover:bg-white/10 transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-white/10 bg-transparent text-zinc-300 text-sm font-semibold hover:border-white/20 hover:bg-white/5 hover:text-white transition-all"
           >
             Code Snippets
           </Link>
@@ -90,10 +97,10 @@ export default function HeroSection({ featured }: HeroSectionProps) {
                 <img
                   src={featured.thumbnail || PLACEHOLDER_IMG}
                   alt={featured.title}
-                  className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-700"
+                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                 />
                 {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#111113] via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#111113]/50 via-transparent to-transparent" />
                 {/* Tags overlay */}
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
                   {featured.tags.map((tag) => (
