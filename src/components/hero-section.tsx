@@ -18,7 +18,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
       <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
         
         {/* Status pill */}
-        <motion.div
+        {/* <motion.div
            initial={{ opacity: 0, y: -20 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 0.5, ease: "easeOut" }}
@@ -26,7 +26,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
         >
           <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
           Available for collaboration
-        </motion.div>
+        </motion.div> */}
 
         {/* Typography / Headline */}
         <motion.h1

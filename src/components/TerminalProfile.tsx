@@ -30,7 +30,7 @@ export function TerminalProfile() {
       try {
         const result = await codeToTokensBase(codeContent, {
           lang: "typescript",
-          theme: "tokyo-night",
+          theme: "github-dark-high-contrast",
         });
 
         if (!isTerminated) {

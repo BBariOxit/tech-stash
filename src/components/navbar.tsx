@@ -82,11 +82,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
-
   return (
     <header
       className={cn(
@@ -97,24 +92,26 @@ export default function Navbar() {
       )}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 shrink-0 group"
-          aria-label="tech-stash home"
-        >
-          <div className="flex items-center justify-center w-7 h-7 rounded-md bg-primary/10 border border-primary/20 group-hover:border-primary/50 transition-colors">
-            <Terminal className="w-4 h-4 text-primary" />
-          </div>
-          <span className="font-mono text-sm font-semibold text-white group-hover:text-primary transition-colors">
-            <span className="text-primary/60">&lt;</span>
-            tech-stash
-            <span className="text-primary/60"> /&gt;</span>
-          </span>
-        </Link>
+        {/* Khối bên trái - Chiếm 1 phần, đẩy nội dung sang trái */}
+        <div className="flex-1 flex justify-start">
+          <Link
+            href="/"
+            className="flex items-center gap-2 shrink-0 group"
+            aria-label="tech-stash home"
+          >
+            <div className="flex items-center justify-center w-7 h-7 rounded-md bg-primary/10 border border-primary/20 group-hover:border-primary/50 transition-colors">
+              <Terminal className="w-4 h-4 text-primary" />
+            </div>
+            <span className="font-mono text-sm font-semibold text-white group-hover:text-primary transition-colors">
+              <span className="text-primary/60">&lt;</span>
+              tech-stash
+              <span className="text-primary/60"> /&gt;</span>
+            </span>
+          </Link>
+        </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-1">
+        {/* Khối ở giữa - Chiếm 1 phần, đẩy nội dung ra giữa */}
+        <div className="hidden md:flex flex-1 items-center justify-center gap-1">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -131,8 +128,8 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Right actions */}
-        <div className="flex items-center gap-2">
+        {/* Khối bên phải - Chiếm 1 phần, đẩy nội dung sang phải */}
+        <div className="flex-1 flex items-center justify-end gap-2">
           <button
             className="hidden sm:flex items-center justify-center w-8 h-8 rounded-md text-zinc-300 hover:text-white hover:bg-white/6 transition-colors"
             aria-label="Search"
@@ -190,6 +187,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={() => setMobileOpen(false)}
                 className={cn(
                   "px-3 py-2 rounded-md text-sm font-medium transition-colors",
                   pathname === link.href
@@ -233,6 +231,7 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/login"
+                onClick={() => setMobileOpen(false)}
                 className="px-3 py-2 rounded-md text-sm font-medium text-zinc-200 border border-white/10 hover:text-white hover:border-primary/40 hover:bg-primary/10 transition-colors"
               >
                 <span className="inline-flex items-center gap-2">
