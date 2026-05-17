@@ -553,6 +553,7 @@ export function SnippetsManagement({ initialSnippets }: SnippetsManagementProps)
                   }
                   rows={12}
                   className="w-full bg-[#09090b] text-zinc-200 font-mono text-sm leading-relaxed p-3 resize-y outline-none min-h-[200px]"
+                  style={{ fontFamily: "var(--font-jb-mono), monospace" }}
                   spellCheck={false}
                 />
               </div>

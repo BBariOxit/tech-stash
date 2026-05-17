@@ -14,7 +14,11 @@ const LANG_COLORS: Record<string, string> = {
 
 import Link from "next/link";
 
-function SnippetCard({ snippet }: { snippet: Snippet }) {
+export interface SnippetWithHtml extends Snippet {
+  html?: string;
+}
+
+function SnippetCard({ snippet }: { snippet: SnippetWithHtml }) {
   const langClass = LANG_COLORS[snippet.language] ?? "text-zinc-300 bg-zinc-400/10 border-zinc-400/20";
 
   return (
@@ -34,15 +38,22 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
         </div>
 
         {/* Description */}
-        <p className="px-4 py-2.5 text-xs text-zinc-300 leading-relaxed border-b border-white/[0.04]">
+        <p className="px-4 py-2.5 text-xs text-zinc-300 leading-relaxed border-b border-white/[0.04] line-clamp-2">
           {snippet.description}
         </p>
 
         {/* Code preview */}
         <div className="px-4 py-3 flex-1 overflow-hidden relative min-h-[140px]">
-          <pre className="snippet-code text-[11px] leading-relaxed">
-            {snippet.code.split("\n").slice(0, 7).join("\n")}
-          </pre>
+          {snippet.html ? (
+            <div
+              className="text-[11px] leading-relaxed [&>pre]:!bg-transparent [&>pre]:!p-0 [&>pre]:!m-0"
+              dangerouslySetInnerHTML={{ __html: snippet.html }}
+            />
+          ) : (
+            <pre className="snippet-code text-[11px] leading-relaxed">
+              {snippet.code.split("\n").slice(0, 7).join("\n")}
+            </pre>
+          )}
           {/* Fade out bottom */}
           <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#111113] to-transparent pointer-events-none" />
         </div>
@@ -52,7 +63,7 @@ function SnippetCard({ snippet }: { snippet: Snippet }) {
 }
 
 interface SnippetsCarouselProps {
-  snippets: Snippet[];
+  snippets: SnippetWithHtml[];
 }
 
 export default function SnippetsCarousel({ snippets }: SnippetsCarouselProps) {

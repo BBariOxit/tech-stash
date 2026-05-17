@@ -30,6 +30,7 @@ import { LanguagesSelect } from "@/components/admin/languages-select";
 import { ThumbnailUpload } from "@/components/admin/thumbnail-upload";
 import { calculateReadTime } from "@/utils/readTime";
 import { createPost } from "@/app/admin/actions";
+import { updatePost } from "@/app/admin/posts/actions";
 import type { Tables } from "../../../types/supabase";
 
 type Tag = Tables<"tags">;
@@ -48,11 +49,23 @@ const postSchema = z.object({
   published: z.boolean(),
 });
 
-type PostFormValues = z.infer<typeof postSchema>;
+export type PostFormValues = z.infer<typeof postSchema>;
+
+interface CreatePostFormProps {
+  initialData?: PostFormValues;
+  initialTags?: Tag[];
+  postId?: string;
+  isEditMode?: boolean;
+}
 
 // ── Component ───────────────────────────────────────────
-export function CreatePostForm() {
-  const [selectedTags, setSelectedTags] = React.useState<Tag[]>([]);
+export function CreatePostForm({
+  initialData,
+  initialTags = [],
+  postId,
+  isEditMode = false,
+}: CreatePostFormProps = {}) {
+  const [selectedTags, setSelectedTags] = React.useState<Tag[]>(initialTags);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [plainText, setPlainText] = React.useState("");
 
@@ -66,7 +79,7 @@ export function CreatePostForm() {
     formState: { errors },
   } = useForm<PostFormValues>({
     resolver: zodResolver(postSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       title: "",
       slug: "",
       excerpt: "",
@@ -83,34 +96,40 @@ export function CreatePostForm() {
 
   // Auto-generate slug from title
   React.useEffect(() => {
-    if (!title) return;
+    if (!title || isEditMode) return;
     const generatedSlug = slugify(title, {
       lower: true,
       strict: true,
       locale: "vi",
     });
     setValue("slug", generatedSlug, { shouldValidate: true });
-  }, [title, setValue]);
+  }, [title, setValue, isEditMode]);
 
   const onSubmit = async (values: PostFormValues) => {
     setIsSubmitting(true);
     try {
       const readTime = calculateReadTime(plainText);
-      const result = await createPost({
+      const payload = {
         ...values,
         excerpt: values.excerpt ?? "",
         thumbnail: values.thumbnail || "",
         tagIds: selectedTags.map((t) => t.id),
         reading_time: readTime,
-      });
+      };
+
+      const result = isEditMode && postId
+        ? await updatePost(postId, payload)
+        : await createPost(payload);
 
       if (result.success) {
-        toast.success("Đã lên sóng!", {
+        toast.success(isEditMode ? "Đã cập nhật bài viết!" : "Đã lên sóng!", {
           description: `Post "${values.title}" đã được lưu vào Supabase.`,
           duration: 5000,
         });
-        reset();
-        setSelectedTags([]);
+        if (!isEditMode) {
+          reset();
+          setSelectedTags([]);
+        }
       } else {
         toast.error("Lỗi rồi!", {
           description: result.error ?? "Không xác định được lỗi.",
@@ -304,7 +323,7 @@ export function CreatePostForm() {
               ) : (
                 <>
                   <Send className="w-4 h-4 mr-2" />
-                  {published ? "Publish ngay" : "Lưu Draft"}
+                  {isEditMode ? "Cập nhật bài viết" : published ? "Publish ngay" : "Lưu Draft"}
                 </>
               )}
             </Button>
