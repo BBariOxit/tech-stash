@@ -21,13 +21,13 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   }
 
   const initialData = {
-    title: post.title,
-    slug: post.slug,
+    title: post.title || "",
+    slug: post.slug || "",
     excerpt: post.excerpt || "",
     thumbnail: post.thumbnail || "",
-    language_id: post.language_id,
-    content: post.content,
-    published: post.published,
+    language_id: post.language_id || "",
+    content: post.content || "",
+    published: post.published || false,
   };
 
   return (

@@ -358,14 +358,17 @@ export function PostsManagement({ initialPosts }: PostsManagementProps) {
                         sideOffset={4}
                         className="w-48"
                       >
-                        <DropdownMenuItem asChild className="cursor-pointer">
-                          <Link
-                            href={`/admin/posts/edit/${post.slug}`}
-                            className="flex items-center w-full"
-                          >
-                            <Pencil className="w-4 h-4 mr-2 text-cyan-400" />
-                            Chỉnh sửa bài viết
-                          </Link>
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          render={
+                            <Link
+                              href={`/admin/posts/edit/${post.slug}`}
+                              className="flex items-center w-full"
+                            />
+                          }
+                        >
+                          <Pencil className="w-4 h-4 mr-2 text-cyan-400" />
+                          Chỉnh sửa bài viết
                         </DropdownMenuItem>
 
                         {/* Preview */}

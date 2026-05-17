@@ -3,8 +3,7 @@
 import * as React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
-import { common, createLowlight } from "lowlight";
+import CodeBlockShiki from "tiptap-extension-code-block-shiki";
 import { Table } from "@tiptap/extension-table";
 import { TableRow } from "@tiptap/extension-table-row";
 import { TableHeader } from "@tiptap/extension-table-header";
@@ -25,7 +24,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const lowlight = createLowlight(common);
 
 interface TiptapEditorProps {
   content: string;
@@ -41,11 +39,10 @@ export function TiptapEditor({ content, onChange, onTextChange, className }: Tip
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({
-        codeBlock: false, // Disable built-in codeBlock; use lowlight version below
+        codeBlock: false, // Disable built-in codeBlock; use shiki version below
       }),
-      CodeBlockLowlight.configure({
-        lowlight,
-        defaultLanguage: "typescript",
+      CodeBlockShiki.configure({
+        defaultTheme: "one-dark-pro",
       }),
       Table.configure({
         resizable: true,
