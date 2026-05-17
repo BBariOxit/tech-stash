@@ -14,7 +14,7 @@ function extractHeadings(html: string): { headings: TocHeading[]; html: string }
   const headings: TocHeading[] = [];
   const slugCount: Record<string, number> = {};
 
-  const processed = html.replace(/<(h[23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (_, tag, attrs, inner) => {
+  const processed = html.replace(/<(h[1-6])([^>]*)>([\s\S]*?)<\/\1>/gi, (_, tag, attrs, inner) => {
     const level = parseInt(tag[1]);
     const text = inner.replace(/<[^>]+>/g, "").trim();
 

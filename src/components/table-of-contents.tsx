@@ -20,19 +20,28 @@ function TocNav({
   activeId: string;
   onItemClick: (id: string) => void;
 }) {
+  const navRef = React.useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    if (!activeId || !navRef.current) return;
+    const activeEl = navRef.current.querySelector(`[href="#${activeId}"]`);
+    if (activeEl) {
+      activeEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }, [activeId]);
+
   return (
-    <nav>
+    <nav ref={navRef}>
       <ul className="relative flex flex-col gap-0.5">
         <div className="absolute left-0 top-0 bottom-0 w-px bg-white/[0.06]" />
         {headings.map((heading) => {
           const isActive = activeId === heading.id;
-          const isH3 = heading.level === 3;
           return (
             <li key={heading.id} className="relative">
               {isActive && (
                 <motion.div
                   layoutId="toc-active-indicator"
-                  className="absolute left-0 top-0 bottom-0 w-px bg-primary"
+                  className="absolute -left-[1px] top-0 bottom-0 w-[2px] bg-primary rounded-full shadow-[0_0_10px_rgba(34,211,238,0.8)]"
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
@@ -43,8 +52,12 @@ function TocNav({
                   onItemClick(heading.id);
                 }}
                 className={[
-                  "flex py-1.5 pr-2 text-[13px] leading-snug transition-colors duration-200",
-                  isH3 ? "pl-8" : "pl-4",
+                  "flex py-1.5 pr-2 text-[13px] leading-snug transition-all duration-300 relative",
+                  heading.level === 1 ? "pl-2 font-semibold" :
+                  heading.level === 2 ? "pl-4" :
+                  heading.level === 3 ? "pl-6" :
+                  heading.level === 4 ? "pl-8 text-[12px]" :
+                  heading.level === 5 ? "pl-10 text-[12px]" : "pl-12 text-[12px]",
                   isActive
                     ? "text-primary font-medium"
                     : "text-zinc-500 hover:text-zinc-300",
@@ -153,7 +166,7 @@ export function BlogPostLayout({ headings, children }: BlogPostLayoutProps) {
                 className="sticky top-28 hidden lg:block h-[calc(100vh-8rem)] shrink-0 overflow-hidden"
               >
                 {/* Fixed-width inner so content doesn't squish during animation */}
-                <div className="w-[240px]">
+                <div className="w-[240px] h-full overflow-y-auto pb-10 scrollbar-none" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                   {/* Header */}
                   <div className="flex items-center gap-2 mb-5 pl-4">
                     <List className="w-3 h-3 text-primary/50 shrink-0" />
