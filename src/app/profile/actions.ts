@@ -10,6 +10,10 @@ export type ProfileData = {
   role: string | null;
   bio: string | null;
   github_url: string | null;
+  level?: number | null;
+  coin?: number | null;
+  current_frame_id?: string | null;
+  avatar_frames?: { css_class: string | null } | null;
 };
 
 export type UpdateProfileState = {
@@ -28,7 +32,7 @@ export async function getProfile(): Promise<ProfileData | null> {
 
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, full_name, avatar_url, role, bio, github_url")
+    .select("id, full_name, avatar_url, role, bio, github_url, level, coin, current_frame_id, avatar_frames:current_frame_id(css_class)")
     .eq("id", user.id)
     .maybeSingle();
 

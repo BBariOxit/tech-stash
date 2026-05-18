@@ -12,6 +12,8 @@ import {
   Loader2,
   ArrowLeft,
   CheckCircle2,
+  Coins,
+  Mail,
 } from "lucide-react";
 
 // lucide-react v1.x đã loại bỏ brand icons, nên tự tạo SVG
@@ -28,6 +30,8 @@ import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import type { ProfileData } from "@/app/profile/actions";
 import { updateProfile } from "@/app/profile/actions";
+import { AvatarFrame } from "@/components/avatar-frame";
+import { LevelBadge } from "@/components/level-badge";
 
 interface ProfileSettingsProps {
   initialProfile: ProfileData;
@@ -162,7 +166,7 @@ export function ProfileSettings({ initialProfile, userEmail }: ProfileSettingsPr
   return (
     <div className="min-h-screen bg-background">
       {/* Top bar */}
-      <div className="sticky top-0 z-10 border-b border-white/[0.07] bg-background/80 backdrop-blur-xl">
+      <div className="sticky top-0 z-50 border-b border-white/[0.07] bg-background/80 backdrop-blur-xl">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <button
             onClick={() => router.back()}
@@ -185,10 +189,10 @@ export function ProfileSettings({ initialProfile, userEmail }: ProfileSettingsPr
           transition={{ duration: 0.4 }}
           className="mb-8 border-b border-white/[0.07] pb-6"
         >
-          <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-primary mb-2">
             Hồ sơ cá nhân.
           </h1>
-          <p className="text-zinc-500 text-sm">
+          <p className="text-zinc-500 text-base">
             Cập nhật thông tin để thiên hạ biết bạn là ai. Để trống nếu muốn làm Ninja ẩn danh.
           </p>
         </motion.div>
@@ -204,56 +208,46 @@ export function ProfileSettings({ initialProfile, userEmail }: ProfileSettingsPr
             className="bg-card border border-white/[0.07] rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center"
           >
             {/* Cột Avatar */}
-            <div className="relative group shrink-0">
-              <div className="size-32 rounded-full border-2 border-white/10 overflow-hidden bg-[#0a0a0c] flex items-center justify-center ring-1 ring-white/[0.04] ring-offset-2 ring-offset-background transition-all group-hover:border-primary/30">
-                {profile.avatar_url ? (
-                  <Image
-                    src={profile.avatar_url}
-                    alt="Avatar"
-                    width={128}
-                    height={128}
-                    className="w-full h-full object-cover"
-                    unoptimized
-                  />
-                ) : (
-                  <span className="text-3xl font-bold text-primary/60 select-none">
-                    {initials}
-                  </span>
-                )}
-              </div>
+            <div className="relative group shrink-0 flex flex-col items-center">
+              <AvatarFrame
+                frameClass={initialProfile.avatar_frames?.css_class || 'frame-default'}
+                avatarUrl={profile.avatar_url}
+                initials={initials}
+                overlay={
+                  <label className="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer z-20">
+                    {isUploading ? (
+                      <Loader2 className="size-8 text-white animate-spin" />
+                    ) : (
+                      <>
+                        <Camera className="size-6 text-white mb-1" />
+                        <span className="text-xs font-medium text-white/80">Đổi ảnh</span>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="image/png,image/jpeg,image/webp"
+                      onChange={handleAvatarUpload}
+                      disabled={isUploading}
+                    />
+                  </label>
+                }
+              />
 
-              {/* Overlay thay ảnh khi hover */}
-              <label className="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
-                {isUploading ? (
-                  <Loader2 className="size-6 text-white animate-spin" />
-                ) : (
-                  <>
-                    <Camera className="size-5 text-white mb-1" />
-                    <span className="text-[10px] font-medium text-white/80">Đổi ảnh</span>
-                  </>
-                )}
-                <input
-                  type="file"
-                  className="hidden"
-                  accept="image/png,image/jpeg,image/webp"
-                  onChange={handleAvatarUpload}
-                  disabled={isUploading}
-                />
-              </label>
-
-
+              {/* Cấp độ */}
+              <LevelBadge level={initialProfile.level || 1} className="absolute -bottom-3 z-30" />
             </div>
 
             {/* Cột Form Input */}
-            <div className="flex-1 w-full space-y-5">
+            <div className="flex-1 w-full space-y-6">
               {/* Tên */}
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-primary tracking-wide">
+                <label className="text-sm font-semibold text-primary tracking-wide">
                   Tên hiển thị
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="size-4 text-zinc-600" />
+                    <User className="size-5 text-zinc-600" />
                   </div>
                   <input
                     id="profile-fullname"
@@ -263,33 +257,54 @@ export function ProfileSettings({ initialProfile, userEmail }: ProfileSettingsPr
                       setProfile({ ...profile, full_name: e.target.value })
                     }
                     placeholder="Nhập tên thật hoặc nickname..."
-                    className="w-full bg-[#0a0a0c] border border-white/[0.07] text-white text-sm rounded-lg pl-10 pr-4 py-2.5 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all placeholder:text-zinc-700"
+                    className="w-full bg-[#0a0a0c] border border-white/[0.07] text-white text-base rounded-xl pl-11 pr-4 py-3 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all placeholder:text-zinc-700"
                   />
                 </div>
               </div>
 
-              {/* Role (Read-only) */}
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-zinc-600 tracking-wide">
-                  Vị trí / Role (không thể thay đổi)
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Briefcase className="size-4 text-zinc-600" />
+              {/* Role & Coin (Read-only) */}
+              <div className="grid grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-zinc-600 tracking-wide">
+                    Vị trí / Role
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Briefcase className="size-5 text-zinc-500" />
+                    </div>
+                    <div className="w-full bg-[#0a0a0c]/50 border border-white/[0.04] text-zinc-200 text-base rounded-xl pl-11 pr-4 py-3 cursor-default select-all hover:border-white/[0.08] transition-colors">
+                      {profile.role || "user"}
+                    </div>
                   </div>
-                  <div className="w-full bg-[#0a0a0c]/50 border border-white/[0.04] text-zinc-600 text-sm rounded-lg pl-10 pr-4 py-2.5 cursor-not-allowed select-all">
-                    {profile.role || "user"}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-zinc-600 tracking-wide">
+                    Coin
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Coins className="size-5 text-amber-500" />
+                    </div>
+                    <div className="w-full bg-[#0a0a0c]/50 border border-white/[0.04] text-amber-400 font-mono text-base rounded-xl pl-11 pr-4 py-3 cursor-default select-all hover:border-white/[0.08] transition-colors">
+                      {initialProfile.coin || 0}
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Email (Read-only) */}
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-zinc-600 tracking-wide">
-                  Email (không thể thay đổi)
+                <label className="text-sm font-semibold text-zinc-600 tracking-wide">
+                  Email
                 </label>
-                <div className="w-full bg-[#0a0a0c]/50 border border-white/[0.04] text-zinc-600 text-sm rounded-lg px-4 py-2.5 cursor-not-allowed select-all">
-                  {userEmail}
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Mail className="size-5 text-zinc-500" />
+                  </div>
+                  <div className="w-full bg-[#0a0a0c]/50 border border-white/[0.04] text-zinc-200 text-base rounded-xl pl-11 px-4 py-3 cursor-default select-all hover:border-white/[0.08] transition-colors">
+                    {userEmail}
+                  </div>
                 </div>
               </div>
             </div>
@@ -306,8 +321,8 @@ export function ProfileSettings({ initialProfile, userEmail }: ProfileSettingsPr
           >
             {/* Bio */}
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-primary tracking-wide flex items-center gap-2">
-                <FileText className="size-3.5" /> Tiểu sử (Bio)
+              <label className="text-sm font-semibold text-primary tracking-wide flex items-center gap-2">
+                <FileText className="size-4" /> Tiểu sử (Bio)
               </label>
               <textarea
                 id="profile-bio"
@@ -319,11 +334,11 @@ export function ProfileSettings({ initialProfile, userEmail }: ProfileSettingsPr
                 }}
                 rows={4}
                 placeholder="Giới thiệu đôi nét về bản thân, sở thích, hoặc sự nghiệp code lỏ của bạn..."
-                className="w-full bg-[#0a0a0c] border border-white/[0.07] text-white text-sm rounded-lg p-3 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all resize-none placeholder:text-zinc-700"
+                className="w-full bg-[#0a0a0c] border border-white/[0.07] text-white text-base rounded-xl p-4 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all resize-none placeholder:text-zinc-700"
               />
               <div className="flex items-center justify-end gap-2">
                 <span
-                  className={`text-[10px] font-mono transition-colors ${
+                  className={`text-xs font-mono transition-colors ${
                     profile.bio.length >= MAX_BIO_LENGTH
                       ? "text-destructive"
                       : profile.bio.length >= MAX_BIO_LENGTH * 0.8
@@ -338,12 +353,12 @@ export function ProfileSettings({ initialProfile, userEmail }: ProfileSettingsPr
 
             {/* Github URL */}
             <div className="space-y-3 pt-6 border-t border-white/[0.04]">
-              <label className="text-xs font-semibold text-primary tracking-wide block mb-1">
+              <label className="text-sm font-semibold text-primary tracking-wide block mb-1">
                 Mạng xã hội
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <GithubIcon className="size-4 text-zinc-600" />
+                  <GithubIcon className="size-5 text-zinc-600" />
                 </div>
                 <input
                   id="profile-github"
@@ -353,7 +368,7 @@ export function ProfileSettings({ initialProfile, userEmail }: ProfileSettingsPr
                     setProfile({ ...profile, github_url: e.target.value })
                   }
                   placeholder="https://github.com/username"
-                  className="w-full bg-[#0a0a0c] border border-white/[0.07] text-white text-sm rounded-lg pl-10 pr-4 py-2.5 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all placeholder:text-zinc-700"
+                  className="w-full bg-[#0a0a0c] border border-white/[0.07] text-white text-base rounded-xl pl-11 pr-4 py-3 focus:border-primary/50 focus:ring-1 focus:ring-primary/30 outline-none transition-all placeholder:text-zinc-700"
                 />
               </div>
             </div>
@@ -386,12 +401,12 @@ export function ProfileSettings({ initialProfile, userEmail }: ProfileSettingsPr
               id="profile-save-btn"
               onClick={handleSave}
               disabled={isLoading || !hasChanges}
-              className="flex items-center gap-2 px-6 py-2.5 bg-primary/10 text-primary border border-primary/25 rounded-lg font-medium hover:bg-primary/20 hover:border-primary/40 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary/10 disabled:hover:border-primary/25 ml-auto cursor-pointer"
+              className="flex items-center gap-2 px-8 py-3 bg-primary/10 text-primary border border-primary/25 rounded-xl font-medium hover:bg-primary/20 hover:border-primary/40 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-primary/10 disabled:hover:border-primary/25 ml-auto cursor-pointer"
             >
               {isLoading ? (
-                <Loader2 className="size-4 animate-spin" />
+                <Loader2 className="size-5 animate-spin" />
               ) : (
-                <Save className="size-4" />
+                <Save className="size-5" />
               )}
               {isLoading ? "Đang lưu..." : "Lưu thay đổi"}
             </button>
