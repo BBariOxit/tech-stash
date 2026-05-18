@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      avatar_frames: {
+        Row: {
+          created_at: string | null
+          css_class: string | null
+          id: string
+          is_premium: boolean | null
+          name: string
+          required_level: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          css_class?: string | null
+          id?: string
+          is_premium?: boolean | null
+          name: string
+          required_level?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          css_class?: string | null
+          id?: string
+          is_premium?: boolean | null
+          name?: string
+          required_level?: number | null
+        }
+        Relationships: []
+      }
       comment_likes: {
         Row: {
           comment_id: string
@@ -120,6 +147,33 @@ export type Database = {
         }
         Relationships: []
       }
+      level_borders: {
+        Row: {
+          created_at: string | null
+          css_class: string | null
+          id: string
+          image_url: string | null
+          min_level: number
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          css_class?: string | null
+          id?: string
+          image_url?: string | null
+          min_level: number
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          css_class?: string | null
+          id?: string
+          image_url?: string | null
+          min_level?: number
+          name?: string
+        }
+        Relationships: []
+      }
       post_tags: {
         Row: {
           id: number
@@ -213,31 +267,48 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          coin: number | null
+          current_frame_id: string | null
           full_name: string | null
           github_url: string | null
           id: string
+          level: number | null
           role: string | null
           updated_at: string | null
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          coin?: number | null
+          current_frame_id?: string | null
           full_name?: string | null
           github_url?: string | null
           id: string
+          level?: number | null
           role?: string | null
           updated_at?: string | null
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          coin?: number | null
+          current_frame_id?: string | null
           full_name?: string | null
           github_url?: string | null
           id?: string
+          level?: number | null
           role?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_current_frame_id_fkey"
+            columns: ["current_frame_id"]
+            isOneToOne: false
+            referencedRelation: "avatar_frames"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       snippet_tags: {
         Row: {

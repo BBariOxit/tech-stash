@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
+import { Roboto, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin", "latin-ext"],
+const roboto = Roboto({
+  weight: ["300", "400", "500", "700", "900"],
+  variable: "--font-roboto",
+  subsets: ["latin", "vietnamese"],
   display: "swap",
 });
 
@@ -47,7 +48,7 @@ export default function RootLayout({
     <html
       lang="vi"
       // Force dark mode permanently — no toggle, no localStorage
-      className={`dark ${geistSans.variable} ${geistMono.variable} ${jbMono.variable} antialiased`}
+      className={`dark ${roboto.variable} ${geistMono.variable} ${jbMono.variable} antialiased`}
     >
       <body className="min-h-dvh flex flex-col bg-background text-foreground">
         {children}
