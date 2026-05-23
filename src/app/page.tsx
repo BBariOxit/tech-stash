@@ -3,8 +3,9 @@ import HeroSection from "@/components/hero-section";
 import LatestPosts from "@/components/latest-posts";
 import SnippetsCarousel from "@/components/snippets-carousel";
 import NewsletterSection from "@/components/newsletter-section";
+import DsaSection from "@/components/dsa-section";
 import Footer from "@/components/footer";
-import { getFeaturedPost, getLatestPosts } from "@/lib/posts";
+import { getFeaturedPost, getLatestPosts, getDsaPosts } from "@/lib/posts";
 import { getAllSnippets } from "@/lib/snippets";
 import { codeToHtml } from "shiki";
 
@@ -12,6 +13,7 @@ export default async function Home() {
   const featured = await getFeaturedPost();
   const latestPosts = await getLatestPosts();
   const snippets = await getAllSnippets();
+  const dsaPosts = await getDsaPosts(5);
   
   const snippetsWithHtml = await Promise.all(
     snippets.slice(0, 6).map(async (snippet) => {
@@ -46,9 +48,10 @@ export default async function Home() {
         {featured && <HeroSection featured={featured} />}
         <LatestPosts posts={latestPosts} />
         <SnippetsCarousel snippets={snippetsWithHtml} />
+        <DsaSection posts={dsaPosts} />
         <NewsletterSection />
       </main>
       <Footer />
     </>
   );
-}
+}
