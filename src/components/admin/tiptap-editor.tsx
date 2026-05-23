@@ -102,7 +102,7 @@ export function TiptapEditor({ content, onChange, onTextChange, className }: Tip
   return (
     <div className={cn("border border-white/10 rounded-lg overflow-hidden bg-[#111113]", className)}>
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 p-2 border-b border-white/10 bg-[#0d0d0f]">
+      <div className="sticky top-0 z-20 flex flex-wrap items-center gap-0.5 p-2 border-b border-white/10 bg-[#0d0d0f]/95 backdrop-blur-sm">
         <ToolbarButton
           title="Bold"
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -168,6 +168,28 @@ export function TiptapEditor({ content, onChange, onTextChange, className }: Tip
         >
           <Code2 className="w-4 h-4" />
         </ToolbarButton>
+
+        {editor.isActive("codeBlock") && (
+          <select
+            value={editor.getAttributes("codeBlock").language || "text"}
+            onChange={(e) =>
+              editor.chain().focus().updateAttributes("codeBlock", { language: e.target.value }).run()
+            }
+            className="ml-1 bg-zinc-800 text-zinc-200 text-xs rounded border border-white/10 px-2 py-1.5 outline-none focus:border-primary/50 cursor-pointer"
+          >
+            <option value="text">Plain Text</option>
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="tsx">TSX</option>
+            <option value="jsx">JSX</option>
+            <option value="json">JSON</option>
+            <option value="bash">Bash</option>
+            <option value="python">Python</option>
+            <option value="sql">SQL</option>
+          </select>
+        )}
         <ToolbarButton
           title="Blockquote"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
