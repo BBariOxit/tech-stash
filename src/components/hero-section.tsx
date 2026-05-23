@@ -103,7 +103,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
                 <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#111113]/50 via-transparent to-transparent" />
                 {/* Tags overlay */}
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                  {featured.tags.map((tag) => (
+                  {featured.tags.slice(0, 4).map((tag) => (
                     <Badge
                       key={tag}
                       className="bg-zinc-900/80 text-zinc-300 border-zinc-700/50 text-xs backdrop-blur-sm px-2 py-0.5"

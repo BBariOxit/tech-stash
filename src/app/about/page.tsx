@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AboutHero from "@/components/about-hero";
 import ProjectsSection from "@/components/projects-section";
-import NewsletterSection from "@/components/newsletter-section";
+
 
 export const metadata = {
   title: "About",
@@ -16,9 +16,7 @@ export default function AboutPage() {
       <main className="flex-1 pt-12">
         <AboutHero />
         <ProjectsSection />
-        <div className="mt-20">
-          <NewsletterSection />
-        </div>
+
       </main>
       <Footer />
     </>

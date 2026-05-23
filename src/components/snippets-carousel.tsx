@@ -22,7 +22,7 @@ function SnippetCard({ snippet }: { snippet: SnippetWithHtml }) {
   const langClass = LANG_COLORS[snippet.language] ?? "text-zinc-300 bg-zinc-400/10 border-zinc-400/20";
 
   return (
-    <Link href={`/snippets/${snippet.slug}`} className="block shrink-0 w-[280px] sm:w-[320px]">
+    <Link href={`/snippets/${snippet.slug}`} className="block shrink-0 w-[300px] sm:w-[400px]">
       <article className="w-full h-full rounded-xl border border-white/[0.08] bg-[#111113] overflow-hidden card-hover flex flex-col">
         {/* Header */}
         <div className="px-4 pt-4 pb-3 border-b border-white/[0.06] flex items-start justify-between gap-2">
@@ -43,7 +43,7 @@ function SnippetCard({ snippet }: { snippet: SnippetWithHtml }) {
         </p>
 
         {/* Code preview */}
-        <div className="px-4 py-3 flex-1 overflow-hidden relative min-h-[140px]">
+        <div className="px-4 py-3 flex-1 overflow-hidden relative min-h-[160px]">
           {snippet.html ? (
             <div
               className="text-[11px] leading-relaxed [&>pre]:!bg-transparent [&>pre]:!p-0 [&>pre]:!m-0"
@@ -51,11 +51,11 @@ function SnippetCard({ snippet }: { snippet: SnippetWithHtml }) {
             />
           ) : (
             <pre className="snippet-code text-[11px] leading-relaxed">
-              {snippet.code.split("\n").slice(0, 7).join("\n")}
+              {snippet.code.split("\n").slice(0, 9).join("\n")}
             </pre>
           )}
           {/* Fade out bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#111113] to-transparent pointer-events-none" />
+          <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#111113] to-transparent pointer-events-none" />
         </div>
       </article>
     </Link>
@@ -80,7 +80,7 @@ export default function SnippetsCarousel({ snippets }: SnippetsCarouselProps) {
 
   const scroll = (dir: "left" | "right") => {
     scrollRef.current?.scrollBy({
-      left: dir === "right" ? 340 : -340,
+      left: dir === "right" ? 416 : -416,
       behavior: "smooth",
     });
   };

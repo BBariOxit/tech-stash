@@ -88,7 +88,7 @@ export default function DsaPageClient({ posts }: DsaPageClientProps) {
           // Không tìm thấy bài viết nào với tag này.
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {filteredPosts.map((post, index) => {
             const formattedDate = new Date(post.date).toLocaleDateString("vi-VN", {
               day: "2-digit",
@@ -137,7 +137,7 @@ export default function DsaPageClient({ posts }: DsaPageClientProps) {
                     </span>
                     <span className="flex items-center gap-1 shrink-0">
                       <Clock className="size-3" />
-                      {post.reading_time}m read
+                      {post.reading_time} phút đọc
                     </span>
                   </div>
 

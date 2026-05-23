@@ -67,7 +67,6 @@ export function CreatePostForm({
 }: CreatePostFormProps = {}) {
   const [selectedTags, setSelectedTags] = React.useState<Tag[]>(initialTags);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [plainText, setPlainText] = React.useState("");
 
   const {
     register,
@@ -108,7 +107,9 @@ export function CreatePostForm({
   const onSubmit = async (values: PostFormValues) => {
     setIsSubmitting(true);
     try {
-      const readTime = calculateReadTime(plainText);
+      // Parse content HTML sang plain text bằng cách thay các thẻ HTML bằng khoảng trắng để tránh dính chữ
+      const textContent = values.content.replace(/<[^>]*>?/gm, ' ');
+      const readTime = calculateReadTime(textContent);
       const payload = {
         ...values,
         excerpt: values.excerpt ?? "",
@@ -217,7 +218,6 @@ export function CreatePostForm({
                 <TiptapEditor
                   content={field.value}
                   onChange={field.onChange}
-                  onTextChange={setPlainText}
                 />
               )}
             />
