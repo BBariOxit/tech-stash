@@ -51,7 +51,7 @@ export default async function BlogPage() {
                   </div>
                   <div className="p-4 flex flex-col gap-3 flex-1">
                     <div className="flex flex-wrap gap-1.5">
-                      {post.tags.map((tag) => (
+                      {post.tags.slice(0, 4).map((tag) => (
                         <Badge key={tag} variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-zinc-700/60 text-zinc-300 font-mono">
                           {tag}
                         </Badge>
