@@ -5,6 +5,7 @@ import type { Post } from "@/lib/posts";
 export const dummyNavLinks = [
   { id: "home", href: "/", label: "Home" },
   { id: "blog", href: "/blog", label: "Blog" },
+  { id: "dsa", href: "/dsa", label: "DSA" },
   { id: "snippets", href: "/snippets", label: "Snippets" },
   { id: "about", href: "/about", label: "About" },
 ];

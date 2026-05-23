@@ -22,7 +22,7 @@ function GraphDecoration() {
   return (
     <svg
       viewBox="0 0 200 160"
-      className="w-full max-w-[200px] opacity-70 pointer-events-none select-none"
+      className="w-full max-w-[280px] opacity-80 pointer-events-none select-none"
       aria-hidden="true"
     >
       {/* Edges */}
@@ -86,12 +86,12 @@ export default function DsaSection({ posts }: DsaSectionProps) {
       aria-label="Data Structures & Algorithms posts"
     >
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
 
           {/* ══════════════════════════════════════════════
               CỘT TRÁI — Title + Đồ hoạ Graph (Sticky)
           ══════════════════════════════════════════════ */}
-          <div className="lg:w-1/3 lg:sticky lg:top-28 h-fit">
+          <div className="lg:col-span-5 lg:sticky lg:top-28 h-fit lg:pl-4 xl:pl-10">
             {/* Eye-brow */}
             <div className="flex items-center gap-2.5 text-primary mb-4">
               <Network className="size-5 shrink-0" />
@@ -137,7 +137,7 @@ export default function DsaSection({ posts }: DsaSectionProps) {
           {/* ══════════════════════════════════════════════
               CỘT PHẢI — Danh sách kiểu Linked List
           ══════════════════════════════════════════════ */}
-          <div className="lg:w-2/3 relative">
+          <div className="lg:col-span-7 relative lg:pr-8 xl:pr-16">
             {/* Đường trục dọc nối các Node */}
             <div
               aria-hidden="true"
@@ -238,7 +238,7 @@ export default function DsaSection({ posts }: DsaSectionProps) {
             {/* CTA — xem tất cả */}
             <div className="mt-8 pl-10 sm:pl-12">
               <Link
-                href="/blog?tag=DSA"
+                href="/dsa"
                 className="group inline-flex items-center gap-2
                            text-sm font-mono text-zinc-300
                            hover:text-primary transition-colors duration-200"
