@@ -222,8 +222,8 @@ export default function ProjectsSection() {
                 <X className="size-5" />
               </button>
               
-              <div className="w-16 h-16 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-cyan-500/20">
-                <Lock className="size-8 text-cyan-400" />
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
+                <Lock className="size-8 text-primary" />
               </div>
               
               <h3 className="text-xl font-bold text-white mb-2">Top Secret! 🤫</h3>
@@ -233,7 +233,7 @@ export default function ProjectsSection() {
               
               <button 
                 onClick={() => setIsTrollModalOpen(false)}
-                className="w-full py-2.5 px-4 bg-cyan-500/10 text-cyan-400 font-medium text-sm rounded-lg border border-cyan-500/30 hover:bg-cyan-500/20 transition-colors cursor-pointer"
+                className="w-full py-2.5 px-4 bg-primary/10 text-primary font-medium text-sm rounded-lg border border-primary/30 hover:bg-primary/20 transition-colors cursor-pointer"
               >
                 Đóng lại đi xem Demo!
               </button>

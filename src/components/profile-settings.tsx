@@ -28,8 +28,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 
 import { createClient } from "@/lib/supabase/client";
-import type { ProfileData } from "@/app/profile/actions";
-import { updateProfile } from "@/app/profile/actions";
+import type { ProfileData } from "@/app/(main)/profile/actions";
+import { updateProfile } from "@/app/(main)/profile/actions";
 import { AvatarFrame } from "@/components/avatar-frame";
 import { LevelBadge } from "@/components/level-badge";
 

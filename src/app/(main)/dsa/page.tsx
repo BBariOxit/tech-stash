@@ -1,5 +1,3 @@
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 import { getDsaPosts } from "@/lib/posts";
 import DsaPageClient from "./_components/dsa-page-client";
 
@@ -13,12 +11,9 @@ export default async function DsaPage() {
   const posts = await getDsaPosts(50);
 
   return (
-    <>
-      <Navbar />
-      <main className="flex-1 min-h-screen">
-        <DsaPageClient posts={posts} />
-      </main>
-      <Footer />
-    </>
+    <div className="min-h-screen">
+      <DsaPageClient posts={posts} />
+    </div>
   );
 }
+

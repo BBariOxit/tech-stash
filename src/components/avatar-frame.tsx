@@ -36,7 +36,7 @@ export function AvatarFrame({
   if (frameClass === 'frame-intern') {
     return (
       <div className={`relative ${sizeClassName} rounded-full flex items-center justify-center p-2 group shrink-0`}>
-        <div className="absolute inset-0 rounded-full border-2 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.6)] animate-pulse"></div>
+        <div className="absolute inset-0 rounded-full border-2 border-primary shadow-[0_0_15px_color-mix(in_srgb,var(--primary)_60%,transparent)] animate-pulse"></div>
         <div className="relative size-full rounded-full overflow-hidden bg-[#0a0a0c] z-10 border-2 border-[#0d1117] flex items-center justify-center">
           {avatarContent}
           {overlay}

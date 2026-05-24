@@ -70,10 +70,10 @@ export default function AboutHero() {
                 theme={{
                   dark: [
                     "#1c1c1f", // Muted empty state
-                    "#083344", // Cyan 950
-                    "#164e63", // Cyan 900
-                    "#06b6d4", // Cyan 500
-                    "#22d3ee", // Cyan 400 (Brand Primary)
+                    "color-mix(in srgb, var(--primary) 20%, transparent)",
+                    "color-mix(in srgb, var(--primary) 40%, transparent)",
+                    "color-mix(in srgb, var(--primary) 70%, transparent)",
+                    "var(--primary)", // Brand Primary
                   ],
                 }}
                 fontSize={13}
