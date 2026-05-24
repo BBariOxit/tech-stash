@@ -26,37 +26,37 @@ function GraphDecoration() {
       aria-hidden="true"
     >
       {/* Edges */}
-      <line x1="30" y1="30" x2="100" y2="80" stroke="#22d3ee" strokeWidth="1.2" strokeOpacity="0.7" />
-      <line x1="100" y1="80" x2="170" y2="40" stroke="#22d3ee" strokeWidth="1.2" strokeOpacity="0.7" />
-      <line x1="100" y1="80" x2="130" y2="140" stroke="#22d3ee" strokeWidth="1" strokeOpacity="0.45" />
-      <line x1="30" y1="30" x2="60" y2="130" stroke="#22d3ee" strokeWidth="1" strokeOpacity="0.4" />
-      <line x1="60" y1="130" x2="130" y2="140" stroke="#22d3ee" strokeWidth="1" strokeOpacity="0.45" />
-      <line x1="170" y1="40" x2="130" y2="140" stroke="#22d3ee" strokeWidth="1" strokeOpacity="0.4" />
+      <line x1="30" y1="30" x2="100" y2="80" stroke="var(--primary)" strokeWidth="1.2" strokeOpacity="0.7" />
+      <line x1="100" y1="80" x2="170" y2="40" stroke="var(--primary)" strokeWidth="1.2" strokeOpacity="0.7" />
+      <line x1="100" y1="80" x2="130" y2="140" stroke="var(--primary)" strokeWidth="1" strokeOpacity="0.45" />
+      <line x1="30" y1="30" x2="60" y2="130" stroke="var(--primary)" strokeWidth="1" strokeOpacity="0.4" />
+      <line x1="60" y1="130" x2="130" y2="140" stroke="var(--primary)" strokeWidth="1" strokeOpacity="0.45" />
+      <line x1="170" y1="40" x2="130" y2="140" stroke="var(--primary)" strokeWidth="1" strokeOpacity="0.4" />
 
       {/* Nodes – animated */}
-      <circle cx="30" cy="30" r="5" fill="#22d3ee">
+      <circle cx="30" cy="30" r="5" fill="var(--primary)">
         <animate attributeName="opacity" values="1;0.3;1" dur="2.2s" repeatCount="indefinite" />
       </circle>
-      <circle cx="100" cy="80" r="7" fill="#22d3ee">
+      <circle cx="100" cy="80" r="7" fill="var(--primary)">
         <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite" />
         <animate attributeName="r" values="7;9;7" dur="1.8s" repeatCount="indefinite" />
       </circle>
-      <circle cx="170" cy="40" r="5" fill="#22d3ee">
+      <circle cx="170" cy="40" r="5" fill="var(--primary)">
         <animate attributeName="opacity" values="0.6;1;0.6" dur="2.6s" repeatCount="indefinite" />
       </circle>
-      <circle cx="60" cy="130" r="4" fill="#22d3ee">
+      <circle cx="60" cy="130" r="4" fill="var(--primary)">
         <animate attributeName="opacity" values="0.3;0.9;0.3" dur="3s" repeatCount="indefinite" />
       </circle>
-      <circle cx="130" cy="140" r="5" fill="#22d3ee">
+      <circle cx="130" cy="140" r="5" fill="var(--primary)">
         <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
       </circle>
 
       {/* Node labels */}
-      <text x="36" y="26" fill="#22d3ee" fontSize="8" opacity="0.9" fontFamily="monospace">root</text>
-      <text x="106" y="76" fill="#22d3ee" fontSize="8" opacity="0.9" fontFamily="monospace">V</text>
-      <text x="176" y="36" fill="#22d3ee" fontSize="8" opacity="0.9" fontFamily="monospace">E₁</text>
-      <text x="36" y="145" fill="#22d3ee" fontSize="8" opacity="0.8" fontFamily="monospace">E₂</text>
-      <text x="135" y="155" fill="#22d3ee" fontSize="8" opacity="0.8" fontFamily="monospace">E₃</text>
+      <text x="36" y="26" fill="var(--primary)" fontSize="8" opacity="0.9" fontFamily="monospace">root</text>
+      <text x="106" y="76" fill="var(--primary)" fontSize="8" opacity="0.9" fontFamily="monospace">V</text>
+      <text x="176" y="36" fill="var(--primary)" fontSize="8" opacity="0.9" fontFamily="monospace">E₁</text>
+      <text x="36" y="145" fill="var(--primary)" fontSize="8" opacity="0.8" fontFamily="monospace">E₂</text>
+      <text x="135" y="155" fill="var(--primary)" fontSize="8" opacity="0.8" fontFamily="monospace">E₃</text>
     </svg>
   );
 }

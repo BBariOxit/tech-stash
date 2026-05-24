@@ -209,7 +209,7 @@
 
 /* 1. Sửa Inline Code (Dùng cho mấy chữ như useMemo giữa dòng) */
 .ProseMirror p code {
-  @apply bg-zinc-800 text-cyan-400 px-1.5 py-0.5 rounded-md font-mono text-sm border border-zinc-700;
+  @apply bg-zinc-800 text-primary px-1.5 py-0.5 rounded-md font-mono text-sm border border-zinc-700;
 }
 
 /* 2. Sửa Code Block (Khối code to) */
@@ -252,7 +252,7 @@
 /* 1. Ép màu nền, viền, và chữ màu cyan cho inline code nằm trong đoạn văn hoặc danh sách */
 .prose p code,
 .prose li code {
-  @apply bg-white/5 text-cyan-400 px-1.5 py-0.5 rounded font-mono text-sm font-normal border border-gray-800;
+  @apply bg-white/5 text-primary px-1.5 py-0.5 rounded font-mono text-sm font-normal border border-gray-800;
 }
 
 /* 2. CHÍ MẠNG: Chặt đứt 2 cái dấu nháy đơn (backticks) mặc định của Tailwind Typography */
@@ -306,7 +306,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  background: rgba(34, 211, 238, 0.15);
+  background: color-mix(in srgb, var(--primary) 15%, transparent);
   pointer-events: none;
 }
 
@@ -317,7 +317,7 @@
   top: 0;
   bottom: -2px;
   width: 4px;
-  background-color: #22d3ee;
+  background-color: var(--primary);
   pointer-events: none;
 }
 

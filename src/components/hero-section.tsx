@@ -35,7 +35,7 @@ export default function HeroSection({ featured }: HeroSectionProps) {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tighter text-white leading-[1.1] mb-6 relative"
         >
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-primary">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary/60 to-primary">
             Code. Build. Scale.
           </span>
           {/* Blinking Cursor */}

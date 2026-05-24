@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 import { getPostBySlug, getAllPosts } from "@/lib/posts";
 import { notFound } from "next/navigation";
@@ -52,9 +50,7 @@ export default async function BlogPostPage({
   const { headings, html: contentWithIds } = extractHeadings(post.content ?? "");
 
   return (
-    <>
-      <Navbar />
-      <main className="flex-1 pt-28 pb-16 px-4 sm:px-6">
+    <div className="pt-28 pb-16 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           {/* Layout: article (animatable) + sticky ToC */}
           <BlogPostLayout headings={headings}>
@@ -117,9 +113,7 @@ export default async function BlogPostPage({
             {post.id && <CommentSection postId={post.id} />}
           </BlogPostLayout>
         </div>
-      </main>
-      <Footer />
-    </>
+    </div>
   );
 }
 

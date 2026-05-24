@@ -3,8 +3,6 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Calendar, Terminal, Heart, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { CodeBlock } from "@/components/CodeBlock";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 import type { Metadata } from "next";
 
 const LANG_COLORS: Record<string, string> = {
@@ -47,10 +45,8 @@ export default async function SnippetDetailPage({
     LANG_COLORS[snippet.language] ?? "text-zinc-300 bg-zinc-400/10 border-zinc-400/20";
 
   return (
-    <>
-      <Navbar />
-      <main className="flex-1 min-h-screen py-24 sm:py-32">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+    <div className="min-h-screen py-24 sm:py-32">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
           {/* ── Back button ── */}
           <Link
@@ -130,9 +126,7 @@ export default async function SnippetDetailPage({
             </div>
           </div>
 
-        </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </div>
   );
 }

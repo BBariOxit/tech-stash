@@ -354,15 +354,15 @@ function LoginPageContent() {
               className={`mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border shadow-inner ${
                 isSuccess
                   ? "border-emerald-400/30 bg-emerald-400/10 shadow-emerald-300/10"
-                  : "border-cyan-300/20 bg-cyan-400/10 shadow-cyan-300/10"
+                  : "border-primary/20 bg-primary/10 shadow-primary/10"
               }`}
             >
               {isSuccess ? (
                 <Check className="h-7 w-7 text-emerald-400" />
               ) : mode === "login" ? (
-                <LogIn className="h-7 w-7 text-cyan-300" />
+                <LogIn className="h-7 w-7 text-primary" />
               ) : (
-                <UserPlus className="h-7 w-7 text-cyan-300" />
+                <UserPlus className="h-7 w-7 text-primary" />
               )}
             </motion.div>
           </AnimatePresence>
@@ -393,13 +393,13 @@ function LoginPageContent() {
                   type="button"
                   onClick={() => handleSetMode(tab)}
                   className={`relative rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-200 ${
-                    mode === tab ? "text-cyan-200" : "text-zinc-400 hover:text-zinc-200"
+                    mode === tab ? "text-primary/80" : "text-zinc-400 hover:text-zinc-200"
                   }`}
                 >
                   {mode === tab && (
                     <motion.span
                       layoutId="tab-indicator"
-                      className="absolute inset-0 rounded-lg bg-cyan-400/20"
+                      className="absolute inset-0 rounded-lg bg-primary/20"
                       transition={{ type: "spring", stiffness: 380, damping: 34 }}
                     />
                   )}
@@ -443,7 +443,7 @@ function LoginPageContent() {
                 <button
                   type="button"
                   onClick={() => { setIsSuccess(false); handleSetMode("login"); }}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-cyan-300 py-3 text-sm font-semibold text-slate-900 transition hover:bg-cyan-200 active:scale-[0.98]"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-slate-900 transition hover:bg-primary/80 active:scale-[0.98]"
                 >
                   <LogIn className="h-4 w-4" />
                   Quay lại đăng nhập
@@ -489,7 +489,7 @@ function LoginPageContent() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-cyan-300/50 focus:bg-white/7"
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:border-primary/50 focus:bg-white/7"
               placeholder="you@techstash.dev"
             />
           </div>
@@ -503,7 +503,7 @@ function LoginPageContent() {
               {mode === "login" && (
                 <a
                   href="/forgot-password"
-                  className="text-xs text-zinc-500 transition hover:text-cyan-300"
+                  className="text-xs text-zinc-500 transition hover:text-primary"
                 >
                   Quên mật khẩu?
                 </a>
@@ -526,7 +526,7 @@ function LoginPageContent() {
                 className={`w-full rounded-xl border bg-white/5 px-3 py-2.5 pr-10 text-sm text-white outline-none transition placeholder:text-zinc-600 focus:bg-white/7 ${
                   passwordError
                     ? "border-red-500/60 focus:border-red-400/70"
-                    : "border-white/10 focus:border-cyan-300/50"
+                    : "border-white/10 focus:border-primary/50"
                 }`}
                 placeholder="••••••••"
               />
@@ -626,7 +626,7 @@ function LoginPageContent() {
                       ? "border-red-500/60 focus:border-red-400/70"
                       : confirmPassword.length > 0 && confirmPassword === password
                       ? "border-emerald-400/50 focus:border-emerald-400/70"
-                      : "border-white/10 focus:border-cyan-300/50"
+                      : "border-white/10 focus:border-primary/50"
                   }`}
                   placeholder="••••••••"
                 />
@@ -670,7 +670,7 @@ function LoginPageContent() {
           <button
             type="submit"
             disabled={isLoading}
-            className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-cyan-300 py-3 text-sm font-semibold text-slate-900 transition hover:bg-cyan-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-slate-900 transition hover:bg-primary/80 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
             {mode === "login" ? "Đăng nhập bằng email" : "Đăng ký bằng email"}

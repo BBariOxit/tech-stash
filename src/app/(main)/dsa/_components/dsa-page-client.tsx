@@ -141,19 +141,12 @@ export default function DsaPageClient({ posts }: DsaPageClientProps) {
                     </span>
                   </div>
 
-                  {/* Title */}
+                  {/* Title — fixed 2-line height for uniform cards */}
                   <h2 className="text-sm sm:text-base font-bold text-white
                                  group-hover:text-primary transition-colors duration-200
-                                 line-clamp-2 leading-snug mb-1.5">
+                                 line-clamp-2 leading-snug h-[2.75em]">
                     {post.title}
                   </h2>
-
-                  {/* Excerpt */}
-                  {post.excerpt && (
-                    <p className="max-sm:hidden text-zinc-400 text-xs line-clamp-2 mb-2 mt-0.5">
-                      {post.excerpt}
-                    </p>
-                  )}
 
                   {/* Tags */}
                   {displayTags.length > 0 && (

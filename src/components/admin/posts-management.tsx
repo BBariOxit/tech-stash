@@ -367,7 +367,7 @@ export function PostsManagement({ initialPosts }: PostsManagementProps) {
                             />
                           }
                         >
-                          <Pencil className="w-4 h-4 mr-2 text-cyan-400" />
+                          <Pencil className="w-4 h-4 mr-2 text-primary" />
                           Chỉnh sửa bài viết
                         </DropdownMenuItem>
 
